@@ -1,0 +1,61 @@
+﻿@model GuiasOET.Models.GUIAS_EMPLEADO.OlvidarContrasenaMetadata
+@{
+    ViewBag.Title = "Contraseña Olvidada";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br>
+<div class="row">
+    <div class="col-sm-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <p>Ingrese su nombre de usuario o email para recibir un link que le permita restablecer su contraseña</p>
+        <hr />
+    </div>
+</div>
+
+<br>
+
+
+<div class="row">
+
+    @using (Html.BeginForm("OlvidarContrasena", "AdministracionUsuarios", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="col-sm-5 ">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <br>
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                @Html.LabelFor(m => m.USUARIO_EMAIL, new { @class = "control-label" })
+                            </div>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(m => m.USUARIO_EMAIL, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.USUARIO_EMAIL, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-push-3">
+                                <input type="submit" class="btn btn-default" value="Enviar" style="width:28%" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

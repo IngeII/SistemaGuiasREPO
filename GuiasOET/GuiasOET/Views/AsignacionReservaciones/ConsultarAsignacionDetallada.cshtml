@@ -1,0 +1,139 @@
+﻿@model GuiasOET.Models.ReservacionesModelos
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+    ViewBag.Title = "Consultar Asignación detallada";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <!--DATOS DE LA RESERVACION-->
+    <div class="row" style="width:auto">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-body" style="height: 55%; width:auto">
+                    <div class="row">
+                        <div class="col-md-12" col-sm-offset-1>
+                            <label for="titulo">Reservación para el:    @Html.DisplayFor(model => model.reservacion.FECHA) para el guía @Html.DisplayFor(model => model.modeloEmpleado.NOMBREEMPLEADO)  @Html.DisplayFor(model => model.modeloEmpleado.APELLIDO1)     </label>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(m => m.reservacion.NUMERORESERVACION, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.reservacion.NUMERORESERVACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.reservacion.NUMERORESERVACION, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+
+                            @Html.LabelFor(model => model.reservacion.NOMBRERESERVACION, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.reservacion.NOMBRERESERVACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.reservacion.NOMBRERESERVACION, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.reservacion.NUMEROPERSONAS, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.reservacion.NUMEROPERSONAS, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.reservacion.NUMEROPERSONAS, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.reservacion.FECHA, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.reservacion.FECHA, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.reservacion.FECHA, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.reservacion.HORA, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.reservacion.HORA, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.reservacion.HORA, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.TURNO, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.TURNO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.TURNO, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.compañeros, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+
+                        <div class="col-md-7">
+                            @if (Model != null && Model.compañeros != null)
+                            {
+                                foreach (var item in Model.compañeros)
+                                {
+                                    @Html.DisplayFor(modelItem => item, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    <br />
+
+                                }
+                            }
+                        </div>
+
+                   </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+}

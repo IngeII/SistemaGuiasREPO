@@ -1,0 +1,109 @@
+﻿@model GuiasOET.Models.ReportesModelo
+
+@{
+    Layout = null;
+}
+
+@functions
+    {
+    public int[] reservaAsignada(string numeroReservacion)
+    {
+        int i = 0;
+        int[] asignacion = new int[2];
+
+        while (i < Model.reservacionesAsignadas.Count && Model.reservacionesAsignadas.ElementAt(i).NUMERORESERVACION.ToString() != numeroReservacion)
+        {
+            ++i;
+        }
+
+        if (i < Model.reservacionesAsignadas.Count)
+        {
+            asignacion[0] = 1;
+            asignacion[1] = i;
+        }
+        else
+        {
+            asignacion[0] = 0;
+            asignacion[1] = 0;
+        }
+
+        return asignacion;
+
+    }
+}
+
+<div class="table-responsive">
+    <table class="table">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <tr>
+                    <th>
+                        @Html.ActionLink("Fecha", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.ReservacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Pax", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.NombreSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Clientes", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.EstacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+
+                    <th>
+                        @Html.ActionLink("Reservaciones", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.PersonasSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Tour", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.FechaSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        Hora
+                    </th>
+                    <th>
+                        Guías Asignados
+                    </th>
+                </tr>
+
+
+                @for (int i = 0; i < Model.totalReservaciones.Count; ++i)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).FECHA )
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMEROPERSONAS )
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRERESERVACION )
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMEROPERSONAS)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).FECHA)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).HORA)
+                        </td>
+                        <td>
+                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                            {
+                                for (int x = 0; x < Model.empleados.ElementAt(reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1)).Count(); ++x)
+                                {
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).NOMBREEMPLEADO)
+                                    @Html.Raw(" ")
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO1)
+                                    @Html.Raw(" ")
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO2)
+                                    <br />
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+            </div>
+        </div>
+    </table>
+</div>

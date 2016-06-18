@@ -1,0 +1,268 @@
+﻿@model GuiasOET.Models.ManejoModelos
+
+@{
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+    ViewBag.Title = "Consultar usuario";
+}
+
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <br />
+    <div class="col-md-9">
+        <div style="float: left">
+            @Html.ActionLink("Ir a lista de usuarios", "ListaUsuarios", null, new { @class = "btn btn-default" , @style = "background-color: #7BC143; color:white;" })
+            <br />
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <br />
+</div>
+    @using (Html.BeginForm())
+    {
+
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <!--DATOS PERSONALES-->
+        <div class="row" style="width:auto">
+            <div class="col-sm-5 col-sm-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="height: 55%; width:auto">
+                        <div class="row">
+                            <div class="col-md-6" col-sm-offset-1>
+                                <label for="titulo">Datos personales:</label>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(m => m.modeloEmpleado.CEDULA, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.CEDULA, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.CEDULA, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+
+                                @Html.LabelFor(model => model.modeloEmpleado.NOMBREEMPLEADO, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.NOMBREEMPLEADO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.NOMBREEMPLEADO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(model => model.modeloEmpleado.APELLIDO1, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.APELLIDO1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.APELLIDO1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(model => model.modeloEmpleado.APELLIDO2, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.APELLIDO2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.APELLIDO2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(model => model.modeloEmpleado.EMAIL, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.EMAIL, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.EMAIL, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(model => model.modeloEmpleado.DIRECCION, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.DIRECCION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.DIRECCION, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                <label class="control-label col-md-2" for="telefono1">Teléfono 1:</label>
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloTelefono.TELEFONO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloTelefono.TELEFONO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                <label class="control-label col-md-2" for="telefono2">Teléfono 2:</label>
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloTelefono2.TELEFONO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloTelefono2.TELEFONO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                <label class="control-label col-md-2" for="telefono3">Teléfono 3:</label>
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloTelefono3.TELEFONO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloTelefono3.TELEFONO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                <label class="control-label col-md-2" for="telefono4">Teléfono 4:</label>
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloTelefono4.TELEFONO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloTelefono4.TELEFONO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!--DATOS DE LA CUENTA-->
+
+            <div class="col-sm-5 col-sm-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="height: 55%; width:auto">
+
+                        <div class="row">
+                            <div class="col-md-6" col-sm-offset-1>
+                                <label for="titulo">Datos de la cuenta:</label>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(model => model.modeloEmpleado.USUARIO, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-7">
+                                @Html.DisplayFor(model => model.modeloEmpleado.USUARIO, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.modeloEmpleado.USUARIO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                @Html.LabelFor(model => model.modeloEmpleado.TIPOEMPLEADO, htmlAttributes: new { @class = "control-label col-md-2" })
+                            </div>
+                            <div class="col-md-2">
+                                @Html.RadioButton("tipoUsuario", "Administrador Global", new { id = "tipoUsuario_1", disabled="true" })
+                            </div>
+                            <div class="col-md-6" col-sm-offset-1>
+                                <label for="tipoUsuario_1">Administrador global</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-2">
+                                @Html.RadioButton("tipoUsuario", "Administrador Local", new { id = "tipoUsuario_2", disabled = "true" })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoUsuario_2">Administrador local</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-2">
+                                @Html.RadioButton("tipoUsuario", "Guía Interno", new { id = "tipoUsuario_3", disabled = "true" })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoUsuario_3">Guía interno</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-2">
+                                @Html.RadioButton("tipoUsuario", "Guía Externo", new { id = "tipoUsuario_4", disabled = "true" })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoUsuario_4">Guía externo</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-2">
+                                @Html.RadioButton("tipoUsuario", "Administrador Local/Guía Interno", new { id = "tipoUsuario_5", disabled = "true" })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoUsuario_5">Administrador Local / Guía Interno</label>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-3" col-sm-offset-1>
+                                <span class="control-label col-md-2" style="font-weight:bold">Estado:</span>
+                            </div>
+                            <div class="col-md-7">
+                                <span class="control-label col-md-2">@ViewBag.estado</span>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }

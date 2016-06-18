@@ -1,0 +1,170 @@
+﻿
+@model GuiasOET.Models.AsignacionModelos
+@using PagedList.Mvc;
+@using PagedList;
+@using System.Diagnostics;
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Asignar Reservación";
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+}
+
+@functions
+    {
+    public int[] reservaAsignada(string numeroReservacion)
+    {
+        int i = 0;
+        int[] asignacion = new int[2];
+
+        while (i < Model.reservacionesAsignadas.Count && Model.reservacionesAsignadas.ElementAt(i).NUMERORESERVACION.ToString() != numeroReservacion)
+        {
+            ++i;
+        }
+
+        if (i < Model.reservacionesAsignadas.Count)
+        {
+            asignacion[0] = 1;
+            asignacion[1] = i;
+        }
+        else
+        {
+            asignacion[0] = 0;
+            asignacion[1] = 0;
+        }
+
+        return asignacion;
+
+    }
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+<div class="row">
+</div>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("AsignarReservacion", "AsignacionReservaciones", FormMethod.Get))
+        {
+
+            <p>
+                Lista de Reservaciones<br />
+
+                Criterio de búsqueda: Desde: <input type="date" name="fechaDesde" value="@ViewBag.CurrentFilter1">
+                Hasta: <input type="date" name="fechaHasta" value="@ViewBag.CurrentFilter2">
+                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+            </p>
+
+        }
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <tr>
+                    <th>
+                        @Html.ActionLink("Reservacion", "AsignarReservacion", new { sortOrder = ViewBag.ReservacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Nombre", "AsignarReservacion", new { sortOrder = ViewBag.NombreSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Estacion", "AsignarReservacion", new { sortOrder = ViewBag.EstacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+
+                    <th>
+                        @Html.ActionLink("Personas", "AsignarReservacion", new { sortOrder = ViewBag.PersonasSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Fecha", "AsignarReservacion", new { sortOrder = ViewBag.FechaSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+                    <th>
+                       Hora
+                    </th>
+                    <th>
+                        Guías Asignados
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+
+                @for (int i = 0; i < Model.totalReservaciones.Count; ++i)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRERESERVACION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBREESTACION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMEROPERSONAS)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).FECHA)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).HORA)
+                        </td>
+                        <td>
+                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                            {
+                                for (int x = 0; x < Model.empleados.ElementAt(reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1)).Count(); ++x)
+                                {
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).NOMBREEMPLEADO)
+                                    @Html.Raw(" ")
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO1)
+                                    @Html.Raw(" ")
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO2)
+                                    <br />
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                            {
+                                @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Asignar Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+            </div>
+        </div>
+    </table>
+</div>
+
+
+
+<br />
+
+        Página @ViewBag.PageNumber de @ViewBag.TotalPages
+        @Html.PagedListPager((IPagedList)ViewBag.MessagesInOnePage,
+page => Url.Action("AsignarReservacion", new { page, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 }))
+
+
+
+

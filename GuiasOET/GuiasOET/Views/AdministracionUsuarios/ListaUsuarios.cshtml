@@ -1,0 +1,113 @@
+﻿@model PagedList.IPagedList<GuiasOET.Models.GUIAS_EMPLEADO>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+@{
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+    ViewBag.Title = "Lista de Usuarios";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-10">
+    </div>
+    <div class="col-lg-2">
+        <a href="@Url.Action("InsertarUsuario")">
+            <span class="btn btn-default fa fa-plus" aria-hidden="true" title="Editar" style="background-color: #7BC143; color:white;" ></span>  
+        </a>
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("ListaUsuarios", "AdministracionUsuarios", FormMethod.Get))
+        {
+            <p>
+                Criterio de búsqueda: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+            </p>
+        }
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <tr>
+                    <th>
+                        @Html.ActionLink("Nombre", "ListaUsuarios", new { sortOrder = ViewBag.NombreSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Primer Apellido", "ListaUsuarios", new { sortOrder = ViewBag.Ape1SortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Segundo Apellido", "ListaUsuarios", new { sortOrder = ViewBag.Ape2SortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Estación", "ListaUsuarios", new { sortOrder = ViewBag.EstacionSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Rol", "ListaUsuarios", new { sortOrder = ViewBag.RolSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                </tr>
+
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NOMBREEMPLEADO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.APELLIDO1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.APELLIDO2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NOMBREESTACION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TIPOEMPLEADO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EMAIL)
+                        </td>                     
+                        <td>
+                            <a href="@Url.Action("ConsultarUsuario", new { id = item.CEDULA })">
+                                <span class= "btn btn-default fa fa-eye" aria-hidden="true" title="Editar" style="background-color: #7BC143; color:white;"></span>
+                            </a>
+                            <a href="@Url.Action("ModificarUsuario", new { id = item.CEDULA })">
+                                <span class="btn btn-default fa fa-pencil" aria-hidden="true" title="Editar" style="background-color: #7BC143; color:white;"></span>
+                            </a>
+                            <a href="@Url.Action("DesactivarUsuario", new { id = item.CEDULA })">
+                                <span class="btn btn-default fa fa-trash-o" aria-hidden="true" title="Editar" style= "background-color: #F26631; color:white;" ></span>
+                            </a>
+                          </td>
+                    </tr>
+                }
+            </div>
+        </div>
+    </table>
+</div>
+
+
+
+    <br />
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("ListaUsuarios",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+

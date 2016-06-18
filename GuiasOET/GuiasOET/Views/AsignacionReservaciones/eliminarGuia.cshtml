@@ -1,0 +1,24 @@
+﻿@model GuiasOET.Models.AsignacionModelos
+
+@{
+    Layout = null;
+}
+
+<tr id="asignacion_@(ViewBag.rowCount)">
+    <td>
+        @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(0).NOMBREEMPLEADO)
+        @Html.Raw(" ")
+        @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(0).APELLIDO1)
+        @Html.Raw(" ")
+        @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(0).APELLIDO2)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(0).NOMBREESTACION)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(0).TIPOEMPLEADO)
+    </td>
+    <td>
+        <a class="btn btn-default" onclick="agregarGuia(@(Model.guiasAsignados.ElementAt(0).CEDULA),@(ViewBag.reserva),$('#asignacion_@(ViewBag.rowCount)'));" style="background-color: #7BC143; color:white;">Asignar</a>
+    </td>
+</tr>

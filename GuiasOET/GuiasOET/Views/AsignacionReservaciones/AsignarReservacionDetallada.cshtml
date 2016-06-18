@@ -1,0 +1,307 @@
+﻿@model GuiasOET.Models.AsignacionModelos
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Asignar Reservaciones";
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+}
+
+<script>
+    function agregarGuia(id, reservacion, asignacion)
+    {
+        var rowCount = $('#asignados tr').length;
+
+        if (Math.ceil(pack/12) >= rowCount ) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("agregarGuia")',
+                data: 'id=' + id + '&reservacion=' + reservacion + '&rowCount=' + rowCount,
+                success: function (data) {
+                    asignacion.remove();
+                    $('#asignados tr:last').after(data);
+                },
+            });
+        }
+        else {
+            alert("Ya superó el número máximo de asignados.");
+        }
+
+    }
+
+    function eliminarGuia(id, reservacion, asignado)
+    {
+        var rowCount = $('#asignaciones tr').length;
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("eliminarGuia")',
+            data: 'id=' + id + '&reservacion=' + reservacion + '&rowCount=' + rowCount,
+            success: function (data) {
+                asignado.remove();
+                $('#asignaciones tr:last').after(data);
+            },
+        });
+    }
+</script>
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <br />
+    <div class="col-md-9">
+        <div style="float: left">
+            @Html.ActionLink("Ir a lista de reservaciones", "AsignarReservacion", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+            <br />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <br />
+</div>
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <!--DATOS PERSONALES-->
+    <div class="row" style="width:auto">
+        <div class="col-sm-5 col-sm-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-body" style="height: 55%; width:auto">
+                    <div class="row">
+                        <div class="col-md-6" col-sm-offset-1>
+                            <label for="titulo">Datos de la reservación</label>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.modeloReservacion.NUMERORESERVACION , htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.modeloReservacion.NUMERORESERVACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.modeloReservacion.NUMERORESERVACION, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.modeloReservacion.NOMBREESTACION, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.modeloReservacion.NOMBREESTACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.modeloReservacion.NOMBREESTACION, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+
+                            @Html.LabelFor(model => model.modeloReservacion.NOMBRERESERVACION, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.modeloReservacion.NOMBRERESERVACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.modeloReservacion.NOMBRERESERVACION, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.modeloReservacion.NUMEROPERSONAS, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.modeloReservacion.NUMEROPERSONAS, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.modeloReservacion.NUMEROPERSONAS, "", new { @class = "text-danger" })
+                            <script>var pack=@(Model.modeloReservacion.NUMEROPERSONAS);</script>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            <span class="control-label col-md-2" style="font-weight:bold">Fecha:</span>
+                        </div>
+                        <div class="col-md-7">
+                            @ViewBag.fecha
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            @Html.LabelFor(model => model.modeloReservacion.HORA, htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.DisplayFor(model => model.modeloReservacion.HORA, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.modeloReservacion.HORA, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--DATOS DE CAMBIOS-->
+
+        <div class="col-sm-5 col-sm-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-body" style="height: 55%; width:auto">
+
+                    <div class="row">
+                        <div class="col-md-6" col-sm-offset-1>
+                            <label for="titulo">Cambios en la reservación:</label>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-7">
+                            <span class="control-label col-md-2">@ViewBag.cambios</span>
+                        </div>
+                    </div>
+
+                    <br />
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row" style="width:auto">
+
+        <div class="col-sm-5 col-sm-offset-1">
+                <div class="panel-body" style="height: 55%; width:auto">
+
+                    <div class="row">
+                        <div class="col-md-6" col-sm-offset-1>
+                            <label for="titulo">Lista de guías disponibles</label>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="table-responsive">
+                        <table class="table" id="asignaciones">
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <tr>
+                                        <th>
+                                            @Html.ActionLink("Nombre completo", "AsignarReservacionDetallada")
+                                        </th>
+                                        <th>
+                                            @Html.ActionLink("Estación", "AsignarReservacionDetallada")
+                                        </th>
+                                        <th>
+                                            @Html.ActionLink("Rol", "AsignarReservacionDetallada")
+                                        </th>
+                                    </tr>
+
+                                    @for (int i = 0; i < Model.totalGuiasDisponibles.Count; i++)
+                                    {
+                                        
+                                        <tr id="asignacion_@(i)">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).NOMBREEMPLEADO)
+                                                @Html.Raw(" ")
+                                                @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).APELLIDO1)
+                                                @Html.Raw(" ")
+                                                @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).APELLIDO2)
+                                                
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).NOMBREESTACION)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).TIPOEMPLEADO)
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-default" onclick="agregarGuia(@(Model.totalGuiasDisponibles.ElementAt(i).CEDULA),@(ViewBag.reserva),$('#asignacion_@(i)'));" style="background-color: #7BC143; color:white;">Asignar</a>
+                                            </td>
+                                        </tr>
+                                            
+                                    }
+                                </div>
+                            </div>
+                        </table>
+                    </div>
+
+                    <br />
+
+
+                </div>
+     
+        </div>
+
+        <div class="col-sm-5 col-sm-offset-1">
+            <div class="panel-body" style="height: 55%; width:auto">
+
+                <div class="row">
+                    <div class="col-md-6" col-sm-offset-1>
+                        <label for="titulo">Lista de guías asignados</label>
+                    </div>
+                </div>
+                <br />
+
+                <div class="table-responsive">
+                    <table class="table" id="asignados">
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <tr>
+                                    <th>
+                                        @Html.ActionLink("Nombre completo", "AsignarReservacionDetallada")
+                                    </th>
+                                    <th>
+                                        @Html.ActionLink("Estación", "AsignarReservacionDetallada")
+                                    </th>
+                                    <th>
+                                        @Html.ActionLink("Rol", "AsignarReservacionDetallada")
+                                    </th>
+                                </tr>
+
+                                @for (int i = 0; i < Model.guiasAsignados.Count; i++)
+                                {
+
+                                    <tr id="asignado@(i)">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).NOMBREEMPLEADO)
+                                            @Html.Raw(" ")
+                                            @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).APELLIDO1)
+                                            @Html.Raw(" ")
+                                            @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).APELLIDO2)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).NOMBREESTACION)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).TIPOEMPLEADO)
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-default" onclick="eliminarGuia(@(Model.guiasAsignados.ElementAt(i).CEDULA),@(ViewBag.reserva),$('#asignado@(i)'));" style="background-color: #F26631; color:white;">Eliminar</a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </div>
+                        </div>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        </div>
+ }
+
+Página @ViewBag.PageNumber de @ViewBag.TotalPages
+@Html.PagedListPager((IPagedList)ViewBag.MessagesInOnePage,
+page => Url.Action("AsignarReservacionDetallada", new { page, id = ViewBag.reserva }))
+
+

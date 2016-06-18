@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Sistema Guías OET</title>
+    @Styles.Render("~/Content/fontawesome")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+</head>
+<body>
+
+    <div class="barra-logo">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="pull-left">
+                        <img src="~/images/logo.png" alt="Logo OET" class="img-responsive logo-oet" />
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <br>
+                    @if (Session["NombreUsuarioLogueado"] != null)
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li> <br>@Html.Label("Bienvenid@ " + Session["NombreUsuarioLogueado"].ToString(), new { style = "color:#FFFFFF" })  </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="navbar navbar-default navbar-fixed-top" style="margin-top:80px;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "Inicio", "AdministracionUsuarios")</li>
+                    <li>@Html.ActionLink("Administración Usuarios", "ListaUsuarios", "AdministracionUsuarios")</li>
+                    <li>@Html.ActionLink("Asignación de días libres", "ListaGuias", "AsignacionDiasLibres")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="margin-right: 5px;">Reservaciones<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Asignar", "AsignarReservacion", "AsignacionReservaciones")</li>
+                            <li>@Html.ActionLink("Consultar", "ConsultarAsignacion", "AsignacionReservaciones")</li>                    
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="margin-right: 5px;">Reportes<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Reservaciones", "AsignarReservacion", "AsignacionReservaciones")</li>
+                            <li>@Html.ActionLink("Días Libres", "ConsultarAsignacion", "AsignacionReservaciones")</li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">  
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Cerrar sesión", "CerrarSesionLogin", "AdministracionUsuarios") </li>
+                </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>@Html.ActionLink("Ir a notificaciones", "Notificaciones", "AsignacionReservaciones") </li>
+                    </ul>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="wrapper">
+        <div class="container body-content">
+            @RenderBody()
+        </div>
+        <div class="push"></div>
+    </div>
+    <div class="footer">
+        <div class="cuerpo-footer">
+            <div class="container">
+                <footer>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h6 class="text-center"><a href="#">Contáctenos</a> | OET &copy; Copyright @DateTime.Now.Year - Todos los derechos reservados. </h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h6 class="text-center"> Por favor reporte cualquier problema o solicite asistencia a <a href="mailto:contacts.admin@oet.ac.cr">contacts.admin@oet.ac.cr</a></h6>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

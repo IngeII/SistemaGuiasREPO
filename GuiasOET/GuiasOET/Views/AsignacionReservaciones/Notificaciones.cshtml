@@ -1,0 +1,85 @@
+﻿@model PagedList.IPagedList<GuiasOET.Models.GUIAS_EMPLEADO>
+
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Notificaciones";
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+<div class="row">
+</div>
+<br>
+
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("Notificaciones", "AsignacionReservaciones", FormMethod.Get))
+        {
+            <p>
+                Lista de Reservaciones<br />
+                Criterio de búsqueda: Desde: <input type="date" name="fechaDesde"> Hasta: <input type="date" name="fechaHasta">
+                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+            </p>
+        }
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <tr>
+                    <th>
+                        @Html.ActionLink("Reservacion", "Notificaciones", new { sortOrder = ViewBag.ReservacionSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Nombre", "Notificaciones", new { sortOrder = ViewBag.NombreSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Estación", "Notificaciones", new { sortOrder = ViewBag.EstacionSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Personas", "Notificaciones", new { sortOrder = ViewBag.PersonasSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Fecha", "Notificaciones", new { sortOrder = ViewBag.FechaSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Hora", "Notificaciones", new { sortOrder = ViewBag.HoraSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Guías asignados", "Notificaciones", new { sortOrder = ViewBag.GuiasAsignadosSortParm, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.ActionLink("Ver guías", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                            @Html.ActionLink("Confirmar", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                            @Html.ActionLink("Cancelar", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #F26631; color:white;" })
+                        </td>
+                    </tr>
+                }
+            </div>
+        </div>
+    </table>
+</div>
+
+
+
+<br />
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("AsignarReservacion",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

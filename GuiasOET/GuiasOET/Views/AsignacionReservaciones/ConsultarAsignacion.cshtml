@@ -1,0 +1,218 @@
+﻿
+
+@model PagedList.IPagedList<GuiasOET.Models.GUIAS_EMPLEADO>
+@using PagedList.Mvc;
+@using System;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+@{
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+    ViewBag.Title = "Consultar Asignación de Reservaciones";
+}
+
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+
+<br>
+<br>
+
+<div class="row">
+    <div class="col-lg-5">
+        @using (Html.BeginForm("ConsultarAsignacion", "AsignacionReservaciones", FormMethod.Post))
+        {
+            <p>
+                Semana: <input type="date" step="7" min=2016-01-04 name="semanaABuscar"> @ViewBag.semanaABuscar
+                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+            </p>
+        }
+
+    </div>
+</div>
+<br>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Guias Internos & Externos
+                </th>
+                <th>
+                    <label for="LUNES">Lunes   @ViewBag.fechaLunes</label>
+                </th>
+                <th>
+                    <label for="MARTES">Martes  @ViewBag.fechaMartes</label>
+                </th>
+                <th>
+                    <label for="MIERCOLES">Miercoles  @ViewBag.fechaMiercoles</label>
+                </th>
+                <th>
+                    <label for="JUEVES">Jueves @ViewBag.fechaJueves</label>
+                </th>
+                <th>
+                    <label for="VIERNES">Viernes @ViewBag.fechaViernes</label>
+                </th>
+                <th>
+                    <label for="SABADO">Sabado @ViewBag.fechaSabado</label>
+                </th>
+                <th>
+                    <label for="DOMINGO">Domingo @ViewBag.fechaDomingo</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+                Boolean indicadorS = false;
+                Boolean indicadorD = false;
+                foreach (var item in Model)
+                {
+                    indicadorS = false;
+                    indicadorD = false;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NOMBREEMPLEADO)
+                            @Html.DisplayFor(modelItem => item.APELLIDO1)
+                            @Html.DisplayFor(modelItem => item.APELLIDO2)
+                        </td>
+                       
+                        @for (int i = 0; i < 7; ++i)
+                        {
+
+                            <td>
+
+                                @switch (i)
+                                {
+                                    case 0:
+                                        fecha = @ViewBag.fechaLunes;
+                                        break;
+                                    case 1:
+                                        fecha = @ViewBag.fechaMartes;
+                                        break;
+                                    case 2:
+                                        fecha = @ViewBag.fechaMiercoles;
+                                        break;
+                                    case 3:
+                                        fecha = @ViewBag.fechaJueves;
+                                        break;
+                                    case 4:
+                                        fecha = @ViewBag.fechaViernes;
+                                        break;
+                                    case 5:
+                                        fecha = @ViewBag.fechaSabado;
+                                        break;
+                                    default:
+                                        fecha = @ViewBag.fechaDomingo;
+                                        break;
+
+                                }
+
+                                @foreach (var asignacion in item.GUIAS_ASIGNACION)
+                                {
+                                    String ced = item.CEDULA;
+                                    String nombre = item.NOMBREEMPLEADO;
+                                    String id = asignacion.NUMERORESERVACION;
+                                    String fechaReservacion = String.Format("{0:dd/MM/yyyy}", asignacion.GUIAS_RESERVACION.FECHA).Trim();
+                                    if (fechaReservacion == fecha)
+                                    {
+                                        /**
+                                        @Html.ActionLink("                    ", "ConsultarAsignacionDetallada", new { id = item.NOMBREEMPLEADO, fecha = fecha, turno = "PM" }, new { @class = "btn btn-default", @style = "background-color:  rgb(0,0,255); color:white;" })
+                                        **/
+                                        if (asignacion.TURNO == "AM")
+                                        {
+                                            @Html.ActionLink("                    ", "ConsultarAsignacionDetallada", new { id = item.CEDULA, fecha = fecha, turno = asignacion.TURNO }, new { @class = "btn btn-default", @style = "background-color: rgb(76, 255, 0); color:white;" })
+                                            if (i == 5)
+                                            {
+                                                indicadorS = true;
+                                            }else if (i == 6)
+                                            {
+                                                indicadorD = true;
+                                            }
+
+                                        }
+                                        if (asignacion.TURNO == "PM")
+                                        {
+                                            @Html.ActionLink("                    ", "ConsultarAsignacionDetallada", new { id = item.CEDULA, fecha = fecha, turno = asignacion.TURNO }, new { @class = "btn btn-default", @style = "background-color: rgb(0, 148, 255); color:white;" })
+                                            if (i == 5)
+                                            {
+                                                indicadorS = true;
+                                            }
+                                            else if (i == 6)
+                                            {
+                                                indicadorD = true;
+                                            }
+                                        }
+                                        if (asignacion.TURNO == "Pajareo")
+                                        {
+                                            @Html.ActionLink("                    ", "ConsultarAsignacionDetallada", new { id = item.CEDULA, fecha = fecha, turno = asignacion.TURNO }, new { @class = "btn btn-default", @style = "background-color: rgb(0,0,255); color:white;" })
+                                            if (i == 5)
+                                            {
+                                                indicadorS = true;
+                                            }
+                                            else if (i == 6)
+                                            {
+                                                indicadorD = true;
+                                            }
+
+                                        }
+                                        if (asignacion.TURNO == "Nocturno")
+                                        {
+                                            @Html.ActionLink("                    ", "ConsultarAsignacionDetallada", new { id = item.CEDULA, fecha = fecha, turno = asignacion.TURNO }, new { @class = "btn btn-default", @style = "background-color: #F2BF8E; color:white;" })
+                                            if (i == 5)
+                                            {
+                                                indicadorS = true;
+                                            }
+                                            else if (i == 6)
+                                            {
+                                                indicadorD = true;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            </td>
+                        }
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("ConsultarAsignacion",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+
+
+
+    </br>
+    </br>
+    </br>
+<div class="row">
+    <div class="col-md-8" col-sm-offset-1>
+        <label for="simbol">Simbología: </label>
+    </div>
+    </br>
+    <div class="col-md-7">
+        <textarea rows="1" cols="23" align="center" style="color: white; background-color: darkgray">Día libre</textarea>
+        <textarea rows="1" cols="23" style="color: white; background-color: rgb(0,0,255)">Tour pajareo</textarea>
+        </br>
+        </br>
+        <textarea rows="1" cols="23" style="color: white; background-color: rgb(76, 255, 0)">Tour AM</textarea>
+        <textarea rows="1" cols="23" style="color: white; background-color: #F2BF8E">Tour nocturno</textarea>
+        </br>
+        </br>
+        <textarea rows="1" cols="23" style="color: white; background-color: rgb(0, 148, 255)">Tour PM</textarea>
+
+    </div>
+
