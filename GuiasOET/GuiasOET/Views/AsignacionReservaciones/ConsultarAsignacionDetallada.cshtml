@@ -29,7 +29,7 @@
                 <div class="panel-body" style="height: 55%; width:auto">
                     <div class="row">
                         <div class="col-md-12" col-sm-offset-1>
-                            <label for="titulo">Reservación para el:    @Html.DisplayFor(model => model.reservacion.FECHA) para el guía @Html.DisplayFor(model => model.modeloEmpleado.NOMBREEMPLEADO)  @Html.DisplayFor(model => model.modeloEmpleado.APELLIDO1)     </label>
+                            <label for="titulo">Reservación para el:    @Html.DisplayFor(model => model.reservacion.FECHAENTRA) para el guía @Html.DisplayFor(model => model.modeloEmpleado.NOMBREEMPLEADO)  @Html.DisplayFor(model => model.modeloEmpleado.APELLIDO1)     </label>
                         </div>
                     </div>
                     <br />
@@ -49,11 +49,13 @@
                     <div class="row">
                         <div class="col-md-3" col-sm-offset-1>
 
-                            @Html.LabelFor(model => model.reservacion.NOMBRERESERVACION, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.reservacion.NOMBRESOLICITANTE, htmlAttributes: new { @class = "control-label col-md-2" })
                         </div>
                         <div class="col-md-7">
-                            @Html.DisplayFor(model => model.reservacion.NOMBRERESERVACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                            @Html.ValidationMessageFor(model => model.reservacion.NOMBRERESERVACION, "", new { @class = "text-danger" })
+                            @Html.DisplayFor(model => model.modeloReservacion.NOMBRESOLICITANTE, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.Raw(" ")
+                            @Html.DisplayFor(model => model.modeloReservacion.APELLIDOSSOLICITANTE, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.modeloReservacion.NOMBRESOLICITANTE, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
@@ -73,11 +75,11 @@
 
                     <div class="row">
                         <div class="col-md-3" col-sm-offset-1>
-                            @Html.LabelFor(model => model.reservacion.FECHA, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.reservacion.FECHAENTRA, htmlAttributes: new { @class = "control-label col-md-2" })
                         </div>
                         <div class="col-md-7">
-                            @Html.DisplayFor(model => model.reservacion.FECHA, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                            @Html.ValidationMessageFor(model => model.reservacion.FECHA, "", new { @class = "text-danger" })
+                            @Html.DisplayFor(model => model.reservacion.FECHAENTRA, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.reservacion.FECHAENTRA, "", new { @class = "text-danger" })
                         </div>
                     </div>
 

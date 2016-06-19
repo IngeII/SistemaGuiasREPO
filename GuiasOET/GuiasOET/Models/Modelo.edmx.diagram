@@ -9,19 +9,20 @@
         <EntityTypeShape EntityType="Model.GUIAS_CONFIGURACIONCORREO" Width="1.5" PointX="0.75" PointY="2.75" />
         <EntityTypeShape EntityType="Model.GUIAS_EMPLEADO" Width="1.5" PointX="5.25" PointY="6" />
         <EntityTypeShape EntityType="Model.GUIAS_ESTACION" Width="1.5" PointX="3" PointY="7.125" />
-        <EntityTypeShape EntityType="Model.GUIAS_RESERVACION" Width="1.5" PointX="8.25" PointY="0.75" />
         <EntityTypeShape EntityType="Model.GUIAS_ROLDIASLIBRES" Width="1.5" PointX="7.5" PointY="4.875" />
         <EntityTypeShape EntityType="Model.GUIAS_TELEFONO" Width="1.5" PointX="7.5" PointY="12.875" />
         <AssociationConnector Association="Model.FK_ESTACION_COMPANIA" />
         <AssociationConnector Association="Model.FK_EMPLEADO_ESTACION" />
         <AssociationConnector Association="Model.FK_ROL_INTERNO" />
         <AssociationConnector Association="Model.FK_TELEFONO_EMPLEADO" />
-        <EntityTypeShape EntityType="Model.GUIAS_ASIGNACION" Width="1.5" PointX="10.5" PointY="5.875" />
         <EntityTypeShape EntityType="Model.GUIAS_TURNO" Width="1.5" PointX="5.25" PointY="11.125" />
+        <AssociationConnector Association="Model.FK_TURNO_ESTACION" />
+        <EntityTypeShape EntityType="Model.V_GUIAS_RESERVADOS" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.GUIAS_ASIGNACION" Width="1.5" PointX="7.5" PointY="8.5" />
+        <EntityTypeShape EntityType="Model.GUIAS_RESERVACION" Width="1.5" PointX="5.25" PointY="15" />
         <AssociationConnector Association="Model.FK_ASIGNACION_GUIA" />
         <AssociationConnector Association="Model.FK_ASIGNACION_RESERVACION" />
         <AssociationConnector Association="Model.FK_TURNO" />
-        <AssociationConnector Association="Model.FK_TURNO_ESTACION" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

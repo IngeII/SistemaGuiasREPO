@@ -274,7 +274,9 @@
     <Compile Include="Models\PartialClasses.cs" />
     <Compile Include="Models\ReportesModelo.cs" />
     <Compile Include="Models\ReservacionesModelos.cs" />
-    <Compile Include="Models\V_GUIAS_RESERVADOS.cs" />
+    <Compile Include="Models\V_GUIAS_RESERVADOS.cs">
+      <DependentUpon>Modelo.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

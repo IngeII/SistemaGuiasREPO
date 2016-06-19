@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="GUIAS_ASIGNACION">
     <Key>
       <PropertyRef Name="NUMERORESERVACION" />
       <PropertyRef Name="CEDULAGUIA" />
     </Key>
     <Property Name="NOTASASOCIA" Type="varchar2" MaxLength="100" />
-    <Property Name="NUMERORESERVACION" Type="varchar2" MaxLength="15" Nullable="false" />
+    <Property Name="NUMERORESERVACION" Type="varchar2" MaxLength="255" Nullable="false" />
     <Property Name="TURNO" Type="varchar2" MaxLength="20" />
     <Property Name="CEDULAGUIA" Type="varchar2" MaxLength="9" Nullable="false" />
   </EntityType>
@@ -55,14 +55,16 @@
     <Key>
       <PropertyRef Name="NUMERORESERVACION" />
     </Key>
-    <Property Name="NUMERORESERVACION" Type="varchar2" MaxLength="15" Nullable="false" />
-    <Property Name="NOMBRERESERVACION" Type="varchar2" MaxLength="100" />
+    <Property Name="NUMERORESERVACION" Type="varchar2" MaxLength="255" Nullable="false" />
+    <Property Name="NOMBRESOLICITANTE" Type="varchar2" MaxLength="80" />
+    <Property Name="APELLIDOSSOLICITANTE" Type="varchar2" MaxLength="80" />
     <Property Name="NUMEROPERSONAS" Type="number" Precision="38" Scale="0" />
-    <Property Name="HORAMODIFICACION" Type="varchar2" MaxLength="10" />
-    <Property Name="FECHAMODIFICACION" Type="date" />
-    <Property Name="FECHA" Type="date" />
+    <Property Name="FECHAENTRA" Type="date" />
+    <Property Name="FECHASALE" Type="date" />
     <Property Name="HORA" Type="varchar2" MaxLength="10" />
     <Property Name="NOMBREESTACION" Type="varchar2" MaxLength="55" />
+    <Property Name="ULTIMAMODIFICACION" Type="number" Precision="38" Scale="0" />
+    <Property Name="NOTAS" Type="varchar2" MaxLength="4000" />
     <Property Name="CONFIRMACION" Type="number" Precision="38" Scale="0" />
   </EntityType>
   <EntityType Name="GUIAS_ROLDIASLIBRES">
@@ -89,6 +91,23 @@
     <Property Name="NOMBREESTACION" Type="varchar2" MaxLength="55" Nullable="false" />
     <Property Name="HORAINICIO" Type="varchar2" MaxLength="10" Nullable="false" />
     <Property Name="HORAFIN" Type="varchar2" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="V_GUIAS_RESERVADOS">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="NOMBRE" />
+      <PropertyRef Name="ESTACION" />
+    </Key>
+    <Property Name="ID" Type="varchar2" MaxLength="255" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar2" MaxLength="80" Nullable="false" />
+    <Property Name="APELLIDOS" Type="varchar2" MaxLength="80" />
+    <Property Name="PAX" Type="number" Precision="20" Scale="0" />
+    <Property Name="ENTRA" Type="date" />
+    <Property Name="SALE" Type="date" />
+    <Property Name="ULTIMA_MODIFICACION" Type="number" Precision="16" Scale="0" />
+    <Property Name="ESTACION" Type="varchar2" MaxLength="100" Nullable="false" />
   </EntityType>
   <Association Name="FK_ASIGNACION_GUIA">
     <End Role="GUIAS_EMPLEADO" Type="Self.GUIAS_EMPLEADO" Multiplicity="1" />
@@ -196,6 +215,18 @@
     <EntitySet Name="GUIAS_ROLDIASLIBRES" EntityType="Self.GUIAS_ROLDIASLIBRES" Schema="SERVICIOS_RESERVADOS" store:Type="Tables" />
     <EntitySet Name="GUIAS_TELEFONO" EntityType="Self.GUIAS_TELEFONO" Schema="SERVICIOS_RESERVADOS" store:Type="Tables" />
     <EntitySet Name="GUIAS_TURNO" EntityType="Self.GUIAS_TURNO" Schema="SERVICIOS_RESERVADOS" store:Type="Tables" />
+    <EntitySet Name="V_GUIAS_RESERVADOS" EntityType="Self.V_GUIAS_RESERVADOS" store:Type="Views" store:Schema="SERVICIOS_RESERVADOS">
+      <DefiningQuery>SELECT 
+"V_GUIAS_RESERVADOS"."ID" AS "ID", 
+"V_GUIAS_RESERVADOS"."NOMBRE" AS "NOMBRE", 
+"V_GUIAS_RESERVADOS"."APELLIDOS" AS "APELLIDOS", 
+"V_GUIAS_RESERVADOS"."PAX" AS "PAX", 
+"V_GUIAS_RESERVADOS"."ENTRA" AS "ENTRA", 
+"V_GUIAS_RESERVADOS"."SALE" AS "SALE", 
+"V_GUIAS_RESERVADOS"."ULTIMA_MODIFICACION" AS "ULTIMA_MODIFICACION", 
+"V_GUIAS_RESERVADOS"."ESTACION" AS "ESTACION"
+FROM "SERVICIOS_RESERVADOS"."V_GUIAS_RESERVADOS" "V_GUIAS_RESERVADOS"</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_ASIGNACION_GUIA" Association="Self.FK_ASIGNACION_GUIA">
       <End Role="GUIAS_EMPLEADO" EntitySet="GUIAS_EMPLEADO" />
       <End Role="GUIAS_ASIGNACION" EntitySet="GUIAS_ASIGNACION" />

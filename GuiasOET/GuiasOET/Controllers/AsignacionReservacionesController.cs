@@ -173,11 +173,11 @@ namespace GuiasOET.Controllers
 
                     if (rol.Contains("Local") || rol.Contains("Interno"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio && e.FECHA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio && e.FECHA <= fechaFin));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin));
                     }
 
                     page = 1;
@@ -191,11 +191,11 @@ namespace GuiasOET.Controllers
 
                     if (rol.Contains("Local") || rol.Contains("Interno"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA <= fechaFin));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA <= fechaFin));
                     }
 
                     page = 1;
@@ -209,11 +209,11 @@ namespace GuiasOET.Controllers
 
                     if (rol.Contains("Local") || rol.Contains("Interno"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio));
                     }
 
                     page = 1;
@@ -293,7 +293,7 @@ namespace GuiasOET.Controllers
 
                     fechaInicio = Convert.ToDateTime(fechaDesde);
                     fechaFin = Convert.ToDateTime(fechaHasta);
-                    todasReservaciones = (baseDatos.GUIAS_RESERVACION.Where(e => e.FECHA >= fechaInicio && e.FECHA <= fechaFin));
+                    todasReservaciones = (baseDatos.GUIAS_RESERVACION.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin));
                     page = 1;
 
 
@@ -303,7 +303,7 @@ namespace GuiasOET.Controllers
                 else if (String.IsNullOrEmpty(fechaDesde) && !(String.IsNullOrEmpty(fechaHasta)))
                 {
                     fechaFin = Convert.ToDateTime(fechaHasta);
-                    todasReservaciones = (baseDatos.GUIAS_RESERVACION.Where(e => e.FECHA <= fechaFin));
+                    todasReservaciones = (baseDatos.GUIAS_RESERVACION.Where(e => e.FECHAENTRA <= fechaFin));
                     page = 1;
 
                 }
@@ -312,7 +312,7 @@ namespace GuiasOET.Controllers
                 else if (!(String.IsNullOrEmpty(fechaDesde)) && String.IsNullOrEmpty(fechaHasta))
                 {
                     fechaInicio = Convert.ToDateTime(fechaDesde);
-                    todasReservaciones = (baseDatos.GUIAS_RESERVACION.Where(e => e.FECHA >= fechaInicio));
+                    todasReservaciones = (baseDatos.GUIAS_RESERVACION.Where(e => e.FECHAENTRA >= fechaInicio));
                     page = 1;
                 }
 
@@ -405,7 +405,7 @@ namespace GuiasOET.Controllers
                     datos = listaTotalReservaciones.OrderBy(e => e.NUMERORESERVACION);
                     break;
                 case "Nombre":
-                    datos = listaTotalReservaciones.OrderBy(e => e.NOMBRERESERVACION);
+                    datos = listaTotalReservaciones.OrderBy(e => e.NOMBRESOLICITANTE);
                     break;
                 case "Estacion":
                     datos = listaTotalReservaciones.OrderBy(e => e.NOMBREESTACION);
@@ -415,7 +415,7 @@ namespace GuiasOET.Controllers
                     break;
                 case "Fecha":
                     Debug.WriteLine("entre a ordenar fecha");
-                    datos = listaTotalReservaciones.OrderBy(e => e.FECHA);
+                    datos = listaTotalReservaciones.OrderBy(e => e.FECHAENTRA);
                     break;
                 default:
                     datos = listaTotalReservaciones.OrderBy(e => e.NUMERORESERVACION);
@@ -838,7 +838,7 @@ namespace GuiasOET.Controllers
             AsignacionModelos modelo;
 
             modelo = new AsignacionModelos(baseDatos.GUIAS_RESERVACION.Find(identificacion));
-            ViewBag.fecha = String.Format("{0:M/d/yyyy}", modelo.modeloReservacion.FECHA).Trim();
+            ViewBag.fecha = String.Format("{0:M/d/yyyy}", modelo.modeloReservacion.FECHAENTRA).Trim();
 
             ViewBag.cambios = "Ninguno";
 
@@ -964,7 +964,7 @@ namespace GuiasOET.Controllers
                         if (reservacionAuxiliar != null && reservacionAuxiliar.Count() != 0)
                         {
                            
-                            if (reservacionAuxiliar.ElementAt(0).FECHA.ToString() == date.ToString())
+                            if (reservacionAuxiliar.ElementAt(0).FECHAENTRA.ToString() == date.ToString())
                             {
                                 indicador = false;
                                 string cedula = "";

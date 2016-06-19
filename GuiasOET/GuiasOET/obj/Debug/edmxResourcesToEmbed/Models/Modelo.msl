@@ -46,21 +46,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="GUIAS_RESERVACION">
-      <EntityTypeMapping TypeName="Model.GUIAS_RESERVACION">
-        <MappingFragment StoreEntitySet="GUIAS_RESERVACION">
-          <ScalarProperty Name="CONFIRMACION" ColumnName="CONFIRMACION" />
-          <ScalarProperty Name="NOMBREESTACION" ColumnName="NOMBREESTACION" />
-          <ScalarProperty Name="HORA" ColumnName="HORA" />
-          <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-          <ScalarProperty Name="FECHAMODIFICACION" ColumnName="FECHAMODIFICACION" />
-          <ScalarProperty Name="HORAMODIFICACION" ColumnName="HORAMODIFICACION" />
-          <ScalarProperty Name="NUMEROPERSONAS" ColumnName="NUMEROPERSONAS" />
-          <ScalarProperty Name="NOMBRERESERVACION" ColumnName="NOMBRERESERVACION" />
-          <ScalarProperty Name="NUMERORESERVACION" ColumnName="NUMERORESERVACION" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="GUIAS_ROLDIASLIBRES">
       <EntityTypeMapping TypeName="Model.GUIAS_ROLDIASLIBRES">
         <MappingFragment StoreEntitySet="GUIAS_ROLDIASLIBRES">
@@ -78,6 +63,30 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="GUIAS_TURNO">
+      <EntityTypeMapping TypeName="Model.GUIAS_TURNO">
+        <MappingFragment StoreEntitySet="GUIAS_TURNO">
+          <ScalarProperty Name="HORAFIN" ColumnName="HORAFIN" />
+          <ScalarProperty Name="HORAINICIO" ColumnName="HORAINICIO" />
+          <ScalarProperty Name="NOMBREESTACION" ColumnName="NOMBREESTACION" />
+          <ScalarProperty Name="NOMBRETURNO" ColumnName="NOMBRETURNO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="V_GUIAS_RESERVADOS">
+      <EntityTypeMapping TypeName="Model.V_GUIAS_RESERVADOS">
+        <MappingFragment StoreEntitySet="V_GUIAS_RESERVADOS">
+          <ScalarProperty Name="ESTACION" ColumnName="ESTACION" />
+          <ScalarProperty Name="ULTIMA_MODIFICACION" ColumnName="ULTIMA_MODIFICACION" />
+          <ScalarProperty Name="SALE" ColumnName="SALE" />
+          <ScalarProperty Name="ENTRA" ColumnName="ENTRA" />
+          <ScalarProperty Name="PAX" ColumnName="PAX" />
+          <ScalarProperty Name="APELLIDOS" ColumnName="APELLIDOS" />
+          <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="GUIAS_ASIGNACION">
       <EntityTypeMapping TypeName="Model.GUIAS_ASIGNACION">
         <MappingFragment StoreEntitySet="GUIAS_ASIGNACION">
@@ -88,13 +97,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="GUIAS_TURNO">
-      <EntityTypeMapping TypeName="Model.GUIAS_TURNO">
-        <MappingFragment StoreEntitySet="GUIAS_TURNO">
-          <ScalarProperty Name="HORAFIN" ColumnName="HORAFIN" />
-          <ScalarProperty Name="HORAINICIO" ColumnName="HORAINICIO" />
+    <EntitySetMapping Name="GUIAS_RESERVACION">
+      <EntityTypeMapping TypeName="Model.GUIAS_RESERVACION">
+        <MappingFragment StoreEntitySet="GUIAS_RESERVACION">
+          <ScalarProperty Name="CONFIRMACION" ColumnName="CONFIRMACION" />
+          <ScalarProperty Name="NOTAS" ColumnName="NOTAS" />
+          <ScalarProperty Name="ULTIMAMODIFICACION" ColumnName="ULTIMAMODIFICACION" />
           <ScalarProperty Name="NOMBREESTACION" ColumnName="NOMBREESTACION" />
-          <ScalarProperty Name="NOMBRETURNO" ColumnName="NOMBRETURNO" />
+          <ScalarProperty Name="HORA" ColumnName="HORA" />
+          <ScalarProperty Name="FECHASALE" ColumnName="FECHASALE" />
+          <ScalarProperty Name="FECHAENTRA" ColumnName="FECHAENTRA" />
+          <ScalarProperty Name="NUMEROPERSONAS" ColumnName="NUMEROPERSONAS" />
+          <ScalarProperty Name="APELLIDOSSOLICITANTE" ColumnName="APELLIDOSSOLICITANTE" />
+          <ScalarProperty Name="NOMBRESOLICITANTE" ColumnName="NOMBRESOLICITANTE" />
+          <ScalarProperty Name="NUMERORESERVACION" ColumnName="NUMERORESERVACION" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
