@@ -11,13 +11,16 @@ namespace GuiasOET.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class V_GUIAS_RESERVADOS
     {
         public string ID { get; set; }
         public string NOMBRE { get; set; }
         public string APELLIDOS { get; set; }
         public Nullable<decimal> PAX { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:M/d/yyyy}")]
         public Nullable<System.DateTime> ENTRA { get; set; }
         public Nullable<System.DateTime> SALE { get; set; }
         public Nullable<long> ULTIMA_MODIFICACION { get; set; }

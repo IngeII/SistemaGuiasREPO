@@ -43,6 +43,20 @@
             },
         });
     }
+
+    function aceptarCambios(reservacion)
+    {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("aceptarCambios")',
+                data: 'reservacion=' + reservacion,
+                success: function (data) {
+                    alert("Reservación actualizada con éxito");
+                },
+            });
+      
+    }
 </script>
 
 <div class="row">
@@ -83,7 +97,7 @@
 
                     <div class="row">
                         <div class="col-md-3" col-sm-offset-1>
-                            @Html.LabelFor(model => model.modeloReservacion.NUMERORESERVACION , htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.modeloReservacion.NUMERORESERVACION, htmlAttributes: new { @class = "control-label col-md-2" })
                         </div>
                         <div class="col-md-7">
                             @Html.DisplayFor(model => model.modeloReservacion.NUMERORESERVACION, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
@@ -165,12 +179,42 @@
 
                     <div class="row">
                         <div class="col-md-7">
-                            <span class="control-label col-md-2">@ViewBag.cambios</span>
+                            @{
+
+                                if (ViewBag.cambios.Count != 0)
+                                {
+                                    foreach (string cambio in ViewBag.cambios)
+                                    {
+                                        <span class="control-label ">@(cambio)</span><br />
+
+                                    }
+                                }
+
+                            }
                         </div>
                     </div>
 
                     <br />
 
+                    <div class="row">
+                        <div class="col-md-12" col-sm-offset-1>
+                            @{
+                                if (ViewBag.cambios.Count == 1)
+                                {
+                                    foreach (string cambio in ViewBag.cambios)
+                                    {
+                                        if (!cambio.Equals("Ninguno"))
+                                        {
+                                            <label for="titulo">¿Desea aceptar los cambios en la reservación?</label>
+                                            <a class="btn btn-default" onclick="aceptarCambios('@(ViewBag.reserva)');" style="background-color: #7BC143; color:white;">Aceptar</a>
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        </div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -225,7 +269,7 @@
                                                 @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).TIPOEMPLEADO)
                                             </td>
                                             <td>
-                                                <a class="btn btn-default" onclick="agregarGuia(@(Model.totalGuiasDisponibles.ElementAt(i).CEDULA),@(ViewBag.reserva),$('#asignacion_@(i)'));" style="background-color: #7BC143; color:white;">Asignar</a>
+                                                <a class="btn btn-default" onclick="agregarGuia(@(Model.totalGuiasDisponibles.ElementAt(i).CEDULA),'@(ViewBag.reserva)',$('#asignacion_@(i)'));" style="background-color: #7BC143; color:white;">Asignar</a>
                                             </td>
                                         </tr>
                                             
@@ -287,7 +331,7 @@
                                             @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).TIPOEMPLEADO)
                                         </td>
                                         <td>
-                                            <a class="btn btn-default" onclick="eliminarGuia(@(Model.guiasAsignados.ElementAt(i).CEDULA),@(ViewBag.reserva),$('#asignado@(i)'));" style="background-color: #F26631; color:white;">Eliminar</a>
+                                            <a class="btn btn-default" onclick="eliminarGuia(@(Model.guiasAsignados.ElementAt(i).CEDULA),'@(ViewBag.reserva)',$('#asignado@(i)'));" style="background-color: #F26631; color:white;">Eliminar</a>
                                         </td>
                                     </tr>
 

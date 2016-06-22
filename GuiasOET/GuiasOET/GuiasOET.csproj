@@ -380,6 +380,7 @@
     <Content Include="Views\AsignacionDiasLibres\AsignarDiasLibresDetallada.cshtml" />
     <Content Include="Views\Reportes\ReportesReservaciones.cshtml" />
     <Content Include="Views\Reportes\PersonasAtendidas.cshtml" />
+    <Content Include="Views\AsignacionReservaciones\aceptarCambios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
