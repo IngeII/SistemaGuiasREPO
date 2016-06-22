@@ -68,41 +68,42 @@
 
         <div class="row">
             <div class="col-lg-12">
+                <tr>
+                    <th>
+
+                        @Html.ActionLink("Fecha", "AsignarReservacionDetallada", new { sortOrder = ViewBag.Fecha, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+
+                    <th>
+                        @Html.ActionLink("Tipo", "AsignarReservacionDetallada", new { sortOrder = ViewBag.Tipodialibre, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                    </th>
+
+                    <th>
+                    </th>
+
+                </tr>
+
+                @for (int i = 0; i < Model.totalRolDiaLibre.Count; ++i)
+                {
+
                     <tr>
-                        <th>
-                            @Html.ActionLink("Fecha", "AsignarReservacion", new { sortOrder = ViewBag.ReservacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
-                        </th>
-
-                        <th>
-                            @Html.ActionLink("Tipo", "AsignarReservacion", new { sortOrder = ViewBag.NombreSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
-                        </th>
-
-                        <th>
-                        </th>
-
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalRolDiaLibre.ElementAt(i).FECHA)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalRolDiaLibre.ElementAt(i).TIPODIALIBRE)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Eliminar", "EliminarRol", new { id = Model.totalRolDiaLibre.ElementAt(i).CEDULAINTERNO }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                        </td>
                     </tr>
-             
-                    @for (int i = 0; i < Model.roldialibre.Count; ++i)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => Model.roldialibre.ElementAt(i).FECHA)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => Model.roldialibre.ElementAt(i).FECHA)
-                            </td>
-                            <td>
-                                <a href="@Url.Action("ModificarRol")">
-                                    <span class="btn btn-default fa fa-pencil" aria-hidden="true" title="Editar" style="background-color: #7BC143; color:white;"></span>
-                                </a>
-                                <a href="@Url.Action("EliminarRol")">
-                                    <span class="btn btn-default fa fa-trash-o" aria-hidden="true" title="Editar" style="background-color: #F26631; color:white;"></span>
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                }
             </div>
         </div>
     </table>
 </div>
 
+
+    Página @(ViewBag.PageCount < ViewBag.PageNumber ? 0 : ViewBag.PageNumber) de @ViewBag.PageCount
+    @Html.PagedListPager(Model.totalRolDiaLibre, page => Url.Action("AsignarDiasLibresDetallada",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
