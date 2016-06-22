@@ -97,44 +97,72 @@ namespace GuiasOET.Controllers
         }
 
 
-        public ActionResult AsignarDiasLibresDetallada(int? id)
+        public ActionResult AsignarDiasLibresDetallada(int? page, int? id, string sortOrder, string currentFilter1, string currentFilter2)
         {
 
             string identificacion;
             DIASLIBRES modelo;
 
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.fecha = String.IsNullOrEmpty(sortOrder) ? "Fecha" : "";
+            ViewBag.tipo = String.IsNullOrEmpty(sortOrder) ? "Tipodialibre" : "";
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             identificacion = id.ToString();
 
             modelo = new DIASLIBRES(baseDatos.GUIAS_EMPLEADO.Find(identificacion));
 
+            List<string> guias = baseDatos.GUIAS_EMPLEADO.Select(s => s.CEDULA).ToList();
+
+            List<GUIAS_ROLDIASLIBRES> dias = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion)).ToList();
+            modelo.tRolDiaLibre = dias;
             // modelo.modeloEmpleado.ESTADO = baseDatos.GUIAS_EMPLEADO.Find(identificacion).ESTADO;
             if (modelo == null)
             {
                 return HttpNotFound();
             }
 
+            /* Se define tamaño de la pagina para la paginación de guías disponibles */
+            int pageSize = 8;
+            int pageNumber = (page ?? 1);
+
+            ViewBag.pageNumber = pageNumber;
+            modelo.totalRolDiaLibre = modelo.tRolDiaLibre.ToPagedList(pageNumber, pageSize);
+            ViewBag.MessagesInOnePage = modelo.tRolDiaLibre;
+            ViewBag.PageNumber = pageNumber;
+
             return View(modelo);
         }
 
         public ActionResult AsignarRol(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)
         {
-
             return View();
         }
-        public ActionResult ModificarRol()
+
+        public ActionResult EliminarRol(int? id)
         {
-            return View();
+            if (id != null)
+            {
+                string identificacion = id.ToString();
+                List<GUIAS_ROLDIASLIBRES> reservacion = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion)).ToList();
+
+                if (reservacion != null && reservacion.Count() == 1)
+                {
+                    baseDatos.GUIAS_ROLDIASLIBRES.Remove(reservacion.ElementAt(0));
+                    baseDatos.SaveChanges();
+                }
+            }
+            //Console.Write(fecha);
+            //Console.Write(cedula);
+            return RedirectToAction("AsignarDiasLibresDetallada");
+
 
         }
 
-        public ActionResult EliminarRol()
-        {
-            return View();
 
-        }
     }
 }
