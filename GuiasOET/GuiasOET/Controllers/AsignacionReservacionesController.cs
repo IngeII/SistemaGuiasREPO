@@ -430,8 +430,7 @@ namespace GuiasOET.Controllers
             return View(table);
         }
 
-        /*
-
+       
         public ActionResult Notificaciones(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)  //**  string currentFilter2, string fechaHasta
         {
             ViewBag.CurrentSort = sortOrder;
@@ -443,15 +442,12 @@ namespace GuiasOET.Controllers
             ViewBag.HoraSortParm = String.IsNullOrEmpty(sortOrder) ? "Hora" : "";
             ViewBag.GuiasAsignadosSortParm = String.IsNullOrEmpty(sortOrder) ? "Guías Asignados" : "";
 
-         
             int pageSize = 8;
             int pageNumber = (page ?? 1);
             ViewBag.pageNumber = pageNumber;
 
             AsignacionModelos table = new AsignacionModelos();
-
-            //Todas las reservaciones del sistema
-            var reservacion = from r in baseDatos.GUIAS_RESERVACION select r;
+            var reservacion = from r in baseDatos.GUIAS_RESERVACION select r; //Todas las reservaciones del sistema
 
             DateTime fechaInicio;
             DateTime fechaFin;
@@ -464,7 +460,6 @@ namespace GuiasOET.Controllers
                 ViewBag.CurrentFilter1 = fechaDesde;
                 ViewBag.CurrentFilter2 = fechaHasta;
             }
-
             //Solo la fecha inicial es vacía
             else if (String.IsNullOrEmpty(fechaDesde) && !(String.IsNullOrEmpty(fechaHasta)))
             {
@@ -532,11 +527,11 @@ namespace GuiasOET.Controllers
                     fechaFin = Convert.ToDateTime(fechaHasta);
                     if (rol.Contains("Local"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio && e.FECHA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHASALE <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio && e.FECHA <= fechaFin));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHASALE <= fechaFin));
                     }
                     page = 1;
                 }
@@ -546,11 +541,11 @@ namespace GuiasOET.Controllers
                     fechaFin = Convert.ToDateTime(fechaHasta);
                     if (rol.Contains("Local"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHASALE<= fechaFin && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA <= fechaFin));
+                        reservacion = (reservacion.Where(e => e.FECHASALE <= fechaFin));
                     }
                     page = 1;
                 }
@@ -560,11 +555,11 @@ namespace GuiasOET.Controllers
                     fechaInicio = Convert.ToDateTime(fechaDesde);
                     if (rol.Contains("Local"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
-                        reservacion = (reservacion.Where(e => e.FECHA >= fechaInicio));
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio));
                     }
                     page = 1;
                 }
@@ -582,40 +577,29 @@ namespace GuiasOET.Controllers
                 //Lista que contiene los guias de todas las reservaciones
                 List<IEnumerable<GUIAS_RESERVACION>> totalReservas = new List<IEnumerable<GUIAS_RESERVACION>>();
 
-
-                // ****AQUI
-
-                List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();
-                
-                var datosDeLaVista = from r in baseDeDatos.V_GUIAS_RESERVADOS select r;
-             
+                List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();           
+                var datosDeLaVista = from r in baseDatos.V_GUIAS_RESERVADOS select r;
                 GUIAS_RESERVACION reserva;
-                V_GUIAS_RESERVADOS vistaReserva;
-
-
-                foreach (var row in reservacion)
+                V_GUIAS_RESERVADOS tuplaVistaActual;
+                var vistaReserva = from r in baseDatos.V_GUIAS_RESERVADOS select r; //Se tienen todas las vistas del sistema 
+                foreach (var row in reservacion) // la lista de reservas aqui ya esta filtrada 
                 {
-                    vistaReserva = baseDatos.V_GUIAS_RESERVADOS.FirstOrDefault(e => e.ID.Equals(row.NUMERORESERVACION));
-
-                    //reserva es una variable de tipo GUIA_RESERVACION y aqui se ingresa la reserva que tiene el mismo numeroReservacion q la reservacion q en ese momento esta iterando en el foreach 
-                    //(el cual itera sobre todas las reservaciones q estan dentro del rango de fechas sellecionado por el usuario ( variable reservacion )
                     reserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
-
                     if (reserva != null && vistaReserva != null)
                     {
                         listaReservaciones.Add(reserva);
                         foreach (var row2 in vistaReserva)
                         {
-                            if (reserva.FECHAMODIFICACION == vistaReserva.MODIFICADO)
-                            {
-
-                            }
-
+                            tuplaVistaActual = baseDatos.V_GUIAS_RESERVADOS.FirstOrDefault(i => i.ID.Equals(row2.ID));
+                            if (reserva.NUMERORESERVACION == tuplaVistaActual.ID) {
+                                if (reserva.ULTIMAMODIFICACION != tuplaVistaActual.ULTIMA_MODIFICACION)
+                                {
+                                    
+                                }
+                         }
 
                         }
                     }
-          
-                    vistaReserva = from p in baseDatos.V_GUIAS_RESERVADOS select p;
                     guias = from p in baseDatos.GUIAS_EMPLEADO select p;
                 }
 
@@ -685,8 +669,7 @@ namespace GuiasOET.Controllers
             return View(empleados.ToPagedList(pageNumber, pageSize));
         }
 
-        ///
-        **/
+        
 
         [HttpGet]
         public ActionResult ConsultarAsignacion(int? page)
