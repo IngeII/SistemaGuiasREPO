@@ -156,11 +156,7 @@ namespace GuiasOET.Controllers
                     baseDatos.SaveChanges();
                 }
             }
-            //Console.Write(fecha);
-            //Console.Write(cedula);
-            return RedirectToAction("AsignarDiasLibresDetallada");
-
-
+            return RedirectToAction("AsignarDiasLibresDetallada", new { id = id});
         }
 
 
