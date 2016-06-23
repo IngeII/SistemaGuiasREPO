@@ -199,17 +199,24 @@
                     <div class="row">
                         <div class="col-md-12" col-sm-offset-1>
                             @{
-                                if (ViewBag.cambios.Count == 1)
+                                if (ViewBag.cambios.Count != 0)
                                 {
-                                    foreach (string cambio in ViewBag.cambios)
+                                    if (ViewBag.cambios.Count == 1)
                                     {
-                                        if (!cambio.Equals("Ninguno"))
+                                        foreach (string cambio in ViewBag.cambios)
                                         {
-                                            <label for="titulo">¿Desea aceptar los cambios en la reservación?</label>
-                                            <a class="btn btn-default" onclick="aceptarCambios('@(ViewBag.reserva)');" style="background-color: #7BC143; color:white;">Aceptar</a>
+                                            if (!cambio.Equals("Ninguno"))
+                                            {
+                                                <label for="titulo">¿Desea aceptar los cambios en la reservación?</label>
+                                                <a class="btn btn-default" onclick="aceptarCambios('@(ViewBag.reserva)');" style="background-color: #7BC143; color:white;">Aceptar</a>
+                                            }
                                         }
                                     }
-
+                                    else
+                                    {
+                                        <label for="titulo">¿Desea aceptar los cambios en la reservación?</label>
+                                        <a class="btn btn-default" onclick="aceptarCambios('@(ViewBag.reserva)');" style="background-color: #7BC143; color:white;">Aceptar</a>
+                                    }
                                 }
                             }
 
