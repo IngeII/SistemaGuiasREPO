@@ -46,15 +46,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="GUIAS_ROLDIASLIBRES">
-      <EntityTypeMapping TypeName="Model.GUIAS_ROLDIASLIBRES">
-        <MappingFragment StoreEntitySet="GUIAS_ROLDIASLIBRES">
-          <ScalarProperty Name="TIPODIALIBRE" ColumnName="TIPODIALIBRE" />
-          <ScalarProperty Name="CEDULAINTERNO" ColumnName="CEDULAINTERNO" />
-          <ScalarProperty Name="FECHA" ColumnName="FECHA" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="GUIAS_TELEFONO">
       <EntityTypeMapping TypeName="Model.GUIAS_TELEFONO">
         <MappingFragment StoreEntitySet="GUIAS_TELEFONO">
@@ -111,6 +102,15 @@
           <ScalarProperty Name="APELLIDOSSOLICITANTE" ColumnName="APELLIDOSSOLICITANTE" />
           <ScalarProperty Name="NOMBRESOLICITANTE" ColumnName="NOMBRESOLICITANTE" />
           <ScalarProperty Name="NUMERORESERVACION" ColumnName="NUMERORESERVACION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GUIAS_ROLDIASLIBRES">
+      <EntityTypeMapping TypeName="Model.GUIAS_ROLDIASLIBRES">
+        <MappingFragment StoreEntitySet="GUIAS_ROLDIASLIBRES">
+          <ScalarProperty Name="TIPODIALIBRE" ColumnName="TIPODIALIBRE" />
+          <ScalarProperty Name="CEDULAINTERNO" ColumnName="CEDULAINTERNO" />
+          <ScalarProperty Name="FECHA" ColumnName="FECHA" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
