@@ -77,25 +77,29 @@
                     <th>
                         @Html.ActionLink("Tipo", "AsignarReservacionDetallada", new { sortOrder = ViewBag.Tipodialibre, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
                     </th>
-
                     <th>
                     </th>
 
                 </tr>
+
                 <tr>
                     <th>
                         <p>
                             <input type="date" step="7" min=2016-01-04 name="semanaABuscar"> @ViewBag.semanaABuscar
                         </p>
                     </th>
+
                     <th>
+                        @Html.EditorFor(model => model.roles1.TIPODIALIBRE, new { htmlAttributes = new { @class = "form-control", length= 10 } })
+                        @Html.ValidationMessageFor(model => model.roles1.TIPODIALIBRE, "", new { @class = "text-danger" })
                     </th>
                     <th>
-                        <a href="@Url.Action("AsignarRol")">
+                        <a href="@Url.Action("AsignarRol" )">
                             <span class="btn btn-default fa fa-plus" aria-hidden="true" title="Agregar" style="background-color: #7BC143; color:white;"></span>
                         </a>
                     </th>
                 </tr>
+
                 @for (int i = 0; i < Model.totalRolDiaLibre.Count; ++i)
                 {
 
@@ -107,7 +111,7 @@
                             @Html.DisplayFor(modelItem => Model.totalRolDiaLibre.ElementAt(i).TIPODIALIBRE)
                         </td>
                         <td>
-                            <a href="@Url.Action("EliminarRol", new { id = Model.totalRolDiaLibre.ElementAt(i).CEDULAINTERNO } )">
+                            <a href="@Url.Action("EliminarRol", new { id = Model.totalRolDiaLibre.ElementAt(i).CEDULAINTERNO, fecha = Model.totalRolDiaLibre.ElementAt(i).FECHA } )">
                                 <span class="btn btn-default fa fa-trash-o" aria-hidden="true" title="Eliminar" style="background-color: #F26631; color:white;"></span>
                             </a> 
                          </td>

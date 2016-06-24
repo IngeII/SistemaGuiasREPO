@@ -146,14 +146,14 @@ namespace GuiasOET.Controllers
             return View();
         }
 
-        public ActionResult EliminarRol(int? id)
+        public ActionResult EliminarRol(int? id, DateTime fecha)
         {
             if (id != null)
             {
                 string identificacion = id.ToString();
-                List<GUIAS_ROLDIASLIBRES> reservacion = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion)).ToList();
+                List<GUIAS_ROLDIASLIBRES> reservacion = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion) && p.FECHA.Equals(fecha)).ToList();
 
-                if (reservacion != null && reservacion.Count() == 1)
+                if (reservacion != null)
                 {
                     baseDatos.GUIAS_ROLDIASLIBRES.Remove(reservacion.ElementAt(0));
                     baseDatos.SaveChanges();
