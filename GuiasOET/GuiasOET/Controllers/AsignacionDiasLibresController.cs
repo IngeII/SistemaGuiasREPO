@@ -116,11 +116,14 @@ namespace GuiasOET.Controllers
 
             modelo = new DIASLIBRES(baseDatos.GUIAS_EMPLEADO.Find(identificacion));
 
-            List<string> guias = baseDatos.GUIAS_EMPLEADO.Select(s => s.CEDULA).ToList();
+            //List<string> guias = baseDatos.GUIAS_EMPLEADO.Select(s => s.CEDULA).ToList();
 
-            List<GUIAS_ROLDIASLIBRES> dias = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion)).ToList();
+            List<GUIAS_ROLDIASLIBRES> dias = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO == identificacion).ToList();
+            /*List<GUIAS_ROLDIASLIBRES> dias = (from b in baseDatos.GUIAS_ROLDIASLIBRES
+                   where b.CEDULAINTERNO.Equals(identificacion)
+                   select b).ToList();*/
             modelo.tRolDiaLibre = dias;
-            // modelo.modeloEmpleado.ESTADO = baseDatos.GUIAS_EMPLEADO.Find(identificacion).ESTADO;
+            //modelo.modeloEmpleado.ESTADO = baseDatos.GUIAS_EMPLEADO.Find(identificacion).ESTADO;
             if (modelo == null)
             {
                 return HttpNotFound();
