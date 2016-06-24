@@ -10,17 +10,40 @@
 }
 
 <script>
-    function generarReporte(datosReservaciones) {
+    function Generar(tipoU,fechaDesde, fechaHasta) {
+        if(tipoU.val() == "Personas Atendidas")
+        {
+            PersonasAtendidas(fechaDesde.val(), fechaHasta.val());
+            //document.write(fechaDesde.val());
+        }
+
+    }
+
+
+    function PersonasAtendidas(fechaDesde, fechaHasta) {
 
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("generarReporte")',
-                data: 'datosReservaciones=' + datosReservaciones,
+                url: '@Url.Action("PersonasAtendidas")',
+                data: 'fechaDesde=' + fechaDesde + '&fechaHasta=' + fechaHasta,
                 success: function (data) {
                 },
             });
         
     }
+
+    function Reservaciones(datosReservaciones) {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Reservaciones")',
+            data: 'datosReservaciones=' + datosReservaciones,
+            success: function (data) {
+            },
+        });
+
+    }
+
 </script>
 
 
@@ -49,9 +72,9 @@
             @using (Html.BeginForm("AsignarReservacion", "AsignacionReservaciones", FormMethod.Get))
             {
                 <p>
-                    Desde: <input type="date" name="fechaDesde" value="@ViewBag.CurrentFilter1">
-                    &nbsp &nbsp Hasta: <input type="date" name="fechaHasta" value="@ViewBag.CurrentFilter2">
-                    &nbsp &nbsp <input type="submit" value="Generar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+                    Desde: <input type="date" id="fechaD" name="fechaDesde" value="@ViewBag.CurrentFilter1">
+                    &nbsp &nbsp Hasta: <input type="date" id ="fechaH" name="fechaHasta" value="@ViewBag.CurrentFilter2">
+                    &nbsp &nbsp <a class="btn btn-default" onclick="Generar($('input:radio[name=tipoReporte]:checked'), $('#fechaD'),  $('#fechaH'));" style="background-color: #7BC143; color:white;">Generar</a>
                 </p>
 
             }
