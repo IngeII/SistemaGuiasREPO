@@ -22,6 +22,17 @@ namespace GuiasOET.Models
             this.GUIAS_ASIGNACION = new HashSet<GUIAS_ASIGNACION>();
         }
 
+        public GUIAS_EMPLEADO(string cedula, string nombre, string ape1, string ape2, string tipo, string estacion, string email)
+        {
+            this.NOMBREEMPLEADO = nombre;
+            this.NOMBREESTACION = estacion;
+            this.TIPOEMPLEADO = tipo;
+            this.APELLIDO1 = ape1;
+            this.APELLIDO2 = ape2;
+            this.CEDULA = cedula;
+            this.EMAIL = email;
+        }
+
         [Required(ErrorMessage = "La cédula es un campo requerido.")]
         [StringLength(9)]
         [Display(Name = "Cédula:")]

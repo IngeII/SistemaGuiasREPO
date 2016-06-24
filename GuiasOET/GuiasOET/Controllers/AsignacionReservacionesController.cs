@@ -1015,7 +1015,7 @@ namespace GuiasOET.Controllers
             AsignacionModelos modelo;
 
             modelo = new AsignacionModelos(baseDatos.GUIAS_RESERVACION.Find(identificacion));
-            ViewBag.fecha = String.Format("{0:M/d/yyyy}", modelo.modeloReservacion.FECHAENTRA).Trim();
+            ViewBag.fecha = String.Format("{0:d/M/yyyy}", modelo.modeloReservacion.FECHAENTRA).Trim();
 
             List<V_GUIAS_RESERVADOS> reservacionVista = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ID.Equals(id)).ToList();
             GUIAS_RESERVACION reservacionTabla = baseDatos.GUIAS_RESERVACION.Find(id);
@@ -1039,16 +1039,17 @@ namespace GuiasOET.Controllers
 
                     if (reservacionVista[0].ENTRA != null && (reservacionVista[0].ENTRA != reservacionTabla.FECHAENTRA))
                     {
-                        string result = String.Format("{0:M/d/yyyy}", reservacionVista[0].ENTRA);
+                        string result = String.Format("{0:d/M/yyyy}", reservacionVista[0].ENTRA);
                         ViewBag.cambios.Add("Fecha entrada: " + result);
                     }
 
-                    if (reservacionVista[0].SALE != null && !reservacionVista[0].SALE.Equals(reservacionTabla.FECHASALE))
+                    if (reservacionVista[0].SALE != null && (reservacionVista[0].SALE != reservacionTabla.FECHASALE))
                     {
+                        string result = String.Format("{0:d/M/yyyy}", reservacionVista[0].SALE);
                         ViewBag.cambios.Add("Fecha salida: " + reservacionVista[0].SALE);
 
                     }
-                    if (reservacionVista[0].PAX != null && !reservacionVista[0].PAX.Equals(reservacionTabla.NUMEROPERSONAS))
+                    if (reservacionVista[0].PAX != null && (reservacionVista[0].PAX != reservacionTabla.NUMEROPERSONAS))
                     {
                         ViewBag.cambios.Add("Número personas: " + reservacionVista[0].PAX);
                     }
@@ -1069,13 +1070,19 @@ namespace GuiasOET.Controllers
             List<GUIAS_EMPLEADO> guiasLibres = baseDatos.GUIAS_EMPLEADO.Where(p => !guias.Contains(p.CEDULA) && p.TIPOEMPLEADO.Contains("Guía") && p.NOMBREESTACION.Equals(modelo.modeloReservacion.NOMBREESTACION) ).ToList();
             List<GUIAS_EMPLEADO> guiasAsociados = baseDatos.GUIAS_EMPLEADO.Where(p => guias.Contains(p.CEDULA) && p.TIPOEMPLEADO.Contains("Guía")).ToList();
 
+            string result1 = String.Format("{0:dd/MM/yy}", reservacionVista[0].ENTRA);
+
+            string consulta = "SELECT E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL FROM GUIAS_EMPLEADO E JOIN GUIAS_ASIGNACION A ON E.CEDULA=A.CEDULAGUIA JOIN GUIAS_RESERVACION R ON A.NUMERORESERVACION=R.NUMERORESERVACION WHERE R.NOMBREESTACION='" + reservacionTabla.NOMBREESTACION+ "' group by (E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL) having count(*) < 4";
+
+            IEnumerable<GUIAS_EMPLEADO> prueba = baseDatos.Database.SqlQuery<GUIAS_EMPLEADO>(consulta);
+            
             /* Se define tamaño de la pagina para la paginación de guías disponibles */
             int pageSize = 8;
             int pageNumber = (page ?? 1);
             ViewBag.pageNumber = pageNumber;
 
             /*Hay que filtrar el maximo de asignaciones para ese día del guía disponible, ya que no pueden ser mas de 4 y que sea un rol de día libre se ponga de otro color*/
-            modelo.guiasDisponibles = guiasLibres;
+            modelo.guiasDisponibles = prueba.ToList();
             modelo.guiasAsignados = guiasAsociados;
 
 
