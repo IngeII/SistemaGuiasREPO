@@ -82,7 +82,20 @@
                     </th>
 
                 </tr>
-
+                <tr>
+                    <th>
+                        <p>
+                            <input type="date" step="7" min=2016-01-04 name="semanaABuscar"> @ViewBag.semanaABuscar
+                        </p>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                        <a href="@Url.Action("AsignarRol")">
+                            <span class="btn btn-default fa fa-plus" aria-hidden="true" title="Agregar" style="background-color: #7BC143; color:white;"></span>
+                        </a>
+                    </th>
+                </tr>
                 @for (int i = 0; i < Model.totalRolDiaLibre.Count; ++i)
                 {
 
@@ -94,8 +107,11 @@
                             @Html.DisplayFor(modelItem => Model.totalRolDiaLibre.ElementAt(i).TIPODIALIBRE)
                         </td>
                         <td>
-                            @Html.ActionLink("Eliminar", "EliminarRol", new { id = Model.totalRolDiaLibre.ElementAt(i).CEDULAINTERNO }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                        </td>
+                            <a href="@Url.Action("EliminarRol", new { id = Model.totalRolDiaLibre.ElementAt(i).CEDULAINTERNO } )">
+                                <span class="btn btn-default fa fa-trash-o" aria-hidden="true" title="Eliminar" style="background-color: #F26631; color:white;"></span>
+                            </a> 
+                         </td>
+                        
                     </tr>
                 }
             </div>
