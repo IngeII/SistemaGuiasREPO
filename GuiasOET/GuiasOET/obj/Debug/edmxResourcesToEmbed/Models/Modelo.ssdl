@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="GUIAS_ASIGNACION">
     <Key>
       <PropertyRef Name="NUMERORESERVACION" />
@@ -69,9 +69,10 @@
   </EntityType>
   <EntityType Name="GUIAS_ROLDIASLIBRES">
     <Key>
+      <PropertyRef Name="FECHA" />
       <PropertyRef Name="CEDULAINTERNO" />
     </Key>
-    <Property Name="FECHA" Type="date" />
+    <Property Name="FECHA" Type="date" Nullable="false" />
     <Property Name="CEDULAINTERNO" Type="varchar2" MaxLength="9" Nullable="false" />
     <Property Name="TIPODIALIBRE" Type="varchar2" MaxLength="20" />
   </EntityType>
@@ -92,8 +93,8 @@
     <Property Name="HORAINICIO" Type="varchar2" MaxLength="10" Nullable="false" />
     <Property Name="HORAFIN" Type="varchar2" MaxLength="10" Nullable="false" />
   </EntityType>
-  <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="V_GUIAS_RESERVADOS">
     <Key>
       <PropertyRef Name="ID" />
@@ -159,7 +160,7 @@ advertencia 6002: La tabla o vista 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' no 
   </Association>
   <Association Name="FK_ROL_INTERNO">
     <End Role="GUIAS_EMPLEADO" Type="Self.GUIAS_EMPLEADO" Multiplicity="1" />
-    <End Role="GUIAS_ROLDIASLIBRES" Type="Self.GUIAS_ROLDIASLIBRES" Multiplicity="0..1" />
+    <End Role="GUIAS_ROLDIASLIBRES" Type="Self.GUIAS_ROLDIASLIBRES" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="GUIAS_EMPLEADO">
         <PropertyRef Name="CEDULA" />
