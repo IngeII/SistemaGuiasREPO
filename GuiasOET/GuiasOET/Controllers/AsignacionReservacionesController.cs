@@ -1252,7 +1252,7 @@ namespace GuiasOET.Controllers
                         }else
                         {
                             ++indice;
-                        }  
+                        }
                 }
             }
             catch(Exception e){
