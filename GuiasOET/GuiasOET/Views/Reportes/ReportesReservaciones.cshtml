@@ -10,9 +10,8 @@
 }
 
 <script>
-    function Generar(tipoU,fechaDesde, fechaHasta) {
-        if(tipoU.val() == "Personas Atendidas")
-        {
+    function Generar(tipoU, fechaDesde, fechaHasta) {
+        if (tipoU.val() == "Personas Atendidas") {
             PersonasAtendidas(fechaDesde.val(), fechaHasta.val());
             //document.write(fechaDesde.val());
         }
@@ -22,14 +21,15 @@
 
     function PersonasAtendidas(fechaDesde, fechaHasta) {
 
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("PersonasAtendidas")',
-                data: 'fechaDesde=' + fechaDesde + '&fechaHasta=' + fechaHasta,
-                success: function (data) {
-                },
-            });
-        
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("PersonasAtendidas")',
+            data: 'fechaDesde=' + fechaDesde + '&fechaHasta=' + fechaHasta,
+            success: function (data) {
+                $('#tablaReservaciones').append(data);
+            },
+        });
+
     }
 
     function Reservaciones(datosReservaciones) {
@@ -59,50 +59,60 @@
 
 
 
-    <div class="row">
-        <div class="col-md-1">
-            <label>Tipo: </label>
-        </div>
-        <div class="col-md-3">
-            @Html.RadioButton("tipoReporte", "Personas Atendidas", new { id = "tipoReporte_1" })
-            <label for="tipoReporte_1">Personas Atendidas</label>
-        </div>
+<div class="row">
+    <div class="col-md-1">
+        <label>Tipo: </label>
+    </div>
+    <div class="col-md-3">
+        @Html.RadioButton("tipoReporte", "Personas Atendidas", new { id = "tipoReporte_1" })
+        <label for="tipoReporte_1">Personas Atendidas</label>
+    </div>
 
-        <div class="col-md-8">
-            @using (Html.BeginForm("AsignarReservacion", "AsignacionReservaciones", FormMethod.Get))
+    <div class="col-md-8">
+        @using (Html.BeginForm("AsignarReservacion", "AsignacionReservaciones", FormMethod.Get))
             {
-                <p>
-                    Desde: <input type="date" id="fechaD" name="fechaDesde" value="@ViewBag.CurrentFilter1">
-                    &nbsp &nbsp Hasta: <input type="date" id ="fechaH" name="fechaHasta" value="@ViewBag.CurrentFilter2">
-                    &nbsp &nbsp <a class="btn btn-default" onclick="Generar($('input:radio[name=tipoReporte]:checked'), $('#fechaD'),  $('#fechaH'));" style="background-color: #7BC143; color:white;">Generar</a>
-                </p>
+            <p>
+                Desde: <input type="date" id="fechaD" name="fechaDesde" value="@ViewBag.CurrentFilter1">
+                &nbsp &nbsp Hasta: <input type="date" id="fechaH" name="fechaHasta" value="@ViewBag.CurrentFilter2">
+                &nbsp &nbsp <a class="btn btn-default" onclick="Generar($('input:radio[name=tipoReporte]:checked'), $('#fechaD'),  $('#fechaH'));" style="background-color: #7BC143; color:white;">Generar</a>
+            </p>
 
-            }
-        </div>
+        }
+    </div>
 
-        </div>
-       <div class="row">
-            <div class="col-md-3 col-sm-offset-1">
-                @Html.RadioButton("tipoReporte", "Reservaciones", new { id = "tipoReporte_2" })
-                <label for="tipoReporte_2">Reservaciones</label>
-            </div>
-        </div>
+</div>
+<div class="row">
+    <div class="col-md-3 col-sm-offset-1">
+        @Html.RadioButton("tipoReporte", "Reservaciones", new { id = "tipoReporte_2" })
+        <label for="tipoReporte_2">Reservaciones</label>
+    </div>
+</div>
 <br>
 <br>
-        <div class="row">
-            <div class="col-sm-2">
-                <label>Exportar a: </label>
-            </div>
 
-            <div class="col-sm-1 col-sm-pull-1">
-                <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">PDF</a>
-            </div>
+<div class="row">
+    <div class="col-sm-2">
+        <label>Exportar a: </label>
+    </div>
 
-            <div class="col-sm-1 col-sm-pull-1">
-                <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">EXCEL</a>
-            </div>
+    <div class="col-sm-1 col-sm-pull-1">
+        <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">PDF</a>
+    </div>
+
+    <div class="col-sm-1 col-sm-pull-1">
+        <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">EXCEL</a>
+    </div>
 
 
-        </div>
+</div>
+
+<br />
+<br />
+<div class="table-responsive">
+    <table class="table" id="tablaReservaciones">
+        </table>
+    </div>
+
+
 
 
