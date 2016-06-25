@@ -20,7 +20,7 @@ namespace GuiasOET.Controllers
     public class AsignacionDiasLibresController : Controller
     {
         private Entities1 baseDatos = new Entities1();
-
+        private string ident = "";
         // GET: ListaGuias
         /*Método GET de la pantalla ListaGuias*/
         public ActionResult ListaGuias(string sortOrder, string currentFilter, string searchString, int? page)
@@ -132,7 +132,8 @@ namespace GuiasOET.Controllers
             /* Se define tamaño de la pagina para la paginación de guías disponibles */
             int pageSize = 8;
             int pageNumber = (page ?? 1);
-
+            ident = identificacion;
+            ViewBag.identificacion = identificacion;
             ViewBag.pageNumber = pageNumber;
             modelo.totalRolDiaLibre = modelo.tRolDiaLibre.ToPagedList(pageNumber, pageSize);
             ViewBag.MessagesInOnePage = modelo.tRolDiaLibre;
@@ -140,10 +141,11 @@ namespace GuiasOET.Controllers
 
             return View(modelo);
         }
-
-        public ActionResult AsignarRol(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)
+        public ActionResult AsignarRol(int? id, string tipo, string fecha)
         {
-            return View();
+            Console.Write("Entro");
+
+            return RedirectToAction("AsignarDiasLibresDetallada", new { id = id });
         }
 
         public ActionResult EliminarRol(int? id, DateTime fecha)
@@ -159,9 +161,35 @@ namespace GuiasOET.Controllers
                     baseDatos.SaveChanges();
                 }
             }
-            return RedirectToAction("AsignarDiasLibresDetallada", new { id = id});
+            return RedirectToAction("AsignarDiasLibresDetallada", new { id = id });
         }
 
+        [HttpGet]
+        public ActionResult AsignarRol(string ide, DateTime fechaDesde, string tipo)
+        {
+            Console.Write(ide);
+            Console.Write(fechaDesde);
+            Console.Write(tipo);
 
+
+            string fecha = fechaDesde.ToString("dd/MM/yyyy");
+
+            DateTime f = Convert.ToDateTime(fecha);
+
+            DIASLIBRES modelo = new DIASLIBRES();
+            modelo.roles1.TIPODIALIBRE = tipo;
+            modelo.roles1.CEDULAINTERNO = ide;
+            modelo.roles1.FECHA = f;
+
+            baseDatos.GUIAS_ROLDIASLIBRES.Add(modelo.roles1);
+            baseDatos.SaveChanges();
+            /*
+            string consulta = "insert into guias_roldiaslibres values ('" + fecha + "', '" + ide + "', '" + tipo + "');";
+            baseDatos.Database.SqlQuery<GUIAS_ROLDIASLIBRES>(consulta);
+            baseDatos.SaveChanges();
+            */
+            int id = Int32.Parse(ide);
+            return RedirectToAction("AsignarDiasLibresDetallada", new { id = id });
+        }
     }
 }
