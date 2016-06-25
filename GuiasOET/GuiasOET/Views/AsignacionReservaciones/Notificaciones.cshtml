@@ -1,11 +1,41 @@
-﻿@model PagedList.IPagedList<GuiasOET.Models.GUIAS_EMPLEADO>
-
+﻿@model GuiasOET.Models.AsignacionModelos
 @using PagedList.Mvc;
+@using PagedList;
+@using System.Diagnostics;
+
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Notificaciones";
     Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+}
+
+@functions
+    {
+    public int[] reservaAsignada(string numeroReservacion)
+    {
+        int i = 0;
+        int[] asignacion = new int[2];
+
+        while (i < Model.reservacionesAsignadas.Count && Model.reservacionesAsignadas.ElementAt(i).NUMERORESERVACION.ToString() != numeroReservacion)
+        {
+            ++i;
+        }
+
+        if (i < Model.reservacionesAsignadas.Count)
+        {
+            asignacion[0] = 1;
+            asignacion[1] = i;
+        }
+        else
+        {
+            asignacion[0] = 0;
+            asignacion[1] = 0;
+        }
+
+        return asignacion;
+
+    }
 }
 
 <div class="row">
@@ -53,24 +83,66 @@
                         @Html.ActionLink("Fecha", "Notificaciones", new { sortOrder = ViewBag.FechaSortParm, currentFilter = ViewBag.CurrentFilter })
                     </th>
                     <th>
-                        @Html.ActionLink("Hora", "Notificaciones", new { sortOrder = ViewBag.HoraSortParm, currentFilter = ViewBag.CurrentFilter })
+                        Hora
                     </th>
                     <th>
-                        @Html.ActionLink("Guías asignados", "Notificaciones", new { sortOrder = ViewBag.GuiasAsignadosSortParm, currentFilter = ViewBag.CurrentFilter })
+                        Guías Asignados
                     </th>
                 </tr>
 
-                @foreach (var item in Model)
+                @for (int i = 0; i < Model.totalReservaciones.Count; ++i)
                 {
                     <tr>
-
                         <td>
-                            @Html.ActionLink("Ver guías", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                            @Html.ActionLink("Confirmar", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                            @Html.ActionLink("Cancelar", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #F26631; color:white;" })
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRESOLICITANTE)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBREESTACION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMEROPERSONAS)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).FECHAENTRA)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).HORA)
+                        </td>
+                        <td>
+                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                            {
+                                for (int x = 0; x < Model.empleados.ElementAt(reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1)).Count(); ++x)
+                                {
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).NOMBREEMPLEADO)
+                                    @Html.Raw(" ")
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO1)
+                                    @Html.Raw(" ")
+                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO2)
+                                    <br />
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                            {
+                                @Html.ActionLink("Ver Guías", "Notificaciones", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                            }
+                            else
+                            {
+
+                                @Html.ActionLink("Confirmar", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                                @Html.ActionLink("Cancelar", "Notificaciones", null, new { @class = "btn btn-default", @style = "background-color: #F26631; color:white;" })
+                            }
+
                         </td>
                     </tr>
                 }
+
             </div>
         </div>
     </table>
@@ -80,6 +152,13 @@
 
 <br />
 
-    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("AsignarReservacion",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        Página @ViewBag.PageNumber de @ViewBag.TotalPages
+        @Html.PagedListPager((IPagedList)ViewBag.MessagesInOnePage,
+page => Url.Action("AsignarReservacion", new { page, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 }))
+
+
+
+
+
+
+

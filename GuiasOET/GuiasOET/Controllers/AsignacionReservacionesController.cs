@@ -623,7 +623,6 @@ namespace GuiasOET.Controllers
             return View(table);
         }
 
-       
         public ActionResult Notificaciones(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)  //**  string currentFilter2, string fechaHasta
         {
             ViewBag.CurrentSort = sortOrder;
@@ -734,7 +733,7 @@ namespace GuiasOET.Controllers
                     fechaFin = Convert.ToDateTime(fechaHasta);
                     if (rol.Contains("Local"))
                     {
-                        reservacion = (reservacion.Where(e => e.FECHASALE<= fechaFin && e.NOMBREESTACION.Equals(estacion)));
+                        reservacion = (reservacion.Where(e => e.FECHASALE <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
                     }
                     else
                     {
@@ -770,7 +769,7 @@ namespace GuiasOET.Controllers
                 //Lista que contiene los guias de todas las reservaciones
                 List<IEnumerable<GUIAS_RESERVACION>> totalReservas = new List<IEnumerable<GUIAS_RESERVACION>>();
 
-                List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();           
+                List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();
                 var datosDeLaVista = from r in baseDatos.V_GUIAS_RESERVADOS select r;
                 GUIAS_RESERVACION reserva;
                 V_GUIAS_RESERVADOS tuplaVistaActual;
@@ -784,12 +783,13 @@ namespace GuiasOET.Controllers
                         foreach (var row2 in vistaReserva)
                         {
                             tuplaVistaActual = baseDatos.V_GUIAS_RESERVADOS.FirstOrDefault(i => i.ID.Equals(row2.ID));
-                            if (reserva.NUMERORESERVACION == tuplaVistaActual.ID) {
+                            if (reserva.NUMERORESERVACION == tuplaVistaActual.ID)
+                            {
                                 if (reserva.ULTIMAMODIFICACION != tuplaVistaActual.ULTIMA_MODIFICACION)
                                 {
-                                    
+
                                 }
-                         }
+                            }
 
                         }
                     }
@@ -862,7 +862,14 @@ namespace GuiasOET.Controllers
             return View(empleados.ToPagedList(pageNumber, pageSize));
         }
 
-        
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public ActionResult ConsultarAsignacion(int? page)
@@ -1252,7 +1259,7 @@ namespace GuiasOET.Controllers
                         }else
                         {
                             ++indice;
-                        }
+                        }  
                 }
             }
             catch(Exception e){
