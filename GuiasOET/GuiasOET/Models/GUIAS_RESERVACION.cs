@@ -35,8 +35,10 @@ namespace GuiasOET.Models
 
         [Display(Name = "Fecha:")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:M/d/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d/M/yyyy}")]
         public Nullable<System.DateTime> FECHAENTRA { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d/M/yyyy}")]
         public Nullable<System.DateTime> FECHASALE { get; set; }
 
         [Display(Name = "Hora:")]

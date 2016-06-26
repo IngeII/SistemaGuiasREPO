@@ -1248,7 +1248,7 @@ namespace GuiasOET.Controllers
                     if (reservacionVista[0].SALE != null && (reservacionVista[0].SALE != reservacionTabla.FECHASALE))
                     {
                         string result = String.Format("{0:d/M/yyyy}", reservacionVista[0].SALE);
-                        ViewBag.cambios.Add("Fecha salida: " + reservacionVista[0].SALE);
+                        ViewBag.cambios.Add("Fecha salida: " + result);
 
                     }
                     if (reservacionVista[0].PAX != null && (reservacionVista[0].PAX != reservacionTabla.NUMEROPERSONAS))
