@@ -52,12 +52,13 @@
 
 <div class="row">
     <div class="col-lg-12">
+
         @using (Html.BeginForm("Notificaciones", "AsignacionReservaciones", FormMethod.Get))
         {
             <p>
                 Lista de Reservaciones<br />
-                Criterio de búsqueda: Desde: <input type="date" name="fechaDesde"> Hasta: <input type="date" name="fechaHasta">
-                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+                Criterio de búsqueda: Desde: <input type="date" name="fechaDesde" value="@ViewBag.CurrentFilter1">
+                Hasta: <input type="date" name="fechaHasta" value="@ViewBag.CurrentFilter2">
             </p>
         }
     </div>
