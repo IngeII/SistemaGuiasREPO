@@ -43,7 +43,18 @@ namespace GuiasOET.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var empleados = from e in baseDatos.GUIAS_EMPLEADO select e;
-            empleados = empleados.Where(e => e.TIPOEMPLEADO.Contains("Guía"));
+            empleados = empleados.Where(e => e.TIPOEMPLEADO.Contains("Guía Interno"));
+
+            if (Session["RolUsuarioLogueado"].ToString().Contains("Externo"))
+            {
+                empleados = empleados.Where(e => e.TIPOEMPLEADO.Contains("AAAA"));
+            }
+           
+            if (Session["RolUsuarioLogueado"].ToString().Contains("Interno") && Session["RolUsuarioLogueado"].ToString().Contains("Administrador") == false)
+            {
+                string cedula = Session["IdUsuarioLogueado"].ToString();
+                empleados = empleados.Where(e => e.CEDULA.Contains(cedula));
+            }
 
             if (Session["RolUsuarioLogueado"].ToString().Contains("Local"))
             {

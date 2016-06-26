@@ -98,16 +98,12 @@
                                 <span class= "btn btn-default fa fa-eye" aria-hidden="true" title="Consultar" style="background-color: #7BC143; color:white;"></span>
                             </a>
                             @{
-                                if (!Session["RolUsuarioLogueado"].ToString().Contains("Externo"))
+                                if (Session["RolUsuarioLogueado"].ToString().Contains("Administrador"))
                                 {
                                     <a href="@Url.Action("ModificarUsuario", new { id = item.CEDULA })">
                                         <span class="btn btn-default fa fa-pencil" aria-hidden="true" title="Modificar" style="background-color: #7BC143; color:white;"></span>
                                     </a>
-                                }
-                             }
-                            @{
-                                if (Session["RolUsuarioLogueado"].ToString().Contains("Administrador"))
-                                {
+                                
                                     <a href="@Url.Action("DesactivarUsuario", new { id = item.CEDULA })">
                                         <span class="btn btn-default fa fa-trash-o" aria-hidden="true" title="Desactivar" style="background-color: #F26631; color:white;"></span>
                                     </a>
