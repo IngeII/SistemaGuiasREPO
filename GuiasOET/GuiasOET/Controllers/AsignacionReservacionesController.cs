@@ -1219,8 +1219,25 @@ namespace GuiasOET.Controllers
             modelo = new AsignacionModelos(baseDatos.GUIAS_RESERVACION.Find(identificacion));
             ViewBag.fecha = String.Format("{0:d/M/yyyy}", modelo.modeloReservacion.FECHAENTRA).Trim();
 
+            
+
             List<V_GUIAS_RESERVADOS> reservacionVista = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ID.Equals(id)).ToList();
             GUIAS_RESERVACION reservacionTabla = baseDatos.GUIAS_RESERVACION.Find(id);
+
+            if(reservacionTabla.CONFIRMACION == null)
+            {
+                ViewBag.confirmacion="Aún sin confirmar";
+            }
+
+            if (reservacionTabla.CONFIRMACION != null && reservacionTabla.CONFIRMACION == 1)
+            {
+                ViewBag.confirmacion = "Confirmada";
+            }
+            else if (reservacionTabla.CONFIRMACION != null && reservacionTabla.CONFIRMACION == 0)
+            {
+                ViewBag.confirmacion = "Cancelada";
+            }
+            
 
             if (reservacionVista.Count != 0)
             {

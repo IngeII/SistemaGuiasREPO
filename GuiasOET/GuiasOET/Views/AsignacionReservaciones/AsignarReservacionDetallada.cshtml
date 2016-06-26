@@ -160,6 +160,15 @@
                             @Html.ValidationMessageFor(model => model.modeloReservacion.HORA, "", new { @class = "text-danger" })
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-3" col-sm-offset-1>
+                            <span class="control-label col-md-2" style="font-weight:bold">Confirmación:</span>                        
+                        </div>
+                        <div class="col-md-7">
+                            @ViewBag.confirmacion
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
