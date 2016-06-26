@@ -43,18 +43,7 @@ namespace GuiasOET.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var empleados = from e in baseDatos.GUIAS_EMPLEADO select e;
-            empleados = empleados.Where(e => e.TIPOEMPLEADO.Contains("Guía Interno"));
-
-            if (Session["RolUsuarioLogueado"].ToString().Contains("Externo"))
-            {
-                empleados = empleados.Where(e => e.TIPOEMPLEADO.Contains("AAAA"));
-            }
-           
-            if (Session["RolUsuarioLogueado"].ToString().Contains("Interno") && Session["RolUsuarioLogueado"].ToString().Contains("Administrador") == false)
-            {
-                string cedula = Session["IdUsuarioLogueado"].ToString();
-                empleados = empleados.Where(e => e.CEDULA.Contains(cedula));
-            }
+            empleados = empleados.Where(e => e.TIPOEMPLEADO.Contains("Guía"));
 
             if (Session["RolUsuarioLogueado"].ToString().Contains("Local"))
             {
@@ -107,8 +96,8 @@ namespace GuiasOET.Controllers
             return View(empleados.ToPagedList(pageNumber, pageSize));
         }
 
-
-        public ActionResult AsignarDiasLibresDetallada(int? page, int? id, string sortOrder, string currentFilter1, string currentFilter2)
+        [HttpGet]
+        public ActionResult AsignarDiasLibresDetallada(int? page, int? id, string sortOrder, string currentFilter1, string currentFilter2, string fechaInicio, string fechaFin, string ident)
         {
 
             string identificacion;
@@ -118,23 +107,129 @@ namespace GuiasOET.Controllers
             ViewBag.fecha = String.IsNullOrEmpty(sortOrder) ? "Fecha" : "";
             ViewBag.tipo = String.IsNullOrEmpty(sortOrder) ? "Tipodialibre" : "";
 
-            if (id == null)
+            if (!(String.IsNullOrEmpty(fechaInicio)) && !(String.IsNullOrEmpty(fechaFin)))
+            {
+
+                ViewBag.CurrentFilter1 = fechaInicio;
+                ViewBag.CurrentFilter2 = fechaFin;
+            }
+
+            //Solo la fecha inicial es vacía
+            else if (String.IsNullOrEmpty(fechaInicio) && !(String.IsNullOrEmpty(fechaFin)))
+            {
+
+                ViewBag.CurrentFilter1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
+                ViewBag.CurrentFilter2 = fechaFin;
+
+                string f1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
+
+                fechaFin = currentFilter2;
+                fechaInicio = Convert.ToString(f1);
+
+            }
+            //Solo la fecha final es vacía
+            else if (!(String.IsNullOrEmpty(fechaInicio)) && String.IsNullOrEmpty(fechaFin))
+            {
+
+                ViewBag.CurrentFilter1 = fechaInicio;
+                ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(30)).Trim();
+
+                string f2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(30)).Trim();
+
+                fechaInicio = currentFilter1;
+                fechaFin = Convert.ToString(f2);
+
+
+            }
+            //Las fechas son vacias
+            else if ((String.IsNullOrEmpty(fechaInicio)) && String.IsNullOrEmpty(fechaFin))
+            {
+                string v1 = ViewBag.CurrentFilter1;
+                string v2 = ViewBag.CurrentFilter2;
+
+                if ((String.IsNullOrEmpty(currentFilter1) && (String.IsNullOrEmpty(currentFilter2))))
+                {
+                    ViewBag.CurrentFilter1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
+                    ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(30)).Trim();
+
+                    string f1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
+                    string f2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(30)).Trim();
+
+                    fechaInicio = Convert.ToString(f1);
+                    fechaFin = Convert.ToString(f2);
+                }
+                else if ((String.IsNullOrEmpty(currentFilter1)))
+                {
+                    ViewBag.CurrentFilter1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now);
+                    ViewBag.CurrentFilter2 = fechaFin;
+
+                    string f1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
+
+                    fechaInicio = Convert.ToString(f1);
+                    fechaFin = currentFilter2;
+                }
+                else if ((String.IsNullOrEmpty(currentFilter2)))
+                {
+
+                    ViewBag.CurrentFilter1 = fechaInicio;
+                    ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(30)).Trim();
+
+                    string f2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(30)).Trim();
+
+                    fechaInicio = currentFilter1;
+                    fechaFin = Convert.ToString(f2);
+
+                }
+                else
+                {
+                    fechaInicio = currentFilter1;
+                    fechaFin = currentFilter2;
+
+                    ViewBag.CurrentFilter1 = fechaInicio;
+                    ViewBag.CurrentFilter2 = fechaFin;
+
+                }
+            }
+            identificacion = "";
+            if (id == null && ident == "")
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            else
+            {
+                if (id != null)
+                {
+                    identificacion = id.ToString();
+                    ViewBag.identificacion = identificacion;
+                    ViewBag.identificacion2 = identificacion;
+                }
+                else
+                {
+                    if (ident != "")
+                    {
+                        identificacion = ident;
+                        ViewBag.identificacion = ident;
+                        ViewBag.identificacion2 = ident;
+                    }
+                }
+            }
 
-            identificacion = id.ToString();
 
             modelo = new DIASLIBRES(baseDatos.GUIAS_EMPLEADO.Find(identificacion));
+            List<GUIAS_ROLDIASLIBRES> dias;
+            if (!String.IsNullOrEmpty(fechaInicio) && !String.IsNullOrEmpty(fechaFin))
+            {
+                DateTime fI = Convert.ToDateTime(fechaInicio);
+                DateTime fF = Convert.ToDateTime(fechaFin);
+                dias = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO == identificacion && p.FECHA >= fI && p.FECHA <= fF).ToList();
+            }
 
-            //List<string> guias = baseDatos.GUIAS_EMPLEADO.Select(s => s.CEDULA).ToList();
+            else
+            {
+                dias = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO == identificacion).ToList();
+            }
 
-            List<GUIAS_ROLDIASLIBRES> dias = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO == identificacion).ToList();
-            /*List<GUIAS_ROLDIASLIBRES> dias = (from b in baseDatos.GUIAS_ROLDIASLIBRES
-                   where b.CEDULAINTERNO.Equals(identificacion)
-                   select b).ToList();*/
             modelo.tRolDiaLibre = dias;
-            //modelo.modeloEmpleado.ESTADO = baseDatos.GUIAS_EMPLEADO.Find(identificacion).ESTADO;
             if (modelo == null)
             {
                 return HttpNotFound();
@@ -143,8 +238,7 @@ namespace GuiasOET.Controllers
             /* Se define tamaño de la pagina para la paginación de guías disponibles */
             int pageSize = 8;
             int pageNumber = (page ?? 1);
-            ident = identificacion;
-            ViewBag.identificacion = identificacion;
+
             ViewBag.pageNumber = pageNumber;
             modelo.totalRolDiaLibre = modelo.tRolDiaLibre.ToPagedList(pageNumber, pageSize);
             ViewBag.MessagesInOnePage = modelo.tRolDiaLibre;
@@ -152,6 +246,8 @@ namespace GuiasOET.Controllers
 
             return View(modelo);
         }
+
+
         public ActionResult AsignarRol(int? id, string tipo, string fecha)
         {
             Console.Write("Entro");
@@ -161,45 +257,106 @@ namespace GuiasOET.Controllers
 
         public ActionResult EliminarRol(int? id, DateTime fecha)
         {
+            string admin1 = "Administrador Local/ Guía Interno";
+            string admin2 = "Administrador Global";
+            string admin3 = "Administrador Local";
+
             if (id != null)
             {
+                string idLogueado = Session["IdUsuarioLogueado"].ToString();
                 string identificacion = id.ToString();
-                List<GUIAS_ROLDIASLIBRES> reservacion = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion) && p.FECHA.Equals(fecha)).ToList();
 
-                if (reservacion != null)
+                List<GUIAS_EMPLEADO> empleado = baseDatos.GUIAS_EMPLEADO.Where(p => p.CEDULA.Equals(idLogueado) && ((p.TIPOEMPLEADO.Equals(admin1)) || (p.TIPOEMPLEADO.Equals(admin2)) || (p.TIPOEMPLEADO.Equals(admin3)))).ToList();
+
+                List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(identificacion) && p.FECHA.Equals(fecha)).ToList();
+
+                if (empleado.Count > 0)
                 {
-                    baseDatos.GUIAS_ROLDIASLIBRES.Remove(reservacion.ElementAt(0));
-                    baseDatos.SaveChanges();
+                    if (dialibre != null)
+                    {
+                        baseDatos.GUIAS_ROLDIASLIBRES.Remove(dialibre.ElementAt(0));
+                        baseDatos.SaveChanges();
+                        this.Flash("Éxito", "Día libre eliminado.");
+                    }
+                }
+                else
+                {
+                    this.Flash("Éxito", "Sólo adiministradores pueden eliminar.");
                 }
             }
             return RedirectToAction("AsignarDiasLibresDetallada", new { id = id });
         }
 
         [HttpGet]
-        public ActionResult AsignarRol(string ide, DateTime fechaDesde, string tipo)
+        public ActionResult AsignarRol(string ide, string fechaDesde, string tipo)
         {
-            Console.Write(ide);
-            Console.Write(fechaDesde);
-            Console.Write(tipo);
+            string admin1 = "Administrador Local/ Guía Interno";
+            string admin2 = "Administrador Global";
+            string admin3 = "Administrador Local";
+            string idLogueado = Session["IdUsuarioLogueado"].ToString();
 
+            List<GUIAS_EMPLEADO> empleado = baseDatos.GUIAS_EMPLEADO.Where(p => p.CEDULA.Equals(idLogueado) && ((p.TIPOEMPLEADO.Equals(admin1)) || (p.TIPOEMPLEADO.Equals(admin2)) || (p.TIPOEMPLEADO.Equals(admin3)))).ToList();
+            if (empleado.Count > 0)
+            {
 
-            string fecha = fechaDesde.ToString("dd/MM/yyyy");
+                if (fechaDesde == "" && tipo == "")
+                {
+                    this.Flash("Éxito", "Recuerde completar todos los campos.");
+                }
+                else
+                {
+                    if (fechaDesde == "" && tipo != "")
+                    {
+                        this.Flash("Éxito", "Recuerde completar la fecha.");
+                    }
+                    else
+                    {
+                        if (fechaDesde != "" && tipo == "")
+                        {
+                            this.Flash("Éxito", "Recuerde completar el tipo.");
 
-            DateTime f = Convert.ToDateTime(fecha);
+                        }
+                        else
+                        {
+                            Console.Write(ide);
+                            Console.Write(fechaDesde);
+                            Console.Write(tipo);
 
-            DIASLIBRES modelo = new DIASLIBRES();
-            modelo.roles1.TIPODIALIBRE = tipo;
-            modelo.roles1.CEDULAINTERNO = ide;
-            modelo.roles1.FECHA = f;
+                            DateTime fechaV = Convert.ToDateTime(fechaDesde);
 
-            baseDatos.GUIAS_ROLDIASLIBRES.Add(modelo.roles1);
-            baseDatos.SaveChanges();
-            /*
-            string consulta = "insert into guias_roldiaslibres values ('" + fecha + "', '" + ide + "', '" + tipo + "');";
-            baseDatos.Database.SqlQuery<GUIAS_ROLDIASLIBRES>(consulta);
-            baseDatos.SaveChanges();
-            */
+                            string fecha = fechaV.ToString("dd/MM/yyyy");
+
+                            DateTime f = Convert.ToDateTime(fecha);
+
+                            List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(f) && p.TIPODIALIBRE.Equals(tipo)).ToList();
+
+                            if (dialibre.Count == 0)
+                            {
+                                DIASLIBRES modelo = new DIASLIBRES();
+                                modelo.roles1.TIPODIALIBRE = tipo;
+                                modelo.roles1.CEDULAINTERNO = ide;
+                                modelo.roles1.FECHA = f;
+
+                                baseDatos.GUIAS_ROLDIASLIBRES.Add(modelo.roles1);
+                                baseDatos.SaveChanges();
+
+                                this.Flash("Éxito", "Día libre agregado.");
+                            }
+                            else
+                            {
+                                this.Flash("Éxito", "Ya existe un día libre asignado.");
+
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                this.Flash("Éxito", "Sólo adiministradores pueden agregar.");
+            }
             int id = Int32.Parse(ide);
+
             return RedirectToAction("AsignarDiasLibresDetallada", new { id = id });
         }
     }
