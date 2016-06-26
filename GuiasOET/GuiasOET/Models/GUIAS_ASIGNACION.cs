@@ -11,11 +11,14 @@ namespace GuiasOET.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class GUIAS_ASIGNACION
     {
         public string NOTASASOCIA { get; set; }
         public string NUMERORESERVACION { get; set; }
+
+        [Display(Name = "Turno:")]
         public string TURNO { get; set; }
         public string CEDULAGUIA { get; set; }
     

@@ -11,6 +11,8 @@ namespace GuiasOET.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     
     public partial class GUIAS_RESERVACION
     {
@@ -19,16 +21,33 @@ namespace GuiasOET.Models
         {
             this.GUIAS_ASIGNACION = new HashSet<GUIAS_ASIGNACION>();
         }
-    
+
+        [Display(Name = "Número:")]
         public string NUMERORESERVACION { get; set; }
+
+        [Display(Name = "Solicitante:")]
         public string NOMBRESOLICITANTE { get; set; }
         public string APELLIDOSSOLICITANTE { get; set; }
+
+        [Display(Name = "Pack:")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:###}")]
         public Nullable<decimal> NUMEROPERSONAS { get; set; }
+
+        [Display(Name = "Fecha:")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:M/d/yyyy}")]
         public Nullable<System.DateTime> FECHAENTRA { get; set; }
         public Nullable<System.DateTime> FECHASALE { get; set; }
+
+        [Display(Name = "Hora:")]
         public string HORA { get; set; }
+
+        [Display(Name = "Estación")]
         public string NOMBREESTACION { get; set; }
         public Nullable<decimal> ULTIMAMODIFICACION { get; set; }
+
+
+        [Display(Name = "Notas:")]
         public string NOTAS { get; set; }
         public Nullable<decimal> CONFIRMACION { get; set; }
     

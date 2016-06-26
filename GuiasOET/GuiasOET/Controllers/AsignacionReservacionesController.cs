@@ -1272,11 +1272,11 @@ namespace GuiasOET.Controllers
             List<GUIAS_EMPLEADO> guiasLibres = baseDatos.GUIAS_EMPLEADO.Where(p => !guias.Contains(p.CEDULA) && p.TIPOEMPLEADO.Contains("Guía") && p.NOMBREESTACION.Equals(modelo.modeloReservacion.NOMBREESTACION) ).ToList();
             List<GUIAS_EMPLEADO> guiasAsociados = baseDatos.GUIAS_EMPLEADO.Where(p => guias.Contains(p.CEDULA) && p.TIPOEMPLEADO.Contains("Guía")).ToList();
 
-            string result1 = String.Format("{0:dd/MM/yy}", reservacionVista[0].ENTRA);
+            //string result1 = String.Format("{0:dd/MM/yy}", reservacionVista[0].ENTRA);
 
-            string consulta = "SELECT E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL FROM GUIAS_EMPLEADO E JOIN GUIAS_ASIGNACION A ON E.CEDULA=A.CEDULAGUIA JOIN GUIAS_RESERVACION R ON A.NUMERORESERVACION=R.NUMERORESERVACION WHERE R.NOMBREESTACION='" + reservacionTabla.NOMBREESTACION+ "' group by (E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL) having count(*) < 4";
+           // string consulta = "SELECT E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL FROM GUIAS_EMPLEADO E JOIN GUIAS_ASIGNACION A ON E.CEDULA=A.CEDULAGUIA JOIN GUIAS_RESERVACION R ON A.NUMERORESERVACION=R.NUMERORESERVACION WHERE R.NOMBREESTACION='" + reservacionTabla.NOMBREESTACION+ "' group by (E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL) having count(*) < 4";
 
-            IEnumerable<GUIAS_EMPLEADO> prueba = baseDatos.Database.SqlQuery<GUIAS_EMPLEADO>(consulta);
+            //IEnumerable<GUIAS_EMPLEADO> prueba = baseDatos.Database.SqlQuery<GUIAS_EMPLEADO>(consulta);
             
             /* Se define tamaño de la pagina para la paginación de guías disponibles */
             int pageSize = 8;
@@ -1284,7 +1284,7 @@ namespace GuiasOET.Controllers
             ViewBag.pageNumber = pageNumber;
 
             /*Hay que filtrar el maximo de asignaciones para ese día del guía disponible, ya que no pueden ser mas de 4 y que sea un rol de día libre se ponga de otro color*/
-            modelo.guiasDisponibles = prueba.ToList();
+            modelo.guiasDisponibles = guiasLibres;
             modelo.guiasAsignados = guiasAsociados;
 
 
