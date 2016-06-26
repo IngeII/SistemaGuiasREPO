@@ -11,7 +11,6 @@ namespace GuiasOET.Models
         public List<GuiasOET.Models.GUIAS_EMPLEADO> guias = new List<GuiasOET.Models.GUIAS_EMPLEADO>();
         public GuiasOET.Models.GUIAS_EMPLEADO guias1 { get; set; }
 
-
         public GuiasOET.Models.GUIAS_ROLDIASLIBRES roles1 { get; set; }
 
         public List<GuiasOET.Models.GUIAS_ROLDIASLIBRES> tRolDiaLibre = new List<GuiasOET.Models.GUIAS_ROLDIASLIBRES>();
@@ -22,6 +21,10 @@ namespace GuiasOET.Models
         public DIASLIBRES(GuiasOET.Models.GUIAS_EMPLEADO empleado)
         {
             guias1 = empleado;
+        }
+        public DIASLIBRES()
+        {
+            roles1 = new GuiasOET.Models.GUIAS_ROLDIASLIBRES();
         }
     }
 }
