@@ -13,7 +13,8 @@
     function Generar(tipoU, fechaDesde, fechaHasta) {
         if (tipoU.val() == "Personas Atendidas") {
             PersonasAtendidas(fechaDesde.val(), fechaHasta.val());
-            //document.write(fechaDesde.val());
+        } else {
+            Reservaciones(fechaDesde.val(), fechaHasta.val());
         }
 
     }
@@ -32,13 +33,14 @@
 
     }
 
-    function Reservaciones(datosReservaciones) {
+    function Reservaciones(fechaDesde, fechaHasta) {
 
         $.ajax({
             type: 'POST',
             url: '@Url.Action("Reservaciones")',
-            data: 'datosReservaciones=' + datosReservaciones,
+            data: 'fechaDesde=' + fechaDesde + '&fechaHasta=' + fechaHasta,
             success: function (data) {
+                $('#tablaReservaciones').append(data);
             },
         });
 
@@ -86,6 +88,11 @@
         @Html.RadioButton("tipoReporte", "Reservaciones", new { id = "tipoReporte_2" })
         <label for="tipoReporte_2">Reservaciones</label>
     </div>
+
+    <div class="col-md-8">
+       
+</div>
+
 </div>
 <br>
 <br>
