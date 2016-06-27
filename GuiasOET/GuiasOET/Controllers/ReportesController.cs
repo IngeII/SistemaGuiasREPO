@@ -256,6 +256,12 @@ namespace GuiasOET.Controllers
                         reportes.fechasReservaciones.Add(fechaReservacion);
                     }
 
+                    for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
+                    {
+                        Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
+                    }
+                   
+
 
                     reportes.empleados = totalGuiasAsignados.ToList();
                     reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList();
@@ -314,8 +320,11 @@ namespace GuiasOET.Controllers
 
             int indiceAuxiliar = 0;
 
+            List<int> indiceReservacionesAsignadas = new List<int>();
 
-            Debug.WriteLine("fecha desde es: " + fechaDesde);
+
+
+        Debug.WriteLine("fecha desde es: " + fechaDesde);
 
             if (rol.Contains("Global"))
             {
@@ -341,13 +350,10 @@ namespace GuiasOET.Controllers
                         reportes.fechasReservaciones.Add(fechaReservacion);
                     }
 
-                    if (reservacionAuxiliar != null)
-                    {
-                        asociacionReservaciones = new int[reservacionAuxiliar.Count()];
-                    }
-                        
-
-                    
+                    /*   if (reservacionAuxiliar != null)
+                       {
+                           asociacionReservaciones = new int[reservacionAuxiliar.Count()];
+                       } */
 
                     foreach (var row in reservacionAuxiliar)
                     {
@@ -356,20 +362,23 @@ namespace GuiasOET.Controllers
 
                         if (reservacionAsignada != null)
                         {
-                            asociacionReservaciones[indice] = indiceAuxiliar;
-                            ++indiceAuxiliar;
+                            //   asociacionReservaciones[indice] = indiceAuxiliar;
+                            //   ++indiceAuxiliar;
+                            indiceReservacionesAsignadas.Add(0);
 
                             //	574839201
                             //	 PITA0424092015.10493619719      
                             string a = row.NUMERORESERVACION;
                             reservaConGuias = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
-                        }else
+                        }
+                        else
                         {
                             // para indicar que la reservacion no esta asignada
-                            asociacionReservaciones[indice] = -1;
+                            //  asociacionReservaciones[indice] = -1;
+                            indiceReservacionesAsignadas.Add(-1);
                         }
 
-                        ++indice;
+                        //  ++indice;
 
                         if (reservaConGuias != null)
                         {
@@ -403,12 +412,19 @@ namespace GuiasOET.Controllers
 
                     }
 
-                   
+
 
                     reportes.empleados = totalGuiasAsignados.ToList();
                     reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList();
                     reportes.totalReservaciones = reservacionAuxiliar.ToList();
-                    reportes.listaAsociacion = asociacionReservaciones;
+                    //     reportes.listaAsociacion = asociacionReservaciones;
+                    reportes.listaAsociacion = indiceReservacionesAsignadas;
+
+                    for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
+                    {
+                        Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
+                    }
+
 
                 }
             }
@@ -482,7 +498,7 @@ namespace GuiasOET.Controllers
                     reportes.empleados = totalGuiasAsignados.ToList();
                     reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList();
                     reportes.totalReservaciones = reservacionAuxiliar.ToList();
-                    reportes.listaAsociacion = asociacionReservaciones;
+                    reportes.listaAsociacion = indiceReservacionesAsignadas;
 
                 }
             }

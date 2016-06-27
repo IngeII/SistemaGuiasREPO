@@ -92,10 +92,9 @@
                         DateTime feD = Model.fechasReservaciones.ElementAt(i);
                         Debug.WriteLine("fecha es: " + feD);
                         totalPersonas = 0;
-                        contador = indice;
+                        contador = contadorAuxiliar;
                         <tr>
                             <td>
-
                                 @Html.Raw(feD)
                             </td>
                             <td>
@@ -135,14 +134,16 @@
 
                                 @if (contador >= Model.totalReservaciones.Count())
                                 {
-                                    contador = indice;
+                                    contadorAuxiliar = contador;
+                                    contador = 0;
                                     @Html.Raw("Total Personas: " + totalPersonas)
                                     @Html.Raw(" ")
                                     <br />
                                 }
                                 else
                                 {
-                                    contador = indice;
+                                    contadorAuxiliar = contador;
+                                    contador = 0;
                                     @Html.Raw("Total Personas: " + totalPersonas)
                                     @Html.Raw(" ")
                                     <br />
@@ -160,11 +161,11 @@
 
                                 @if (contador >= Model.totalReservaciones.Count())
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                                 else
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                             </td>
                             <td>
@@ -177,11 +178,11 @@
 
                                 @if (contador >= Model.totalReservaciones.Count())
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                                 else
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                             </td>
                             <td>
@@ -200,11 +201,11 @@
                                 }
                                 @if (contador >= Model.totalReservaciones.Count())
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                                 else
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                             </td>
 
@@ -221,11 +222,11 @@
                                 }
                                 @if (contador >= Model.totalReservaciones.Count())
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
                                 else
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                 }
 
                             </td>
@@ -238,15 +239,25 @@
                                     @Html.Raw(": ")
                                     <br />
 
-                                    for (int c = 0; c < Model.empleados.ElementAt(contador).Count(); ++c)
+                                    if (Model.listaAsociacion.ElementAt(contador) == -1)
                                     {
-                                        @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(i).NOMBREEMPLEADO)
                                         @Html.Raw(" ")
-                                        @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(i).APELLIDO1)
-                                        @Html.Raw(" ")
-                                        @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(i).APELLIDO2)
-                                        <br />
                                     }
+                                    else
+                                    {
+
+                                        for (int c = 0; c < Model.empleados.ElementAt(contador).Count(); ++c)
+                                        {
+                                            @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(i).NOMBREEMPLEADO)
+                                            @Html.Raw(" ")
+                                            @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(i).APELLIDO1)
+                                            @Html.Raw(" ")
+                                            @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(i).APELLIDO2)
+                                            <br />
+                                        }
+                                    }
+
+
 
                                     ++contador;
                                 }
@@ -255,12 +266,12 @@
 
                                 @if (contador >= Model.totalReservaciones.Count())
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                     ++indice;
                                 }
                                 else
                                 {
-                                    contador = indice;
+                                    contador = 0;
                                     ++indice;
                                 }
 
