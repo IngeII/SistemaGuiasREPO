@@ -806,7 +806,6 @@ namespace GuiasOET.Controllers
 
 
 
-
         [HttpGet]
         public ActionResult ConsultarAsignacion(int? page)
         {
