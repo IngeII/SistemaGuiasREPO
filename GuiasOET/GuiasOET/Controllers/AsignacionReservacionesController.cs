@@ -365,8 +365,23 @@ namespace GuiasOET.Controllers
 
         public ActionResult Notificaciones(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)  //**  string currentFilter2, string fechaHasta
         {
-            string rol = Session["RolUsuarioLogueado"].ToString();
-            string estacion = Session["EstacionUsuarioLogueado"].ToString();
+            string rol = "";
+            string estacion = "";
+
+            if (Session["RolUsuarioLogueado"]!= null) {
+                rol = Session["RolUsuarioLogueado"].ToString();
+            }
+            else {
+                return RedirectToAction("Login");
+            }
+
+            if (Session["EstacionUsuarioLogueado"] != null)
+            {
+                estacion = Session["EstacionUsuarioLogueado"].ToString();
+            }
+            else {
+                return RedirectToAction("Login");
+            }
 
             List<V_GUIAS_RESERVADOS> reservaciones = null;
 

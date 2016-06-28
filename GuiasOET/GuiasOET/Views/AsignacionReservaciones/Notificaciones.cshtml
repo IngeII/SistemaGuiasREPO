@@ -133,23 +133,13 @@
                             {
                                 @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
                             }
-                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                            @if (Model.totalReservaciones != null)
                             {
-                                @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                            }
-                            @if (Model.totalGuiasDisponibles != null)
-                            {
-                                foreach (var item in Model.totalGuiasDisponibles)
+
+                                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+                                string fechaReservacion = "28/06/2016";  // String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
+                                if (fechaReservacion == fechaActual)
                                 {
-                                    string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
-                                    foreach (var asignacion in item.GUIAS_ASIGNACION)
-                                    {
-                                        String ced = item.CEDULA;
-                                        String nombre = item.NOMBREEMPLEADO;
-                                        String id = asignacion.NUMERORESERVACION;
-                                        String fechaReservacion = String.Format("{0:dd/MM/yyyy}", asignacion.GUIAS_RESERVACION.FECHAENTRA).Trim();
-                                        if (fechaReservacion == fechaActual)
-                                        {
                                             <a href="@Url.Action("ConfirmarNotificacion", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION })">
                                                 <span class="btn btn-default" aria-hidden="true" title="Confirmar" style="background-color: #7BC143; color:white;"></span>
                                             </a>
@@ -157,9 +147,9 @@
                                             <a href="@Url.Action("Cancelar", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION })">
                                                 <span class="btn btn-default" aria-hidden="true" title="Cancelar" style="background-color: #7BC143; color:white;"></span>
                                             </a>
-                                        }
-                                    }
-                                }
+                                 }
+                                    
+                                
                             }
                        </td>
                    </tr>
