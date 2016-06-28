@@ -57,8 +57,10 @@
         {
             <p>
                 Lista de Reservaciones<br />
+
                 Criterio de búsqueda: Desde: <input type="date" name="fechaDesde" value="@ViewBag.CurrentFilter1">
                 Hasta: <input type="date" name="fechaHasta" value="@ViewBag.CurrentFilter2">
+                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
             </p>
         }
     </div>
@@ -135,21 +137,24 @@
                             }
                             @if (Model.totalReservaciones != null)
                             {
+                                //string hora = String.Format("{HH:mm}",Model.totalReservaciones.ElementAt(i).HORA);
 
-                                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
-                                string fechaReservacion = "28/06/2016";  // String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
+
+
+
+
+                                string fechaActual = "28/06/2016"; // DateTime.Now.ToString("dd/MM/yyyy");
+                                string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
+                                Console.Write(fechaReservacion);
                                 if (fechaReservacion == fechaActual)
                                 {
-                                            <a href="@Url.Action("ConfirmarNotificacion", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION })">
-                                                <span class="btn btn-default" aria-hidden="true" title="Confirmar" style="background-color: #7BC143; color:white;"></span>
-                                            </a>
+                                  
+                                    @Html.ActionLink("Confirmar", "Notificaciones", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2, Page }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
+                                    @Html.ActionLink("Cancelar", "CancelarNotificacion", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2,Page }, new { @class = "btn btn-default", @style = "background-color: #F26631; color:white;" })
+     
+                                }
 
-                                            <a href="@Url.Action("Cancelar", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION })">
-                                                <span class="btn btn-default" aria-hidden="true" title="Cancelar" style="background-color: #7BC143; color:white;"></span>
-                                            </a>
-                                 }
-                                    
-                                
+
                             }
                        </td>
                    </tr>
