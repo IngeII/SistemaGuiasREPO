@@ -431,7 +431,6 @@ namespace GuiasOET.Controllers
             else if (rol.Contains("Interno"))
             {
                 estacion = Session["EstacionUsuarioLogueado"].ToString();
-
                 //Se verifica que ambas fechas no sean vacías
                 if (!(String.IsNullOrEmpty(fechaDesde)) && !(String.IsNullOrEmpty(fechaHasta)))
                 {
@@ -441,6 +440,23 @@ namespace GuiasOET.Controllers
                     //Todas las reservaciones del sistema en el rango de fechas establecido
                     var reservacionAuxiliar = baseDatos.GUIAS_RESERVACION.Where(e => e.NOMBREESTACION.Equals(estacion) && e.FECHAENTRA >= fechaD && e.FECHAENTRA <= fechaH);
 
+                    //Se ordenan las reservaciones por fecha
+
+                    reservacionAuxiliar = reservacionAuxiliar.OrderBy(r => r.FECHAENTRA);
+
+
+                    //Se guardan las fechas de las reservaciones
+                    foreach (var row in reservacionAuxiliar)
+                    {
+                        //Se guarda la fecha de la reservación
+                        fechaReservacion = Convert.ToDateTime(row.FECHAENTRA);
+                        reportes.fechasReservaciones.Add(fechaReservacion);
+                    }
+
+                    /*   if (reservacionAuxiliar != null)
+                       {
+                           asociacionReservaciones = new int[reservacionAuxiliar.Count()];
+                       } */
 
                     foreach (var row in reservacionAuxiliar)
                     {
@@ -449,10 +465,23 @@ namespace GuiasOET.Controllers
 
                         if (reservacionAsignada != null)
                         {
+                            //   asociacionReservaciones[indice] = indiceAuxiliar;
+                            //   ++indiceAuxiliar;
+                            indiceReservacionesAsignadas.Add(0);
+
+                            //	574839201
+                            //	 PITA0424092015.10493619719      
+                            string a = row.NUMERORESERVACION;
                             reservaConGuias = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                         }
+                        else
+                        {
+                            // para indicar que la reservacion no esta asignada
+                            //  asociacionReservaciones[indice] = -1;
+                            indiceReservacionesAsignadas.Add(-1);
+                        }
 
-
+                        //  ++indice;
 
                         if (reservaConGuias != null)
                         {
@@ -483,22 +512,22 @@ namespace GuiasOET.Controllers
                         //Se limpia la lista de los guías asignados
                         guiasAsignados.Clear();
 
+
                     }
 
-
-                    //Se guardan las fechas de las reservaciones
-                    foreach (var row in reservaciones)
-                    {
-                        //Se guarda la fecha de la reservación
-                        fechaReservacion = Convert.ToDateTime(row.FECHAENTRA);
-                        reportes.fechasReservaciones.Add(fechaReservacion);
-                    }
 
 
                     reportes.empleados = totalGuiasAsignados.ToList();
                     reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList();
                     reportes.totalReservaciones = reservacionAuxiliar.ToList();
+                    //     reportes.listaAsociacion = asociacionReservaciones;
                     reportes.listaAsociacion = indiceReservacionesAsignadas;
+
+                    for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
+                    {
+                        Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
+                    }
+
 
                 }
             }
