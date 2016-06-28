@@ -19,6 +19,9 @@
         @Html.DisplayFor(modelItem => Model.guiasDisponibles.ElementAt(0).TIPOEMPLEADO)
     </td>
     <td>
+        @ViewBag.turnoAsignado
+    </td>
+    <td>
         <a class="btn btn-default" onclick="eliminarGuia(@(Model.guiasDisponibles.ElementAt(0).CEDULA),@(ViewBag.reserva),$('#asignado@(ViewBag.rowCount)'));" style="background-color: #F26631; color:white;">Eliminar</a>
     </td>
 </tr>

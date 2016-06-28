@@ -1433,6 +1433,9 @@ namespace GuiasOET.Controllers
 
         public ActionResult AsignarReservacionDetallada(string id, int? page)
         {
+
+            ViewBag.turnos = new List<string>();
+
             ViewBag.cambios = new List<string>();
 
             ViewBag.reserva = id;
@@ -1443,12 +1446,19 @@ namespace GuiasOET.Controllers
             modelo = new AsignacionModelos(baseDatos.GUIAS_RESERVACION.Find(identificacion));
             ViewBag.fecha = String.Format("{0:d/M/yyyy}", modelo.modeloReservacion.FECHAENTRA).Trim();
 
-            
-
+            /*Se obtienen lso datos para esa reservación que se encuentran en la vista sql y en la tabla*/
             List<V_GUIAS_RESERVADOS> reservacionVista = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ID.Equals(id)).ToList();
             GUIAS_RESERVACION reservacionTabla = baseDatos.GUIAS_RESERVACION.Find(id);
 
-            if(reservacionTabla.CONFIRMACION == null)
+            /*Se obtienen los turnos para la misma estación que la reservación*/
+            List<GUIAS_TURNO> turnos = baseDatos.GUIAS_TURNO.Where(e => e.NOMBREESTACION.Contains(reservacionTabla.NOMBREESTACION)).ToList();
+
+            /*Cargo el combobox con los tipos de turno*/
+            for (int i =0; i < turnos.Count; i++) {
+                ViewBag.turnos.Add(turnos[i].NOMBRETURNO);
+            }
+
+            if (reservacionTabla.CONFIRMACION == null)
             {
                 ViewBag.confirmacion="Aún sin confirmar";
             }
@@ -1512,7 +1522,17 @@ namespace GuiasOET.Controllers
             List<string> guias = baseDatos.GUIAS_ASIGNACION.Where(p => p.NUMERORESERVACION.Equals(identificacion)).Select(s => s.CEDULAGUIA).ToList();
             List<GUIAS_EMPLEADO> guiasLibres = baseDatos.GUIAS_EMPLEADO.Where(p => !guias.Contains(p.CEDULA) && p.TIPOEMPLEADO.Contains("Guía") && p.NOMBREESTACION.Equals(modelo.modeloReservacion.NOMBREESTACION) ).ToList();
             List<GUIAS_EMPLEADO> guiasAsociados = baseDatos.GUIAS_EMPLEADO.Where(p => guias.Contains(p.CEDULA) && p.TIPOEMPLEADO.Contains("Guía")).ToList();
+            ViewBag.turnosAsignados = new string[guiasAsociados.Count];// new List<string>();
 
+            for (int i = 0; i < guiasAsociados.Count; i++)
+            {
+                GUIAS_ASIGNACION nuevo = baseDatos.GUIAS_ASIGNACION.Find(id, guiasAsociados[i].CEDULA);
+                if (nuevo != null)
+                {
+                    ViewBag.turnosAsignados[i] = nuevo.TURNO;
+
+                }
+            }
             //string result1 = String.Format("{0:dd/MM/yy}", reservacionVista[0].ENTRA);
 
            // string consulta = "SELECT E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL FROM GUIAS_EMPLEADO E JOIN GUIAS_ASIGNACION A ON E.CEDULA=A.CEDULAGUIA JOIN GUIAS_RESERVACION R ON A.NUMERORESERVACION=R.NUMERORESERVACION WHERE R.NOMBREESTACION='" + reservacionTabla.NOMBREESTACION+ "' group by (E.CEDULA, E.NOMBREEMPLEADO, E.APELLIDO1, E.APELLIDO2, E.TIPOEMPLEADO, E.NOMBREESTACION, E.EMAIL, E.ESTADO, E.DIRECCION, E.USUARIO, E.CONTRASENA, E.CONFIRMAREMAIL) having count(*) < 4";
@@ -1520,7 +1540,7 @@ namespace GuiasOET.Controllers
             //IEnumerable<GUIAS_EMPLEADO> prueba = baseDatos.Database.SqlQuery<GUIAS_EMPLEADO>(consulta);
             
             /* Se define tamaño de la pagina para la paginación de guías disponibles */
-            int pageSize = 8;
+            int pageSize = 4;
             int pageNumber = (page ?? 1);
             ViewBag.pageNumber = pageNumber;
 
@@ -1583,7 +1603,7 @@ namespace GuiasOET.Controllers
             return View(modelo);
         }
 
-        public ActionResult agregarGuia(string id, string reservacion, int rowCount)
+        public ActionResult agregarGuia(string id, string reservacion, int rowCount, string turno)
         {
             if (id != null)
             {
@@ -1591,6 +1611,7 @@ namespace GuiasOET.Controllers
                 string iden = id.ToString();
                 modelo.CEDULAGUIA = iden;
                 modelo.NUMERORESERVACION = reservacion;
+                modelo.TURNO = turno;
 
                 baseDatos.GUIAS_ASIGNACION.Add(modelo);
                 baseDatos.SaveChanges();
@@ -1603,6 +1624,7 @@ namespace GuiasOET.Controllers
             
             ViewBag.rowCount = rowCount + 1;
             ViewBag.reserva = reservacion;
+            ViewBag.turnoAsignado = turno;
             return View(mod);
         }
 

@@ -12,20 +12,31 @@
     {
         var rowCount = $('#asignados tr').length;
 
-        if (Math.ceil(pack/12) >= rowCount ) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("agregarGuia")',
-                data: 'id=' + id + '&reservacion=' + reservacion + '&rowCount=' + rowCount,
-                success: function (data) {
-                    asignacion.remove();
-                    $('#asignados tr:last').after(data);
-                },
-            });
+        var e = document.getElementById("turnoAsignacion");
+        var turno = e.options[e.selectedIndex].value;
+
+        if(turno != "Seleccione")
+        {
+            if (Math.ceil(pack/12) >= rowCount ) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("agregarGuia")',
+                    data: 'id=' + id + '&reservacion=' + reservacion + '&rowCount=' + rowCount + '&turno=' + turno,
+                    success: function (data) {
+                        asignacion.remove();
+                        $('#asignados tr:last').after(data);
+                    },
+                });
+            }
+            else {
+                alert("Ya superó el número máximo de guías asignados permitidos.");
+            }
         }
-        else {
-            alert("Ya superó el número máximo de guías asignados permitidos.");
+        else
+        {
+            alert("Por favor seleccione un turno válido para la asignación.");
         }
+        
 
     }
 
@@ -127,6 +138,7 @@
                             @Html.DisplayFor(model => model.modeloReservacion.NOMBRESOLICITANTE, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                             @Html.Raw(" ")
                             @Html.DisplayFor(model => model.modeloReservacion.APELLIDOSSOLICITANTE, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                             
                             @Html.ValidationMessageFor(model => model.modeloReservacion.NOMBRESOLICITANTE, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -250,6 +262,32 @@
                     </div>
                     <br />
 
+                    <div class="row">
+
+                        <div class="col-md-3" col-sm-offset-1>
+                            <label class="control-label col-md-2" for="turnoAsignacion">Turno:</label>
+                        </div>
+
+                        <div class="col-md-7">
+                            <select name="turnoAsignacion" id="turnoAsignacion" class="form-control">
+                               @{
+                                   <option value="Seleccione">Seleccione</option>
+                                   if (ViewBag.turnos.Count != 0)
+                                   {
+                                       foreach (string turno in ViewBag.turnos)
+                                       {
+                                        <option value="@(turno)">@(turno)</option>
+
+                                       }
+                                   }
+
+                            }
+                            </select>
+                        </div>
+                    </div>
+
+                    <br />
+
                     <div class="table-responsive">
                         <table class="table" id="asignaciones">
 
@@ -257,19 +295,20 @@
                                 <div class="col-lg-12">
                                     <tr>
                                         <th>
-                                            @Html.ActionLink("Nombre completo", "AsignarReservacionDetallada")
+                                            Nombre completo
                                         </th>
                                         <th>
-                                            @Html.ActionLink("Estación", "AsignarReservacionDetallada")
+                                            Estación
                                         </th>
                                         <th>
-                                            @Html.ActionLink("Rol", "AsignarReservacionDetallada")
+                                            Rol
                                         </th>
+                                       
                                     </tr>
 
                                     @for (int i = 0; i < Model.totalGuiasDisponibles.Count; i++)
                                     {
-                                        
+
                                         <tr id="asignacion_@(i)">
                                             <td>
                                                 @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).NOMBREEMPLEADO)
@@ -285,6 +324,7 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => Model.totalGuiasDisponibles.ElementAt(i).TIPOEMPLEADO)
                                             </td>
+                                            
                                             <td>
                                                 <a class="btn btn-default" onclick="agregarGuia(@(Model.totalGuiasDisponibles.ElementAt(i).CEDULA),'@(ViewBag.reserva)',$('#asignacion_@(i)'));" style="background-color: #7BC143; color:white;">Asignar</a>
                                             </td>
@@ -320,14 +360,17 @@
                             <div class="col-lg-12">
                                 <tr>
                                     <th>
-                                        @Html.ActionLink("Nombre completo", "AsignarReservacionDetallada")
+                                        Nombre completo
                                     </th>
                                     <th>
-                                        @Html.ActionLink("Estación", "AsignarReservacionDetallada")
+                                        Estación
                                     </th>
                                     <th>
-                                        @Html.ActionLink("Rol", "AsignarReservacionDetallada")
+                                        Rol
                                     </th>
+                                    <th>
+                                        Turno
+                                        </th>
                                 </tr>
 
                                 @for (int i = 0; i < Model.guiasAsignados.Count; i++)
@@ -346,6 +389,16 @@
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => Model.guiasAsignados.ElementAt(i).TIPOEMPLEADO)
+                                        </td>
+                                        
+                                        <td>
+                                            @{
+                                               
+                                                        @(ViewBag.turnosAsignados[i])
+                                                   
+                                                
+                                            }
+
                                         </td>
                                         <td>
                                             <a class="btn btn-default" onclick="eliminarGuia(@(Model.guiasAsignados.ElementAt(i).CEDULA),'@(ViewBag.reserva)',$('#asignado@(i)'));" style="background-color: #F26631; color:white;">Eliminar</a>
