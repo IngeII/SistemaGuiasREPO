@@ -138,8 +138,3 @@
         </div>
     </table>
 </div>
-
-
-    Página @(ViewBag.PageCount < ViewBag.PageNumber ? 0 : ViewBag.PageNumber) de @ViewBag.PageCount
-    @Html.PagedListPager(Model.totalRolDiaLibre, page => Url.Action("AsignarDiasLibresDetallada",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
