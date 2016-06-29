@@ -236,7 +236,7 @@ namespace GuiasOET.Controllers
             }
 
             /* Se define tamaño de la pagina para la paginación de guías disponibles */
-            int pageSize = 8;
+            int pageSize = 120;
             int pageNumber = (page ?? 1);
 
             ViewBag.pageNumber = pageNumber;
