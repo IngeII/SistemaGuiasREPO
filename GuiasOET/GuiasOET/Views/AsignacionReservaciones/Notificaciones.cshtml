@@ -6,10 +6,40 @@
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-@{  
+@{
     ViewBag.Title = "Notificaciones";
     Layout = "~/Views/Shared/_GeneralLayout.cshtml";
 }
+
+<script>
+    function CancelarNotificacion(id)
+        {
+                $.ajax({
+                type: 'POST',
+                    url: '@Url.Action("CancelarNotificacion")',
+                    data: 'id=' + id,
+                    success: function(data) {
+                        $('td:contains("'+id+'")').parent().remove();
+                },
+                });
+            }
+</script>
+
+
+<script>
+    function ConfirmarNotificacion(id)
+    {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ConfirmarNotificacion")',
+            data: 'id=' + id,
+            success: function (data) {
+                $('td:contains("' + id + '")').parent(".trhlite").css("background-color", "yellow");
+                $('td:contains("' + id + '")').removeChild("ConfirmarNotificacion");
+          },
+        });
+    }
+</script>
 
 @functions
     {
@@ -35,7 +65,6 @@
         }
 
         return asignacion;
-
     }
 }
 
@@ -95,10 +124,10 @@
 
                 @for (int i = 0; i < Model.totalReservaciones.Count; ++i)
                 {
+                    if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                    {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)
-                        </td>
+                        <td>@Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)</td>
                         <td>
                             @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRESOLICITANTE)
                         </td>
@@ -137,28 +166,40 @@
                             }
                             @if (Model.totalReservaciones != null)
                             {
-                                //string hora = String.Format("{HH:mm}",Model.totalReservaciones.ElementAt(i).HORA);
-
-
-
-
-
-                                string fechaActual = "28/06/2016"; // DateTime.Now.ToString("dd/MM/yyyy");
+                                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+                                string char1dia = fechaActual.ElementAt(0).ToString();
+                                string char2dia = fechaActual.ElementAt(1).ToString();
+                                string mes = fechaActual.ElementAt(3).ToString() + fechaActual.ElementAt(4).ToString();
+                                string ano = fechaActual.ElementAt(6).ToString() + fechaActual.ElementAt(7).ToString() + fechaActual.ElementAt(8).ToString() + fechaActual.ElementAt(9).ToString();
+                                string diaStr = char1dia + char2dia;
+                                int dia = Int32.Parse(diaStr);
+                                if (dia == 30)
+                                {
+                                    dia = 31;
+                                }
+                                else
+                                {
+                                    dia = dia + 1;
+                                }
+                                string nuevoDia = dia.ToString();
+                                string fechaNuevaDeDiaAnterior = nuevoDia + "/" + mes + "/" + ano;
+                                Console.Write(fechaNuevaDeDiaAnterior);
                                 string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
                                 Console.Write(fechaReservacion);
-                                if (fechaReservacion == fechaActual)
+                                Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
+
+
+                                if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
                                 {
-                                  
-                                    @Html.ActionLink("Confirmar", "Notificaciones", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2, Page }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                                    @Html.ActionLink("Cancelar", "CancelarNotificacion", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2,Page }, new { @class = "btn btn-default", @style = "background-color: #F26631; color:white;" })
-     
+                                    <a class="btn btn-default" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
+
+                                    <a class="btn btn-default" onclick="CancelarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #F26631; color:white;">Cancelar</a>
                                 }
-
-
                             }
-                       </td>
-                   </tr>
-                }
+                        </td>
+                    </tr>
+                        }
+                    }
             </div>
         </div>
     </table>
@@ -171,3 +212,5 @@
         Página @ViewBag.PageNumber de @ViewBag.TotalPages
         @Html.PagedListPager((IPagedList)ViewBag.MessagesInOnePage,
 page => Url.Action("Notificaciones", new { page, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 }))
+
+
