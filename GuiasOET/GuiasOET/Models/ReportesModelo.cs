@@ -24,6 +24,12 @@ namespace GuiasOET.Models
         public List<int> listaAsociacion = new List<int>();
 
 
+        //Vista de días libres
+        public List<List<GUIAS_ROLDIASLIBRES>> diasLibres = new List<List<GUIAS_ROLDIASLIBRES>>();
+        public List<GUIAS_EMPLEADO> empleadosDiasLibres = new List<GUIAS_EMPLEADO>();
+        public List<bool> diasLibreEmpleado = new List<bool>();
+
+
         public ReportesModelo()
         {
 

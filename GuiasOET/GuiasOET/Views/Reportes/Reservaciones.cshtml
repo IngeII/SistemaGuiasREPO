@@ -118,6 +118,8 @@
 
                                     if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
                                     {
+    
+                                   
 
                                         Debug.WriteLine("la cantidad en total reservaciones es: " + Model.totalReservaciones.Count());
                                         Debug.WriteLine("la fecha ENTRA es: " + Model.totalReservaciones.ElementAt(contador).FECHAENTRA);
@@ -316,19 +318,27 @@
 
                                     if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
                                     {
-
-                                        for (int c = 0; c < Model.empleados.ElementAt(contador).Count(); ++c)
+                                        if (Model.listaAsociacion.ElementAt(contador) == -1)
                                         {
+                                            @Html.Raw(" ")
+                                        }
+                                        else
+                                        {
+
+
+                                            for (int c = 0; c < Model.empleados.ElementAt(contador).Count(); ++c)
+                                            {
                                             @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(c).NOMBREEMPLEADO)
                                             @Html.Raw(" ")
                                             @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(c).APELLIDO1)
                                             @Html.Raw(" ")
                                             @Html.DisplayFor(modelItem => Model.empleados.ElementAt(contador).ElementAt(c).APELLIDO2)
                                             <br />
+                                            }
                                         }
 
 
-    
+
                                         ++contador;
 
 

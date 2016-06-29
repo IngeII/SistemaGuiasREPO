@@ -382,6 +382,8 @@
     <Content Include="Views\Reportes\PersonasAtendidas.cshtml" />
     <Content Include="Views\AsignacionReservaciones\aceptarCambios.cshtml" />
     <Content Include="Views\Reportes\Reservaciones.cshtml" />
+    <Content Include="Views\AsignacionReservaciones\generarReportePDF.cshtml" />
+    <Content Include="Views\Reportes\DiasLibres.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
