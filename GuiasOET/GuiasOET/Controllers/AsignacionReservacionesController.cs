@@ -388,7 +388,7 @@ namespace GuiasOET.Controllers
                     ModelState.AddModelError("", "No es posible desactivar el usuario en este momento, intente más tarde");
                 }
             }
-            return View("Notificaciones");
+            return null;
         }
 
         public ActionResult CancelarNotificacion(string id)

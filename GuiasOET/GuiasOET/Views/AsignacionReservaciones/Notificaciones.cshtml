@@ -33,11 +33,9 @@
             url: '@Url.Action("ConfirmarNotificacion")',
             data: 'id=' + id,
             success: function (data) {
-                $('td:contains("' + id + '")');
-
-
+                $('td:contains("' + id + '")').parent(".trhlite").css("background-color", "yellow");
+                $('td:contains("' + id + '")').child("ConfirmarNotificacion").remove;
           },
-
         });
     }
 </script>
@@ -164,16 +162,30 @@
                                 @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
                             }
                             @if (Model.totalReservaciones != null)
-                            {
-                                //string hora = String.Format("{HH:mm}",Model.totalReservaciones.ElementAt(i).HORA);
-
-                                string fechaActual = "28/06/2016"; // DateTime.Now.ToString("dd/MM/yyyy");
+                                {
+                                   string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+                                string char1dia = fechaActual.ElementAt(0).ToString();
+                                string char2dia = fechaActual.ElementAt(1).ToString();
+                                string mes = fechaActual.ElementAt(3).ToString() + fechaActual.ElementAt(4).ToString();
+                                string ano = fechaActual.ElementAt(6).ToString() + fechaActual.ElementAt(7).ToString() + fechaActual.ElementAt(8).ToString() + fechaActual.ElementAt(9).ToString();
+                                string diaStr = char1dia + char2dia;
+                                int dia = Int32.Parse(diaStr);
+                                if (dia == 30)
+                                {
+                                    dia = 31;
+                                }
+                                else
+                                {
+                                    dia = dia +1;
+                                }
+                                string nuevoDia = dia.ToString();
+                                string fechaNuevaDeDiaAnterior = nuevoDia + "/" + mes + "/" + ano;
+                                Console.Write(fechaNuevaDeDiaAnterior);
                                 string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
                                 Console.Write(fechaReservacion);
                                 Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
 
-
-                                if (fechaReservacion == fechaActual)//&& Model.totalReservaciones.ElementAt(i).CONFIRMACION != "0")
+                                    if (fechaReservacion == fechaActual && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
                                 {
                                     <a class="btn btn-default" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
 
