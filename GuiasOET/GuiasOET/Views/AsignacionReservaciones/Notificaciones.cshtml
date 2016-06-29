@@ -6,10 +6,41 @@
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-@{  
+@{
     ViewBag.Title = "Notificaciones";
     Layout = "~/Views/Shared/_GeneralLayout.cshtml";
 }
+
+<script>
+    function CancelarNotificacion(id)
+        {
+                $.ajax({
+                type: 'POST',
+                    url: '@Url.Action("CancelarNotificacion")',
+                    data: 'id=' + id,
+                    success: function(data) {
+                        $('td:contains("'+id+'")').parent().remove();
+                },
+                });
+            }
+</script>
+
+<script>
+    function ConfirmarNotificacion(id)
+    {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ConfirmarNotificacion")',
+            data: 'id=' + id,
+            success: function (data) {
+                $('td:contains("' + id + '")');
+
+
+          },
+
+        });
+    }
+</script>
 
 @functions
     {
@@ -35,7 +66,6 @@
         }
 
         return asignacion;
-
     }
 }
 
@@ -96,9 +126,7 @@
                 @for (int i = 0; i < Model.totalReservaciones.Count; ++i)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)
-                        </td>
+                        <td>@Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)</td>
                         <td>
                             @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRESOLICITANTE)
                         </td>
@@ -139,25 +167,21 @@
                             {
                                 //string hora = String.Format("{HH:mm}",Model.totalReservaciones.ElementAt(i).HORA);
 
-
-
-
-
                                 string fechaActual = "28/06/2016"; // DateTime.Now.ToString("dd/MM/yyyy");
                                 string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
                                 Console.Write(fechaReservacion);
-                                if (fechaReservacion == fechaActual)
+                                Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
+
+
+                                if (fechaReservacion == fechaActual)//&& Model.totalReservaciones.ElementAt(i).CONFIRMACION != "0")
                                 {
-                                  
-                                    @Html.ActionLink("Confirmar", "Notificaciones", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2, Page }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                                    @Html.ActionLink("Cancelar", "CancelarNotificacion", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2,Page }, new { @class = "btn btn-default", @style = "background-color: #F26631; color:white;" })
-     
+                                    <a class="btn btn-default" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
+
+                                    <a class="btn btn-default" onclick="CancelarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #F26631; color:white;">Cancelar</a>
                                 }
-
-
                             }
-                       </td>
-                   </tr>
+                        </td>
+                    </tr>
                 }
             </div>
         </div>
@@ -171,3 +195,5 @@
         Página @ViewBag.PageNumber de @ViewBag.TotalPages
         @Html.PagedListPager((IPagedList)ViewBag.MessagesInOnePage,
 page => Url.Action("Notificaciones", new { page, sortOrder = ViewBag.CurrentSort, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 }))
+
+
