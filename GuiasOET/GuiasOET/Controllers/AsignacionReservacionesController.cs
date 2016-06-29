@@ -22,6 +22,7 @@ namespace GuiasOET.Controllers
 
         private Entities1 baseDatos = new Entities1();
 
+
         [HttpGet]
         public ActionResult AsignarReservacion(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)
         {
@@ -73,15 +74,10 @@ namespace GuiasOET.Controllers
 
             List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();
 
-            DateTime fechaInicio = DateTime.Now;
-            DateTime fechaFin = DateTime.Now.AddDays(7);
+            DateTime fechaInicio;
+            DateTime fechaFin;
 
             DateTime fechaInicial;
-
-            bool usuarioGlobal = false;
-
-            List<V_GUIAS_RESERVADOS> reservacionVista;
-            GUIAS_RESERVACION reservacionTabla;
 
             //Lista que contiene los guias de todas las reservaciones
             List<IEnumerable<GUIAS_RESERVACION>> totalReservas = new List<IEnumerable<GUIAS_RESERVACION>>();
@@ -248,19 +244,19 @@ namespace GuiasOET.Controllers
                         }
                     }
 
+                    //Llenar la tabla
+
+
 
                     if (rol.Contains("Local") || rol.Contains("Interno"))
                     {
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
-                        //table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
-                        usuarioGlobal = false;
+                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
                     }
                     else
                     {
-
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin));
-                        usuarioGlobal = true;
-                        //  table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
+                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
                     }
 
                     page = 1;
@@ -271,51 +267,6 @@ namespace GuiasOET.Controllers
 
                     reservacionAsignada = reservacionAsignada.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                     reserva = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
-
-                    if (usuarioGlobal)
-                    {
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
-                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
-
-                        if (reservacionVista.Count > 0)
-                        {
-                            Debug.WriteLine("tengo MAS de 0 cero elementos");
-                        }
-                        else
-                        {
-                            Debug.WriteLine("tengo MENOS de 0 cero elementos");
-                        }
-
-                        Debug.WriteLine("el row tiene esto: " + row.NUMERORESERVACION);
-                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
-                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
-                        {
-                            table.cambiosReservaciones.Add(true);
-
-                        }
-                        else
-                        {
-                            table.cambiosReservaciones.Add(false);
-                        }
-                    }
-                    else
-                    {
-
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
-                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
-
-                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
-                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
-                        {
-                            table.cambiosReservaciones.Add(true);
-
-                        }
-                        else
-                        {
-                            table.cambiosReservaciones.Add(false);
-                        }
-
-                    }
 
                     if (reserva != null)
                     {
@@ -334,10 +285,9 @@ namespace GuiasOET.Controllers
                         for (int y = 1; y < guiasAsignados.Count(); ++y)
                         {
                             totalGuias = totalGuias.Concat(guiasAsignados.ElementAt(y));
-
-                            totalGuiasAsignados.Add(totalGuias);
                         }
 
+                        totalGuiasAsignados.Add(totalGuias);
 
                     }
 
@@ -414,6 +364,7 @@ namespace GuiasOET.Controllers
 
             return View(table);
         }
+
 
         public ActionResult ConfirmarNotificacion(string id)
         {
@@ -639,8 +590,24 @@ namespace GuiasOET.Controllers
                         contador = null;
                         contador = baseDatos.GUIAS_RESERVACION.Find(reservaciones[i].ID);
 
-                        //Si la reservacion de la vista no se encuentra guardada en la base de datos se agrega a la tabla Reservaciones
-                        if (contador != null)
+                        if (contador == null)
+                        {
+                            GUIAS_RESERVACION nuevo = new GUIAS_RESERVACION();
+                            nuevo.NUMERORESERVACION = reservaciones[i].ID;
+                            nuevo.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
+                            nuevo.FECHAENTRA = reservaciones[i].ENTRA;
+                            nuevo.FECHASALE = reservaciones[i].SALE;
+                            nuevo.HORA = "8:00am";
+                            nuevo.NOMBREESTACION = reservaciones[i].ESTACION;
+                            nuevo.NOMBRESOLICITANTE = reservaciones[i].NOMBRE;
+                            //nuevo.NOTAS = reservaciones[i].
+                            nuevo.NUMEROPERSONAS = reservaciones[i].PAX;
+                            nuevo.ULTIMAMODIFICACION = reservaciones[i].ULTIMA_MODIFICACION;
+                            baseDatos.GUIAS_RESERVACION.Add(nuevo);
+                            baseDatos.SaveChanges();
+                        }
+                        //Si la reservacion ya se encuentra en la base de datos se verifica que no tenga guías asociados para actualizarse sin lanzar alertas
+                        else
                         {
                             if (!contador.ULTIMAMODIFICACION.Equals(reservaciones[i].ULTIMA_MODIFICACION))
                             {
@@ -667,6 +634,7 @@ namespace GuiasOET.Controllers
                             }
                         }
                     }
+
 
                     if (rol.Contains("Local"))
                     {
