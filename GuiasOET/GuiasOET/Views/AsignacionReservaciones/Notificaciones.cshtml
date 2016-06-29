@@ -124,6 +124,8 @@
 
                 @for (int i = 0; i < Model.totalReservaciones.Count; ++i)
                 {
+                    if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
+                    {
                     <tr>
                         <td>@Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)</td>
                         <td>
@@ -163,7 +165,7 @@
                                 @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
                             }
                             @if (Model.totalReservaciones != null)
-                                {
+                            {
                                 string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
                                 string char1dia = fechaActual.ElementAt(0).ToString();
                                 string char2dia = fechaActual.ElementAt(1).ToString();
@@ -177,7 +179,7 @@
                                 }
                                 else
                                 {
-                                    dia = dia +1;
+                                    dia = dia + 1;
                                 }
                                 string nuevoDia = dia.ToString();
                                 string fechaNuevaDeDiaAnterior = nuevoDia + "/" + mes + "/" + ano;
@@ -196,7 +198,8 @@
                             }
                         </td>
                     </tr>
-                }
+                        }
+                    }
             </div>
         </div>
     </table>
