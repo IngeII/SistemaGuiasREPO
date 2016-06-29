@@ -12,8 +12,9 @@
 }
 
 <script>
-    function CancelarNotificacion(id)
-        {
+		    function CancelarNotificacion(id)
+              {
+
                 $.ajax({
                 type: 'POST',
                     url: '@Url.Action("CancelarNotificacion")',
@@ -22,24 +23,35 @@
                         $('td:contains("'+id+'")').parent().remove();
                 },
                 });
-            }
+
+               }
+
 </script>
+
 
 
 <script>
     function ConfirmarNotificacion(id)
     {
+        $("#Confirmar").attr("disabled", true);
+        $("#Cancelar").attr("disabled", true);
         $.ajax({
             type: 'POST',
             url: '@Url.Action("ConfirmarNotificacion")',
             data: 'id=' + id,
             success: function (data) {
-                $('td:contains("' + id + '")').parent(".trhlite").css("background-color", "yellow");
-                $('td:contains("' + id + '")').removeChild("ConfirmarNotificacion");
+                $("#Confirmar").attr("disabled", true);
+                $("#Cancelar").attr("disabled", true);
+
           },
         });
+        $("#Confirmar").attr("disabled", true);
+        $("#Cancelar").attr("disabled", true);
+
+
     }
 </script>
+
 
 @functions
     {
@@ -126,80 +138,82 @@
                 {
                     if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
                     {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)</td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRESOLICITANTE)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBREESTACION)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMEROPERSONAS)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).FECHAENTRA)
+                        <tr id="asignado@(i)">
+                            <td>@Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBRESOLICITANTE)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NOMBREESTACION)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).NUMEROPERSONAS)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).FECHAENTRA)
 
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).HORA)
-                        </td>
-                        <td>
-                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
-                            {
-                                for (int x = 0; x < Model.empleados.ElementAt(reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1)).Count(); ++x)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(i).HORA)
+                            </td>
+                            <td>
+                                @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
                                 {
-                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).NOMBREEMPLEADO)
-                                    @Html.Raw(" ")
-                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO1)
-                                    @Html.Raw(" ")
-                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO2)
-                                    <br />
+                                    for (int x = 0; x < Model.empleados.ElementAt(reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1)).Count(); ++x)
+                                    {
+                                        @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).NOMBREEMPLEADO)
+                                        @Html.Raw(" ")
+                                        @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO1)
+                                        @Html.Raw(" ")
+                                        @Html.DisplayFor(modelItem => Model.empleados.ElementAt((reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(1))).ElementAt(x).APELLIDO2)
+                                        <br />
+                                    }
                                 }
-                            }
 
-                        </td>
-                        <td>
-                            @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
-                            {
-                                @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
-                            }
-                            @if (Model.totalReservaciones != null)
-                            {
-                                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
-                                string char1dia = fechaActual.ElementAt(0).ToString();
-                                string char2dia = fechaActual.ElementAt(1).ToString();
-                                string mes = fechaActual.ElementAt(3).ToString() + fechaActual.ElementAt(4).ToString();
-                                string ano = fechaActual.ElementAt(6).ToString() + fechaActual.ElementAt(7).ToString() + fechaActual.ElementAt(8).ToString() + fechaActual.ElementAt(9).ToString();
-                                string diaStr = char1dia + char2dia;
-                                int dia = Int32.Parse(diaStr);
-                                if (dia == 30)
+                            </td>
+                            <td>
+                                @if (reservaAsignada(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION).ElementAt(0) == 1)
                                 {
-                                    dia = 31;
+                                    @Html.ActionLink("Ver Guías", "AsignarReservacionDetallada", new { id = Model.totalReservaciones.ElementAt(i).NUMERORESERVACION }, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })
                                 }
-                                else
+                                @if (Model.totalReservaciones != null)
                                 {
-                                    dia = dia + 1;
+                                    string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+                                    string char1dia = fechaActual.ElementAt(0).ToString();
+                                    string char2dia = fechaActual.ElementAt(1).ToString();
+                                    string mes = fechaActual.ElementAt(3).ToString() + fechaActual.ElementAt(4).ToString();
+                                    string ano = fechaActual.ElementAt(6).ToString() + fechaActual.ElementAt(7).ToString() + fechaActual.ElementAt(8).ToString() + fechaActual.ElementAt(9).ToString();
+                                    string diaStr = char1dia + char2dia;
+                                    int dia = Int32.Parse(diaStr);
+                                    if (dia == 30)
+                                    {
+                                        dia = 31;
+                                    }
+                                    else
+                                    {
+                                        dia = dia + 1;
+                                    }
+                                    string nuevoDia = dia.ToString();
+                                    string fechaNuevaDeDiaAnterior = nuevoDia + "/" + mes + "/" + ano;
+                                    Console.Write(fechaNuevaDeDiaAnterior);
+                                    string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
+                                    Console.Write(fechaReservacion);
+                                    Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
+
+
+                                    if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
+                                    {
+                                        <a class="btn btn-default" id="Confirmar" name="Confirmar" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
+
+
+                                        <a class="btn btn-default" id="Cancelar" name="Cancelar" onclick="CancelarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #F26631; color:white;">Cancelar</a>
+
+                                    }
                                 }
-                                string nuevoDia = dia.ToString();
-                                string fechaNuevaDeDiaAnterior = nuevoDia + "/" + mes + "/" + ano;
-                                Console.Write(fechaNuevaDeDiaAnterior);
-                                string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
-                                Console.Write(fechaReservacion);
-                                Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
-
-
-                                if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
-                                {
-                                    <a class="btn btn-default" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
-
-                                    <a class="btn btn-default" onclick="CancelarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #F26631; color:white;">Cancelar</a>
-                                }
-                            }
-                        </td>
-                    </tr>
-                        }
+                            </td>
+                        </tr>
                     }
+                }
             </div>
         </div>
     </table>
