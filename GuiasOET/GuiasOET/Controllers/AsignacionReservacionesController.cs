@@ -18,7 +18,7 @@ using System.Collections;
 namespace GuiasOET.Controllers
 {
     public class AsignacionReservacionesController : Controller
-    {
+    {  
 
         private Entities1 baseDatos = new Entities1();
 
