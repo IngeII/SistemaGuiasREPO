@@ -25,6 +25,7 @@
             }
 </script>
 
+
 <script>
     function ConfirmarNotificacion(id)
     {
@@ -34,7 +35,7 @@
             data: 'id=' + id,
             success: function (data) {
                 $('td:contains("' + id + '")').parent(".trhlite").css("background-color", "yellow");
-                $('td:contains("' + id + '")').child("ConfirmarNotificacion").remove;
+                $('td:contains("' + id + '")').removeChild("ConfirmarNotificacion");
           },
         });
     }
@@ -185,7 +186,8 @@
                                 Console.Write(fechaReservacion);
                                 Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
 
-                                    if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
+
+                                if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
                                 {
                                     <a class="btn btn-default" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
 

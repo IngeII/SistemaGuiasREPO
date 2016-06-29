@@ -334,9 +334,10 @@ namespace GuiasOET.Controllers
                         for (int y = 1; y < guiasAsignados.Count(); ++y)
                         {
                             totalGuias = totalGuias.Concat(guiasAsignados.ElementAt(y));
+
+                            totalGuiasAsignados.Add(totalGuias);
                         }
 
-                        totalGuiasAsignados.Add(totalGuias);
 
                     }
 
@@ -472,8 +473,26 @@ namespace GuiasOET.Controllers
 
         public ActionResult Notificaciones(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)  //**  string currentFilter2, string fechaHasta
         {
-            string rol = Session["RolUsuarioLogueado"].ToString();
-            string estacion = Session["EstacionUsuarioLogueado"].ToString();
+            string rol = "";
+            string estacion = "";
+
+            if (Session["RolUsuarioLogueado"] != null)
+            {
+                rol = Session["RolUsuarioLogueado"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (Session["EstacionUsuarioLogueado"] != null)
+            {
+                estacion = Session["EstacionUsuarioLogueado"].ToString();
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
 
             List<V_GUIAS_RESERVADOS> reservaciones = null;
 
@@ -491,6 +510,7 @@ namespace GuiasOET.Controllers
             int pageSize = 8;
             int pageNumber = (page ?? 1);
             ViewBag.pageNumber = pageNumber;
+
 
             //Todas las reservaciones del sistema
             var reservacion = from r in baseDatos.GUIAS_RESERVACION select r;
@@ -519,15 +539,8 @@ namespace GuiasOET.Controllers
 
             List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();
 
-            DateTime fechaInicio = DateTime.Now;
-            DateTime fechaFin = DateTime.Now.AddDays(7);
-
-            DateTime fechaInicial;
-
-            bool usuarioGlobal = false;
-
-            List<V_GUIAS_RESERVADOS> reservacionVista;
-            GUIAS_RESERVACION reservacionTabla;
+            DateTime fechaInicio;
+            DateTime fechaFin;
 
             //Lista que contiene los guias de todas las reservaciones
             List<IEnumerable<GUIAS_RESERVACION>> totalReservas = new List<IEnumerable<GUIAS_RESERVACION>>();
@@ -540,35 +553,24 @@ namespace GuiasOET.Controllers
             //Ninguna fecha es vacía
             if (!(String.IsNullOrEmpty(fechaDesde)) && !(String.IsNullOrEmpty(fechaHasta)))
             {
-
                 ViewBag.CurrentFilter1 = fechaDesde;
                 ViewBag.CurrentFilter2 = fechaHasta;
             }
-
             //Solo la fecha inicial es vacía
             else if (String.IsNullOrEmpty(fechaDesde) && !(String.IsNullOrEmpty(fechaHasta)))
             {
-
                 ViewBag.CurrentFilter1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
                 ViewBag.CurrentFilter2 = fechaHasta;
-
                 fechaDesde = Convert.ToString(DateTime.Now);
                 fechaHasta = currentFilter2;
-
             }
             //Solo la fecha final es vacía
             else if (!(String.IsNullOrEmpty(fechaDesde)) && String.IsNullOrEmpty(fechaHasta))
             {
-
                 ViewBag.CurrentFilter1 = fechaDesde;
                 ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(7)).Trim();
-
                 fechaDesde = currentFilter1;
-                fechaInicial = Convert.ToDateTime(fechaDesde);
-                fechaHasta = Convert.ToString(fechaInicial.AddDays(7));
-                //  fechaHasta = Convert.ToString(DateTime.Now.AddDays(7));
-
-
+                fechaHasta = Convert.ToString(DateTime.Now.AddDays(7));
             }
             //Las fechas son vacias
             else if ((String.IsNullOrEmpty(fechaDesde)) && String.IsNullOrEmpty(fechaHasta))
@@ -580,7 +582,6 @@ namespace GuiasOET.Controllers
                 {
                     ViewBag.CurrentFilter1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
                     ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(7)).Trim();
-
                     fechaDesde = Convert.ToString(DateTime.Now);
                     fechaHasta = Convert.ToString(DateTime.Now.AddDays(7));
                 }
@@ -588,50 +589,40 @@ namespace GuiasOET.Controllers
                 {
                     ViewBag.CurrentFilter1 = String.Format("{0:yyyy-MM-dd}", DateTime.Now);
                     ViewBag.CurrentFilter2 = fechaHasta;
-
                     fechaDesde = String.Format("{0:dd/MM/yyyy}", DateTime.Now);
                     fechaHasta = currentFilter2;
                 }
                 else if ((String.IsNullOrEmpty(currentFilter2)))
                 {
-
                     ViewBag.CurrentFilter1 = fechaDesde;
-                    fechaInicial = ViewBag.CurrentFilter1;
-                    ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", fechaInicial.AddDays(7)).Trim();
-
+                    ViewBag.CurrentFilter2 = String.Format("{0:yyyy-MM-dd}", DateTime.Now.AddDays(7)).Trim();
                     fechaDesde = currentFilter1;
-                    fechaHasta = String.Format("{0:dd/MM/yyyy}", fechaInicial.AddDays(7)).Trim();
-
+                    fechaHasta = String.Format("{0:dd/MM/yyyy}", DateTime.Now.AddDays(7)).Trim();
                 }
                 else
                 {
                     fechaDesde = currentFilter1;
                     fechaHasta = currentFilter2;
-
                     ViewBag.CurrentFilter1 = fechaDesde;
                     ViewBag.CurrentFilter2 = fechaHasta;
-
                 }
-
-
             }
 
-            if (rol.Contains("Local") || rol.Contains("Interno") || rol.Contains("Global"))
+            if (rol.Contains("Global") || rol.Contains("Local"))
             {
-                if (rol.Contains("Local") || rol.Contains("Interno"))
+                //Si el usuario es local y no puso ninguna fecha solo ve lo de su estacion
+                if (rol.Contains("Local"))
                 {
                     estacion = Session["EstacionUsuarioLogueado"].ToString();
                     reservacion = reservacion.Where(e => e.NOMBREESTACION.Equals(estacion));
                 }
-                //Ninguna fecha es vacía
+                //  Si el usuario puso la fecha inicial y fecha final 
                 if (!String.IsNullOrEmpty(fechaDesde) && !String.IsNullOrEmpty(fechaHasta))
                 {
-
                     fechaInicio = Convert.ToDateTime(fechaDesde);
                     fechaFin = Convert.ToDateTime(fechaHasta);
-
                     //Se obtienen todas las reservaciones de la vista sql que cumplan con las distintas condiciones de acuerdo al usuario
-                    if (rol.Contains("Local"))
+                    if (rol.Contains("Local") || rol.Contains("Interno"))
                     {
                         reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ESTACION.Equals(estacion) && p.ENTRA >= fechaInicio && p.ENTRA <= fechaFin).Distinct().ToList();
 
@@ -677,23 +668,158 @@ namespace GuiasOET.Controllers
                         }
                     }
 
-
                     if (rol.Contains("Local"))
                     {
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
-                        //table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
-                        usuarioGlobal = false;
                     }
                     else
                     {
-
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin));
-                        usuarioGlobal = true;
-                        //  table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
+                    }
+
+                    page = 1;
+
+                }
+                // Si el usuario solo puso la fecha final y la de inicial esta vacía
+                else if (String.IsNullOrEmpty(fechaDesde) && !(String.IsNullOrEmpty(fechaHasta)))
+                {
+                    fechaFin = Convert.ToDateTime(fechaHasta);
+
+                    if (rol.Contains("Local"))
+                    {
+                        reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ESTACION.Equals(estacion) && p.ENTRA <= fechaFin).ToList();
+                    }
+                    else if (rol.Contains("Global"))
+                    {
+                        reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ENTRA <= fechaFin).ToList();
+                    }
+
+                    GUIAS_RESERVACION contador = new GUIAS_RESERVACION();
+
+                    for (int i = 0; i < reservaciones.Count; i++)
+                    {
+                        contador = null;
+                        contador = baseDatos.GUIAS_RESERVACION.Find(reservaciones[i].ID);
+                        if (contador != null)
+                        {
+                            if (!contador.ULTIMAMODIFICACION.Equals(reservaciones[i].ULTIMA_MODIFICACION))
+                            {
+                                List<GUIAS_ASIGNACION> guiasGuardados = baseDatos.GUIAS_ASIGNACION.Where(p => p.NUMERORESERVACION.Equals(contador.NUMERORESERVACION)).ToList();
+
+                                //Si esta reservacion no tiene guias asignados debe actualizarse sin lanzar alertas
+                                if (guiasGuardados.Count == 0)
+                                {
+                                    GUIAS_RESERVACION actualizado = new GUIAS_RESERVACION();
+                                    actualizado.NUMERORESERVACION = reservaciones[i].ID;
+                                    actualizado.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
+                                    actualizado.FECHAENTRA = reservaciones[i].ENTRA;
+                                    actualizado.FECHASALE = reservaciones[i].SALE;
+                                    actualizado.HORA = "8:00am";
+                                    actualizado.NOMBREESTACION = reservaciones[i].ESTACION;
+                                    actualizado.NOMBRESOLICITANTE = reservaciones[i].NOMBRE;
+                                    //nuevo.NOTAS = reservaciones[i].
+                                    actualizado.NUMEROPERSONAS = reservaciones[i].PAX;
+                                    actualizado.ULTIMAMODIFICACION = reservaciones[i].ULTIMA_MODIFICACION;
+
+                                    baseDatos.Entry(contador).CurrentValues.SetValues(actualizado);
+                                    baseDatos.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+
+                    if (rol.Contains("Local"))
+                    {
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
+                    }
+                    else
+                    {
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA <= fechaFin));
                     }
 
                     page = 1;
                 }
+                //Solo la fecha final es vacía
+                else if (!(String.IsNullOrEmpty(fechaDesde)) && String.IsNullOrEmpty(fechaHasta))
+                {
+                    fechaInicio = Convert.ToDateTime(fechaDesde);
+
+                    if (rol.Contains("Local"))
+                    {
+                        reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ESTACION.Equals(estacion) && p.ENTRA >= fechaInicio).ToList();
+
+                    }
+                    else if (rol.Contains("Global"))
+                    {
+                        reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ENTRA >= fechaInicio).ToList();
+                    }
+
+                    GUIAS_RESERVACION contador = new GUIAS_RESERVACION();
+
+                    for (int i = 0; i < reservaciones.Count; i++)
+                    {
+
+                        contador = null;
+                        contador = baseDatos.GUIAS_RESERVACION.Find(reservaciones[i].ID);
+                        if (contador != null)
+                        {
+
+                            if (!contador.ULTIMAMODIFICACION.Equals(reservaciones[i].ULTIMA_MODIFICACION))
+                            {
+                                List<GUIAS_ASIGNACION> guiasGuardados = baseDatos.GUIAS_ASIGNACION.Where(p => p.NUMERORESERVACION.Equals(contador.NUMERORESERVACION)).ToList();
+
+                                //Si esta reservacion no tiene guias asignados debe actualizarse sin lanzar alertas
+                                if (guiasGuardados.Count == 0)
+                                {
+                                    GUIAS_RESERVACION actualizado = new GUIAS_RESERVACION();
+                                    actualizado.NUMERORESERVACION = reservaciones[i].ID;
+                                    actualizado.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
+                                    actualizado.FECHAENTRA = reservaciones[i].ENTRA;
+                                    actualizado.FECHASALE = reservaciones[i].SALE;
+                                    actualizado.HORA = "8:00am";
+                                    actualizado.NOMBREESTACION = reservaciones[i].ESTACION;
+                                    actualizado.NOMBRESOLICITANTE = reservaciones[i].NOMBRE;
+                                    //nuevo.NOTAS = reservaciones[i].
+                                    actualizado.NUMEROPERSONAS = reservaciones[i].PAX;
+                                    actualizado.ULTIMAMODIFICACION = reservaciones[i].ULTIMA_MODIFICACION;
+
+                                    baseDatos.Entry(contador).CurrentValues.SetValues(actualizado);
+                                    baseDatos.SaveChanges();
+                                }
+                            }
+                        }
+                    }
+
+                    if (rol.Contains("Local"))
+                    {
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.NOMBREESTACION.Equals(estacion)));
+                    }
+                    else
+                    {
+                        reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio));
+                    }
+
+                    page = 1;
+                }
+
+                //Se asigna la cantidad de paginas
+                if (reservacion.Count() == 0)
+                {
+                    ViewBag.TotalPages = 1;
+                }
+                else
+                {
+                    var count = reservacion.Count();
+                    decimal totalPages = count / (decimal)pageSize;
+                    ViewBag.TotalPages = Math.Ceiling(totalPages);
+                }
+
+                //Todos los guias asociados a las reservaciones
+                table.empleados = totalGuiasAsignados.ToPagedList(pageNumber, pageSize);
+
+                //Todas las reservaciones que tienen UN NUMERO DE ID 
+                table.reservaciones = listaReservaciones.ToPagedList(pageNumber, pageSize);
+
 
                 foreach (var row in reservacion)
                 {
@@ -701,60 +827,23 @@ namespace GuiasOET.Controllers
                     reservacionAsignada = reservacionAsignada.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                     reserva = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
 
-                    if (usuarioGlobal)
-                    {
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
-                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
-
-                        if (reservacionVista.Count > 0)
-                        {
-                            Debug.WriteLine("tengo MAS de 0 cero elementos");
-                        }
-                        else
-                        {
-                            Debug.WriteLine("tengo MENOS de 0 cero elementos");
-                        }
-
-                        Debug.WriteLine("el row tiene esto: " + row.NUMERORESERVACION);
-                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
-                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
-                        {
-                            table.cambiosReservaciones.Add(true);
-
-                        }
-                        else
-                        {
-                            table.cambiosReservaciones.Add(false);
-                        }
-                    }
-                    else
-                    {
-
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
-                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
-
-                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
-                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
-                        {
-                            table.cambiosReservaciones.Add(true);
-
-                        }
-                        else
-                        {
-                            table.cambiosReservaciones.Add(false);
-                        }
-
-                    }
-
                     if (reserva != null)
-                    {
-                        reservacionesConAsignacion.Add(reserva);
+                    { 
+
+
+                      
 
                         foreach (var row2 in reservacionAsignada)
                         {
+                           
                             guias = guias.Where(x => x.CEDULA.Equals(row2.CEDULAGUIA));
-                            guiasAsignados.Add(guias);
-                            guias = from p in baseDatos.GUIAS_EMPLEADO select p;
+                            if(guias != null)
+                            {
+                                reservacionesConAsignacion.Add(reserva);
+                                guiasAsignados.Add(guias);
+                                guias = from p in baseDatos.GUIAS_EMPLEADO select p;
+                            }
+                           
 
                         }
 
@@ -795,9 +884,10 @@ namespace GuiasOET.Controllers
                 //Todas las reservaciones que tienen guias asignados
                 table.reservacionesAsignadas = reservacionesConAsignacion.ToPagedList(pageNumber, pageSize);
 
-
-
             }
+
+
+
             List<GUIAS_RESERVACION> listaTotalReservaciones = new List<GUIAS_RESERVACION>();
 
             if (rol.Contains("Local") || rol.Contains("Interno") || rol.Contains("Global"))
@@ -835,7 +925,6 @@ namespace GuiasOET.Controllers
 
             table.totalReservaciones = datos.ToPagedList(pageNumber, pageSize);
 
-
             ViewBag.MessagesInOnePage = table.totalReservaciones;
             ViewBag.PageNumber = pageNumber;
 
@@ -843,7 +932,7 @@ namespace GuiasOET.Controllers
         }
 
 
-    [HttpGet]
+        [HttpGet]
         public ActionResult ConsultarAsignacion(int? page)
         {
             var semana = DateTime.Now.ToString("dd/MM/yyyy");
