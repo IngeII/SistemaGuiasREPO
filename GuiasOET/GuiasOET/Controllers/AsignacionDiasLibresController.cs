@@ -299,19 +299,19 @@ namespace GuiasOET.Controllers
             if (empleado.Count > 0)
             {
 
-                if (fechaDesde == "" && tipo == "")
+                if (fechaDesde == "" && (tipo == "" || tipo == null))
                 {
                     this.Flash("Éxito", "Recuerde completar todos los campos.");
                 }
                 else
                 {
-                    if (fechaDesde == "" && tipo != "")
+                    if (fechaDesde == "" && (tipo != "" || tipo != null))
                     {
                         this.Flash("Éxito", "Recuerde completar la fecha.");
                     }
                     else
                     {
-                        if (fechaDesde != "" && tipo == "")
+                        if (fechaDesde != "" && (tipo == ""|| tipo ==null))
                         {
                             this.Flash("Éxito", "Recuerde completar el tipo.");
 
