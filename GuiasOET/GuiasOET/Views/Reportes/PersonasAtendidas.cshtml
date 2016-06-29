@@ -94,11 +94,14 @@
                     bool indicadorCinco = false;
                     bool indicadorSeis = false;
                     Dictionary<string, bool> diccionarioReservaciones = new Dictionary<string, bool>();
+                    String formatoFecha = "";
 
                     for (int i = 0; i < Model.fechasReservaciones.Count; ++i)
                     {
 
                         DateTime feD = Model.fechasReservaciones.ElementAt(i);
+                        formatoFecha = String.Format("{0:d/M/yyyy}", feD).Trim();
+
                         Debug.WriteLine("fecha es: " + feD);
                         totalPersonas = 0;
                         contador = contadorGeneral;
@@ -134,7 +137,7 @@
                                     diccionarioReservaciones.Add(Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION, true);
                                 <tr>
                                     <td>
-                                        @Html.Raw(feD)
+                                        @Html.Raw(formatoFecha)
                                     </td>
                                     <td>
 
@@ -269,7 +272,7 @@
 
                                                 if (contador < Model.reservacionesAsignadas.Count() && Model.reservacionesAsignadas.ElementAt(contador).GUIAS_TURNO != null)
                                                 {
-                                                    @Html.DisplayFor(modelItem => Model.reservacionesAsignadas.ElementAt(contador).GUIAS_TURNO)
+                                                    @Html.DisplayFor(modelItem => Model.turnoReservacion.ElementAt(contador).NOMBRETURNO);
                                                     @Html.Raw(" ")
                                                 }
                                                 else

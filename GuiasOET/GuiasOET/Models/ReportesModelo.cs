@@ -22,6 +22,7 @@ namespace GuiasOET.Models
         public List<DateTime> fechasReservaciones = new List<DateTime>();
         public List<string> subTotales = new List<string>();
         public List<int> listaAsociacion = new List<int>();
+        public List<GUIAS_TURNO> turnoReservacion = new List<GUIAS_TURNO>();
 
 
         //Vista de días libres
