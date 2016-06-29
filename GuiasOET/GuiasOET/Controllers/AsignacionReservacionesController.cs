@@ -73,10 +73,15 @@ namespace GuiasOET.Controllers
 
             List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();
 
-            DateTime fechaInicio;
-            DateTime fechaFin;
+            DateTime fechaInicio = DateTime.Now;
+            DateTime fechaFin = DateTime.Now.AddDays(7);
 
             DateTime fechaInicial;
+
+            bool usuarioGlobal = false;
+
+            List<V_GUIAS_RESERVADOS> reservacionVista;
+            GUIAS_RESERVACION reservacionTabla;
 
             //Lista que contiene los guias de todas las reservaciones
             List<IEnumerable<GUIAS_RESERVACION>> totalReservas = new List<IEnumerable<GUIAS_RESERVACION>>();
@@ -215,7 +220,8 @@ namespace GuiasOET.Controllers
                             baseDatos.SaveChanges();
                         }
                         //Si la reservacion ya se encuentra en la base de datos se verifica que no tenga guías asociados para actualizarse sin lanzar alertas
-                        else {
+                        else
+                        {
                             if (!contador.ULTIMAMODIFICACION.Equals(reservaciones[i].ULTIMA_MODIFICACION))
                             {
                                 List<GUIAS_ASIGNACION> guiasGuardados = baseDatos.GUIAS_ASIGNACION.Where(p => p.NUMERORESERVACION.Equals(contador.NUMERORESERVACION)).ToList();
@@ -242,19 +248,19 @@ namespace GuiasOET.Controllers
                         }
                     }
 
-                    //Llenar la tabla
-
-
 
                     if (rol.Contains("Local") || rol.Contains("Interno"))
                     {
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
+                        //table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
+                        usuarioGlobal = false;
                     }
                     else
                     {
+
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin));
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
+                        usuarioGlobal = true;
+                        //  table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
                     }
 
                     page = 1;
@@ -265,6 +271,51 @@ namespace GuiasOET.Controllers
 
                     reservacionAsignada = reservacionAsignada.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                     reserva = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
+
+                    if (usuarioGlobal)
+                    {
+                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
+                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
+
+                        if (reservacionVista.Count > 0)
+                        {
+                            Debug.WriteLine("tengo MAS de 0 cero elementos");
+                        }
+                        else
+                        {
+                            Debug.WriteLine("tengo MENOS de 0 cero elementos");
+                        }
+
+                        Debug.WriteLine("el row tiene esto: " + row.NUMERORESERVACION);
+                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
+                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
+                        {
+                            table.cambiosReservaciones.Add(true);
+
+                        }
+                        else
+                        {
+                            table.cambiosReservaciones.Add(false);
+                        }
+                    }
+                    else
+                    {
+
+                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
+                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
+
+                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
+                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
+                        {
+                            table.cambiosReservaciones.Add(true);
+
+                        }
+                        else
+                        {
+                            table.cambiosReservaciones.Add(false);
+                        }
+
+                    }
 
                     if (reserva != null)
                     {
@@ -421,24 +472,8 @@ namespace GuiasOET.Controllers
 
         public ActionResult Notificaciones(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)  //**  string currentFilter2, string fechaHasta
         {
-            string rol = "";
-            string estacion = "";
-
-            if (Session["RolUsuarioLogueado"] != null)
-            {
-                rol = Session["RolUsuarioLogueado"].ToString();
-            }
-            else {
-                return RedirectToAction("Login");
-            }
-
-            if (Session["EstacionUsuarioLogueado"] != null)
-            {
-                estacion = Session["EstacionUsuarioLogueado"].ToString();
-            }
-            else {
-                return RedirectToAction("Login");
-            }
+            string rol = Session["RolUsuarioLogueado"].ToString();
+            string estacion = Session["EstacionUsuarioLogueado"].ToString();
 
             List<V_GUIAS_RESERVADOS> reservaciones = null;
 
@@ -456,7 +491,6 @@ namespace GuiasOET.Controllers
             int pageSize = 8;
             int pageNumber = (page ?? 1);
             ViewBag.pageNumber = pageNumber;
-
 
             //Todas las reservaciones del sistema
             var reservacion = from r in baseDatos.GUIAS_RESERVACION select r;
@@ -485,9 +519,16 @@ namespace GuiasOET.Controllers
 
             List<GUIAS_RESERVACION> listaReservaciones = new List<GUIAS_RESERVACION>();
 
-            DateTime fechaInicio;
-            DateTime fechaFin;
+            DateTime fechaInicio = DateTime.Now;
+            DateTime fechaFin = DateTime.Now.AddDays(7);
+
             DateTime fechaInicial;
+
+            bool usuarioGlobal = false;
+
+            List<V_GUIAS_RESERVADOS> reservacionVista;
+            GUIAS_RESERVACION reservacionTabla;
+
             //Lista que contiene los guias de todas las reservaciones
             List<IEnumerable<GUIAS_RESERVACION>> totalReservas = new List<IEnumerable<GUIAS_RESERVACION>>();
 
@@ -575,21 +616,22 @@ namespace GuiasOET.Controllers
 
             }
 
-            if (rol.Contains("Global") || rol.Contains("Local"))
+            if (rol.Contains("Local") || rol.Contains("Interno") || rol.Contains("Global"))
             {
-                //Si el usuario es local y no puso ninguna fecha solo ve lo de su estacion
-                if (rol.Contains("Local"))
+                if (rol.Contains("Local") || rol.Contains("Interno"))
                 {
                     estacion = Session["EstacionUsuarioLogueado"].ToString();
                     reservacion = reservacion.Where(e => e.NOMBREESTACION.Equals(estacion));
                 }
-                //  Si el usuario puso la fecha inicial y fecha final 
+                //Ninguna fecha es vacía
                 if (!String.IsNullOrEmpty(fechaDesde) && !String.IsNullOrEmpty(fechaHasta))
                 {
+
                     fechaInicio = Convert.ToDateTime(fechaDesde);
                     fechaFin = Convert.ToDateTime(fechaHasta);
+
                     //Se obtienen todas las reservaciones de la vista sql que cumplan con las distintas condiciones de acuerdo al usuario
-                    if (rol.Contains("Local") || rol.Contains("Interno"))
+                    if (rol.Contains("Local"))
                     {
                         reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ESTACION.Equals(estacion) && p.ENTRA >= fechaInicio && p.ENTRA <= fechaFin).Distinct().ToList();
 
@@ -635,25 +677,74 @@ namespace GuiasOET.Controllers
                         }
                     }
 
-                    if (rol.Contains("Local") || rol.Contains("Interno"))
+
+                    if (rol.Contains("Local"))
                     {
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin && e.NOMBREESTACION.Equals(estacion)));
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
+                        //table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
+                        usuarioGlobal = false;
                     }
                     else
                     {
+
                         reservacion = (reservacion.Where(e => e.FECHAENTRA >= fechaInicio && e.FECHAENTRA <= fechaFin));
-                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
+                        usuarioGlobal = true;
+                        //  table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
                     }
 
                     page = 1;
-
                 }
+
                 foreach (var row in reservacion)
                 {
 
                     reservacionAsignada = reservacionAsignada.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                     reserva = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
+
+                    if (usuarioGlobal)
+                    {
+                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin).ToList();
+                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
+
+                        if (reservacionVista.Count > 0)
+                        {
+                            Debug.WriteLine("tengo MAS de 0 cero elementos");
+                        }
+                        else
+                        {
+                            Debug.WriteLine("tengo MENOS de 0 cero elementos");
+                        }
+
+                        Debug.WriteLine("el row tiene esto: " + row.NUMERORESERVACION);
+                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
+                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
+                        {
+                            table.cambiosReservaciones.Add(true);
+
+                        }
+                        else
+                        {
+                            table.cambiosReservaciones.Add(false);
+                        }
+                    }
+                    else
+                    {
+
+                        table.vistaReservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(c => c.ENTRA >= fechaInicio && c.ENTRA <= fechaFin && c.ESTACION.Equals(estacion)).ToList();
+                        reservacionVista = table.vistaReservaciones.Where(p => p.ID.Equals(row.NUMERORESERVACION)).ToList();
+
+                        //Si los datos de la tabla y la vista para esta reservación no son iguales se despliega al usuario cuales son los cambios
+                        if (reservacionVista[0].ULTIMA_MODIFICACION != row.ULTIMAMODIFICACION)
+                        {
+                            table.cambiosReservaciones.Add(true);
+
+                        }
+                        else
+                        {
+                            table.cambiosReservaciones.Add(false);
+                        }
+
+                    }
 
                     if (reserva != null)
                     {
@@ -707,7 +798,6 @@ namespace GuiasOET.Controllers
 
 
             }
-
             List<GUIAS_RESERVACION> listaTotalReservaciones = new List<GUIAS_RESERVACION>();
 
             if (rol.Contains("Local") || rol.Contains("Interno") || rol.Contains("Global"))
@@ -752,7 +842,8 @@ namespace GuiasOET.Controllers
             return View(table);
         }
 
-        [HttpGet]
+
+    [HttpGet]
         public ActionResult ConsultarAsignacion(int? page)
         {
             var semana = DateTime.Now.ToString("dd/MM/yyyy");

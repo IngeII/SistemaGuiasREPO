@@ -163,7 +163,7 @@
                             }
                             @if (Model.totalReservaciones != null)
                                 {
-                                   string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
+                                string fechaActual = DateTime.Now.ToString("dd/MM/yyyy");
                                 string char1dia = fechaActual.ElementAt(0).ToString();
                                 string char2dia = fechaActual.ElementAt(1).ToString();
                                 string mes = fechaActual.ElementAt(3).ToString() + fechaActual.ElementAt(4).ToString();
@@ -185,7 +185,7 @@
                                 Console.Write(fechaReservacion);
                                 Console.Write(Model.totalReservaciones.ElementAt(i).CONFIRMACION);
 
-                                    if (fechaReservacion == fechaActual && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
+                                    if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
                                 {
                                     <a class="btn btn-default" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
 
