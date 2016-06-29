@@ -1,0 +1,173 @@
+﻿@model GuiasOET.Models.ReportesModelo
+@using System.Diagnostics;
+
+@{
+    ViewBag.Title = "Reportes de Días Libres";
+    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+}
+
+<script>
+
+</script>
+
+<div class="row">
+    <div class="col-md-9">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+<br />
+
+
+<div class="row">
+    <div class="col-lg-5">
+        @using (Html.BeginForm("DiasLibres", "Reportes", FormMethod.Post))
+        {
+            <p>
+                Semana: <input type="date" step="7" min=2016-01-04 name="semanaABuscar" value="@ViewBag.semanaABuscar">
+                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+            </p>
+        }
+
+    </div>
+</div>
+<br>
+
+<div class="row">
+    <div class="col-sm-2">
+        <p>Exportar a: </p>
+    </div>
+
+    <div class="col-sm-1 col-sm-pull-1">
+        <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">PDF</a>
+    </div>
+
+    <div class="col-sm-1 col-sm-pull-1">
+        <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">EXCEL</a>
+    </div>
+</div>
+
+
+<br />
+<div class="row">
+    <div class="col-sm-2">
+        <p>Lista de días libres: </p>
+    </div>
+</div>
+
+<br />
+
+<div class="table-responsive">
+    <table class="table" id="tablaDiasLibres">
+        <thead>
+            <tr>
+                <th>
+                    Guias Internos & Externos
+                </th>
+                <th>
+                    <label for="LUNES">Lunes   @ViewBag.fechaLunes</label>
+                </th>
+                <th>
+                    <label for="MARTES">Martes  @ViewBag.fechaMartes</label>
+                </th>
+                <th>
+                    <label for="MIERCOLES">Miercoles  @ViewBag.fechaMiercoles</label>
+                </th>
+                <th>
+                    <label for="JUEVES">Jueves @ViewBag.fechaJueves</label>
+                </th>
+                <th>
+                    <label for="VIERNES">Viernes @ViewBag.fechaViernes</label>
+                </th>
+                <th>
+                    <label for="SABADO">Sabado @ViewBag.fechaSabado</label>
+                </th>
+                <th>
+                    <label for="DOMINGO">Domingo @ViewBag.fechaDomingo</label>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+
+                for (int j = 0; j < Model.empleadosDiasLibres.Count(); ++j)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.empleadosDiasLibres.ElementAt(j).NOMBREEMPLEADO)
+                            @Html.DisplayFor(modelItem => Model.empleadosDiasLibres.ElementAt(j).APELLIDO1)
+                            @Html.DisplayFor(modelItem => Model.empleadosDiasLibres.ElementAt(j).APELLIDO2)
+                        </td>
+
+                        @for (int i = 0; i < 7; ++i)
+                        {
+
+                            <td>
+
+                                @switch (i)
+                                {
+                                    case 0:
+                                        fecha = @ViewBag.fechaLunes;
+                                        break;
+                                    case 1:
+                                        fecha = @ViewBag.fechaMartes;
+                                        break;
+                                    case 2:
+                                        fecha = @ViewBag.fechaMiercoles;
+                                        break;
+                                    case 3:
+                                        fecha = @ViewBag.fechaJueves;
+                                        break;
+                                    case 4:
+                                        fecha = @ViewBag.fechaViernes;
+                                        break;
+                                    case 5:
+                                        fecha = @ViewBag.fechaSabado;
+                                        break;
+                                    default:
+                                        fecha = @ViewBag.fechaDomingo;
+                                        break;
+
+                                }
+
+                                @if (Model.diasLibres.ElementAt(j).Count() == 0)
+                                {
+                                    @Html.Raw("-")
+                                }
+                                else
+                                {
+                                    int contador = 0;
+
+                                    DateTime fechaDLibre = Model.diasLibres.ElementAt(j).ElementAt(contador).FECHA;
+                                    string fechaDiaLibre = String.Format("{0:dd/MM/yyyy}", fechaDLibre).Trim();
+                                    while (contador < Model.diasLibres.ElementAt(j).Count() && fechaDiaLibre != fecha)
+                                    {
+                                        Debug.WriteLine("estoy en el while");
+                                        fechaDiaLibre = String.Format("{0:dd/MM/yyyy}", Model.diasLibres.ElementAt(j).ElementAt(contador).FECHA).Trim();
+                                        ++contador;
+                                    }
+                                    if (contador < Model.diasLibres.ElementAt(j).Count())
+                                    {
+                                        @Html.DisplayFor(modelItem => Model.diasLibres.ElementAt(j).ElementAt(contador).TIPODIALIBRE);
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("-")
+                                    }
+                                }
+
+                            </td>
+                        }
+                    </tr>
+
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
