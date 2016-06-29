@@ -258,7 +258,7 @@ namespace GuiasOET.Controllers
                                 }
                                 else
                                 {
-                                    GUIAS_TURNO turno = baseDatos.GUIAS_TURNO.FirstOrDefault(i => i.NOMBRETURNO.Equals(reservaAsig.GUIAS_TURNO));
+                                    GUIAS_TURNO turno = baseDatos.GUIAS_TURNO.FirstOrDefault(i => i.NOMBRETURNO.Equals(reservaAsig.GUIAS_TURNO.NOMBRETURNO));
                                     turnoReservasAsignadas.Add(turno);
                                 }
 
@@ -436,6 +436,8 @@ namespace GuiasOET.Controllers
 
             int contador = 0;
 
+            List<GUIAS_TURNO> turnoReservasAsignadas = new List<GUIAS_TURNO>();
+
 
             Debug.WriteLine("fecha desde es: " + fechaDesde);
 
@@ -466,23 +468,40 @@ namespace GuiasOET.Controllers
 
                     }
 
-                    /*   if (reservacionAuxiliar != null)
-                       {
-                           asociacionReservaciones = new int[reservacionAuxiliar.Count()];
-                       } */
-
                     foreach (var row in reservacionAuxiliar)
                     {
 
                         
                         string a = row.NUMERORESERVACION;
                         var reservacionAsignada = baseDatos.GUIAS_ASIGNACION.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
+
+                       
+
+                            foreach (var reservaAsig in reservacionAsignada)
+                            {
+
+                                if (reservaAsig.GUIAS_TURNO.Equals(null))
+                                {
+                                    turnoReservasAsignadas.Add(null);
+                                }
+                                else
+                                {
+                                    GUIAS_TURNO turno = baseDatos.GUIAS_TURNO.FirstOrDefault(i => i.NOMBRETURNO.Equals(reservaAsig.GUIAS_TURNO.NOMBRETURNO));
+                                    turnoReservasAsignadas.Add(turno);
+                                }
+
+
+                                reservacionesConAsignacion.Add(reservaAsig);
+                            }
+                        
+
+
                         reservaConGuias = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                         
 
                         if (reservaConGuias != null)
                         {
-                            reservacionesConAsignacion.Add(reservaConGuias);
+                        //    reservacionesConAsignacion.Add(reservaConGuias);
                             reserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(reservaConGuias.NUMERORESERVACION));
                             reservaciones.Add(reserva);
                             indiceReservacionesAsignadas.Add(0);
@@ -526,11 +545,12 @@ namespace GuiasOET.Controllers
                     reportes.totalReservaciones = reservacionAuxiliar.ToList();
                     //     reportes.listaAsociacion = asociacionReservaciones;
                     reportes.listaAsociacion = indiceReservacionesAsignadas;
+                    reportes.turnoReservacion = turnoReservasAsignadas;
 
-               /*     for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
-                    {
-                        Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
-                    } */
+                    /*     for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
+                         {
+                             Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
+                         } */
 
                     for (int i = 0; i < reportes.reservacionesAsignadas.Count(); ++i)
                     {
@@ -644,6 +664,7 @@ namespace GuiasOET.Controllers
                     reportes.totalReservaciones = reservacionAuxiliar.ToList();
                     //     reportes.listaAsociacion = asociacionReservaciones;
                     reportes.listaAsociacion = indiceReservacionesAsignadas;
+                    reportes.turnoReservacion = turnoReservasAsignadas;
 
                     for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
                     {

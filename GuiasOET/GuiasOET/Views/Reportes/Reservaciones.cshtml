@@ -93,10 +93,12 @@
                     bool indicadorCuatro = false;
                     bool indicadorCinco = false;
                     bool indicadorSeis = false;
+                    String formatoFecha = "";
 
                     for (int i = 0; i < Model.fechasReservaciones.Count; ++i)
                     {
                         DateTime feD = Model.fechasReservaciones.ElementAt(i);
+                        formatoFecha = String.Format("{0:d/M/yyyy}", feD).Trim();
                         Debug.WriteLine("fecha es: " + feD);
                         totalPersonas = 0;
                         contador = contadorGeneral;
@@ -111,8 +113,7 @@
                         <tr>
                             <td>
                                
-                                    @Html.Raw(feD)
-                               
+                                @Html.Raw(formatoFecha)
                                 
                             </td>
                             <td>
