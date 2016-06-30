@@ -339,7 +339,7 @@ namespace GuiasOET.Controllers
 
 
             //Se calcula la cantidad de personas por cada reservacion
-            reportes.subTotales = calcularSubTotales(reportes.totalReservaciones, totalGuiasAsignados);
+            reportes.subTotales = calcularSubTotales(reportes.totalReservaciones);
 
             return View(reportes);
         }
@@ -428,16 +428,11 @@ namespace GuiasOET.Controllers
 
             DateTime fechaReservacion;
 
-            int indice = 0;
-
-            int indiceAuxiliar = 0;
-
             List<int> indiceReservacionesAsignadas = new List<int>();
 
             int contador = 0;
 
-            List<GUIAS_TURNO> turnoReservasAsignadas = new List<GUIAS_TURNO>();
-
+            List<GUIAS_TURNO> turnoReservasAsignadas = new List<GUIAS_TURNO>();            
 
             Debug.WriteLine("fecha desde es: " + fechaDesde);
 
@@ -452,6 +447,8 @@ namespace GuiasOET.Controllers
                     //Todas las reservaciones del sistema en el rango de fechas establecido
                     var reservacionAuxiliar = baseDatos.GUIAS_RESERVACION.Where(e => e.FECHAENTRA >= fechaD && e.FECHAENTRA <= fechaH);
 
+                    reservacionAuxiliar = reservacionAuxiliar.Distinct();
+
                     //Se ordenan las reservaciones por fecha
 
                     reservacionAuxiliar = reservacionAuxiliar.OrderBy(r => r.FECHAENTRA);
@@ -462,11 +459,11 @@ namespace GuiasOET.Controllers
                     {
                         //Se guarda la fecha de la reservación
                         fechaReservacion = Convert.ToDateTime(row.FECHAENTRA);
-                        reportes.fechasReservaciones.Add(fechaReservacion);
-                    //    indiceReservacionesAsignadas.Add(-1);
-                        
+                        reportes.fechasReservaciones.Add(fechaReservacion);                     
 
                     }
+
+
 
                     foreach (var row in reservacionAuxiliar)
                     {
@@ -474,37 +471,39 @@ namespace GuiasOET.Controllers
                         
                         string a = row.NUMERORESERVACION;
                         var reservacionAsignada = baseDatos.GUIAS_ASIGNACION.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
-
-                       
-
-                            foreach (var reservaAsig in reservacionAsignada)
-                            {
-
-                                if (reservaAsig.GUIAS_TURNO.Equals(null))
+                        if (reservacionAsignada != null && reservacionAsignada.Count() > 0)
+                        {
+                          
+                                foreach (var asigna in reservacionAsignada)
                                 {
-                                    turnoReservasAsignadas.Add(null);
-                                }
-                                else
-                                {
-                                    GUIAS_TURNO turno = baseDatos.GUIAS_TURNO.FirstOrDefault(i => i.NOMBRETURNO.Equals(reservaAsig.GUIAS_TURNO.NOMBRETURNO));
-                                    turnoReservasAsignadas.Add(turno);
-                                }
+                                    indiceReservacionesAsignadas.Add(0);
+                                    if (asigna.GUIAS_TURNO == null)
+                                    {
+                                          turnoReservasAsignadas.Add(null);
+                                    }else
+                                    {
+                                         GUIAS_TURNO turno = baseDatos.GUIAS_TURNO.FirstOrDefault(e => e.NOMBRETURNO.Equals(asigna.GUIAS_TURNO.NOMBRETURNO));
+                                         turnoReservasAsignadas.Add(turno);
+                                     }
+                                    reservacionesConAsignacion.Add(asigna);
 
-
-                                reservacionesConAsignacion.Add(reservaAsig);
                             }
-                        
 
-
+                                                                                                        
+                        }else
+                        {
+                            indiceReservacionesAsignadas.Add(-1);
+                        }
+                       
+                           
                         reservaConGuias = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
                         
 
                         if (reservaConGuias != null)
                         {
-                        //    reservacionesConAsignacion.Add(reservaConGuias);
                             reserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(reservaConGuias.NUMERORESERVACION));
                             reservaciones.Add(reserva);
-                            indiceReservacionesAsignadas.Add(0);
+                           
 
 
                             //Se obtienen todos los guías asociados a una determinada reservación
@@ -528,7 +527,7 @@ namespace GuiasOET.Controllers
                         }
                         else
                         {
-                            indiceReservacionesAsignadas.Add(-1);
+                           // indiceReservacionesAsignadas.Add(-1);
                             totalGuiasAsignados.Add(null);
                         }
 
@@ -537,35 +536,13 @@ namespace GuiasOET.Controllers
 
                         ++contador;
                     }
-
-
-
                     reportes.empleados = totalGuiasAsignados.ToList();
                     reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList();
                     reportes.totalReservaciones = reservacionAuxiliar.ToList();
-                    //     reportes.listaAsociacion = asociacionReservaciones;
                     reportes.listaAsociacion = indiceReservacionesAsignadas;
                     reportes.turnoReservacion = turnoReservasAsignadas;
+                    reportes.fechasReservaciones = reportes.fechasReservaciones.Distinct().ToList();
 
-                    /*     for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
-                         {
-                             Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
-                         } */
-
-                    for (int i = 0; i < reportes.reservacionesAsignadas.Count(); ++i)
-                    {
-                        Debug.WriteLine("reserva con guias es: " + reportes.reservacionesAsignadas.ElementAt(i).NUMERORESERVACION);
-                    }
-
-                    for (int i = 0; i < reportes.totalReservaciones.Count(); ++i)
-                    {
-                        Debug.WriteLine("total reservaciones: " + reportes.totalReservaciones.ElementAt(i).NUMERORESERVACION);
-                    }
-
-                    for (int i = 0; i < reportes.listaAsociacion.Count(); ++i)
-                    {
-                        Debug.WriteLine("lista asociacion: " + reportes.listaAsociacion.ElementAt(i));
-                    }
 
 
                 }
@@ -677,7 +654,7 @@ namespace GuiasOET.Controllers
 
 
             //Se calcula la cantidad de personas por cada reservacion
-            reportes.subTotales = calcularSubTotales(reportes.totalReservaciones, totalGuiasAsignados);
+            reportes.subTotales = calcularSubTotales(reportes.totalReservaciones);
 
             return View(reportes);
         }
@@ -686,7 +663,7 @@ namespace GuiasOET.Controllers
 
 
 
-        public List<string> calcularSubTotales(List<GUIAS_RESERVACION> reservaciones, List<IEnumerable<GUIAS_EMPLEADO>> totalGuiasAsignados)
+        public List<string> calcularSubTotales(List<GUIAS_RESERVACION> reservaciones)
         {
 
             List<string> listaSubTotales = new List<string>();
@@ -722,14 +699,10 @@ namespace GuiasOET.Controllers
                     distribucion = Convert.ToString(cantidadAsignada);
                 }
                   
-
-              
-
-                //Se elimina el ultimo caracter
-                //distribucion = distribucion.Remove(distribucion.Length - 1, 1);
                 listaSubTotales.Add(distribucion);
                 distribucion = "";
                 cantidadAsignada = 0;
+                limite = false;
 
             }
 
