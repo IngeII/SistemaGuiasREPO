@@ -135,9 +135,7 @@
                                             hilera = Model.subTotales.ElementAt(contador);
                                             Debug.WriteLine("la hilera tiene esto: " + hilera);
 
-                                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION);
-                                            @Html.Raw(": ")
-                                            <br />
+                                           
 
                                             List<int> numbers = new List<int>(Array.ConvertAll(hilera.Split('-'), int.Parse));
                                            for (int j = 0; j < numbers.Count(); ++j)
@@ -182,20 +180,19 @@
                                    
                                         if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
                                         {
-                                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION);
-                                            @Html.Raw(": ")
-                                            <br />
+                                           
                                             @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NOMBRESOLICITANTE)
-                                        @Html.Raw(" ")
-                                            ++contador;
-                                        }
-                                        else
-                                        {
-                                            contador = contadorAuxiliar;
-                                            indicadorDos = true;
+                                            @Html.Raw(" ")
+                                            <br />
+                                        ++contador;
+                                    }
+                                    else
+                                    {
+                                        contador = contadorAuxiliar;
+                                        indicadorDos = true;
 
-                                        }
-                                   
+                                    }
+
                                 }
 
                                 @if (contador >= Model.totalReservaciones.Count())
@@ -248,21 +245,19 @@
                                         {
 
 
-                                            
-                                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION);
-                                            @Html.Raw(": ")
-                                        <br />
+                                           
+                                   
                                             string r = Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION;
                                             int a = Model.listaAsociacion.ElementAt(contador);
                                             if (Model.listaAsociacion.ElementAt(contador) == -1)
                                             {
-                                                @Html.Raw(" ")
-
-                                            }
-                                            else
+                                                @Html.Raw("No posee")
+                                                <br />
+                                        }
+                                        else
+                                        {
+                                            if (Model.reservacionesAsignadas.ElementAt(indiceReservacionesAsignadas).GUIAS_TURNO != null)
                                             {
-                                                if (Model.reservacionesAsignadas.ElementAt(indiceReservacionesAsignadas).GUIAS_TURNO != null)
-                                                {
                                                     @Html.DisplayFor(modelItem => Model.reservacionesAsignadas.ElementAt(indiceReservacionesAsignadas).GUIAS_TURNO.NOMBRETURNO)
                                                     @Html.Raw(" ")
                                                     ++indiceReservacionesAsignadas;
@@ -313,21 +308,20 @@
 
 
                                           
-                                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION);
-                                            @Html.Raw(": ")
-                                           <br />
+                                           
                                             @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).HORA)
                                             @Html.Raw(" ")
-                                            ++contador;
-                                        }
-                                        else
-                                        {
+                                            <br />
+                                        ++contador;
+                                    }
+                                    else
+                                    {
 
-                                            contador = contadorAuxiliar;
-                                            indicadorCinco = true;
-                                            
-                                        }
-                                  
+                                        contador = contadorAuxiliar;
+                                        indicadorCinco = true;
+
+                                    }
+
 
                                 }
 
@@ -350,18 +344,18 @@
                                   
                                        if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
                                        {
-                                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION); 
-                                             @Html.Raw(": ")
-                                            <br />
+                                           
 
                                         if (Model.listaAsociacion.ElementAt(contador) == -1)
                                         {
                                                   @Html.Raw(" Sin asignacion ")
+                                            <br />
                                         }
                                         else
                                         {
-                                            
-                                            if(Model.empleados.ElementAt(indiceEmpleados) !=null) {
+
+                                            if (Model.empleados.ElementAt(indiceEmpleados) != null)
+                                            {
 
                                                 for (int c = 0; c < Model.empleados.ElementAt(indiceEmpleados).Count(); ++c)
                                                 {
