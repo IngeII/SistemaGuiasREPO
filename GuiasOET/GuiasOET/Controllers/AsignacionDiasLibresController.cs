@@ -248,7 +248,7 @@ namespace GuiasOET.Controllers
         }
 
 
-        public ActionResult AsignarRol(int? id, string tipo, string fecha)
+        public ActionResult AsignarRol(int? id, string tipo, string fecha, string fecha2)
         {
             Console.Write("Entro");
 
@@ -288,7 +288,7 @@ namespace GuiasOET.Controllers
         }
 
         [HttpGet]
-        public ActionResult AsignarRol(string ide, string fechaDesde, string tipo)
+        public ActionResult AsignarRol(string ide, string fechaDesde, string fechaHasta, string tipo)
         {
             string admin1 = "Administrador Local/ Guía Interno";
             string admin2 = "Administrador Global";
@@ -318,34 +318,82 @@ namespace GuiasOET.Controllers
                         }
                         else
                         {
-                            Console.Write(ide);
-                            Console.Write(fechaDesde);
-                            Console.Write(tipo);
+                            if(fechaHasta != ""){
+                                DateTime fechaV = Convert.ToDateTime(fechaDesde);
+                                string fecha = fechaV.ToString("dd/MM/yyyy");
+                                DateTime fDesde = Convert.ToDateTime(fecha);
 
-                            DateTime fechaV = Convert.ToDateTime(fechaDesde);
+                                DateTime fechaF = Convert.ToDateTime(fechaHasta);
+                                string fecha2 = fechaF.ToString("dd/MM/yyyy");
+                                DateTime fHasta = Convert.ToDateTime(fecha2);
 
-                            string fecha = fechaV.ToString("dd/MM/yyyy");
+                                if(fDesde < fHasta)
+                                {
+                                    DateTime contador = fDesde;
+                                    while(contador<= fHasta)
+                                    {
+                                        List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(contador) && p.TIPODIALIBRE.Equals(tipo)).ToList();
 
-                            DateTime f = Convert.ToDateTime(fecha);
+                                        if (dialibre.Count == 0)
+                                        {
+                                            DIASLIBRES modelo = new DIASLIBRES();
+                                            modelo.roles1.TIPODIALIBRE = tipo;
+                                            modelo.roles1.CEDULAINTERNO = ide;
+                                            modelo.roles1.FECHA = contador;
 
-                            List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(f) && p.TIPODIALIBRE.Equals(tipo)).ToList();
+                                            baseDatos.GUIAS_ROLDIASLIBRES.Add(modelo.roles1);
+                                            baseDatos.SaveChanges();
 
-                            if (dialibre.Count == 0)
-                            {
-                                DIASLIBRES modelo = new DIASLIBRES();
-                                modelo.roles1.TIPODIALIBRE = tipo;
-                                modelo.roles1.CEDULAINTERNO = ide;
-                                modelo.roles1.FECHA = f;
+                                        }
+                                        else
+                                        {
+                                            this.Flash("Éxito", "Ya existe un día libre asignado.");
 
-                                baseDatos.GUIAS_ROLDIASLIBRES.Add(modelo.roles1);
-                                baseDatos.SaveChanges();
+                                        }
+                                        string f = String.Format("{0:yyyy-MM-dd}", contador.AddDays(1)).Trim();
 
-                                this.Flash("Éxito", "Día libre agregado.");
+                                        contador = Convert.ToDateTime(f);
+
+
+                                    }
+                                    this.Flash("Éxito", "Días libres agregados.");
+                                    //insertte
+                                }
+                                else
+                                {
+                                    this.Flash("Éxito", "Fecha de inicio debe ser mayor que la final.");
+
+                                }
+
                             }
-                            else
-                            {
-                                this.Flash("Éxito", "Ya existe un día libre asignado.");
+                            else{
 
+
+                                DateTime fechaV = Convert.ToDateTime(fechaDesde);
+
+                                string fecha = fechaV.ToString("dd/MM/yyyy");
+
+                                DateTime f = Convert.ToDateTime(fecha);
+
+                                List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(f) && p.TIPODIALIBRE.Equals(tipo)).ToList();
+
+                                if (dialibre.Count == 0)
+                                {
+                                    DIASLIBRES modelo = new DIASLIBRES();
+                                    modelo.roles1.TIPODIALIBRE = tipo;
+                                    modelo.roles1.CEDULAINTERNO = ide;
+                                    modelo.roles1.FECHA = f;
+
+                                    baseDatos.GUIAS_ROLDIASLIBRES.Add(modelo.roles1);
+                                    baseDatos.SaveChanges();
+
+                                    this.Flash("Éxito", "Día libre agregado.");
+                                }
+                                else
+                                {
+                                    this.Flash("Éxito", "Ya existe un día libre asignado.");
+
+                                }
                             }
                         }
                     }
