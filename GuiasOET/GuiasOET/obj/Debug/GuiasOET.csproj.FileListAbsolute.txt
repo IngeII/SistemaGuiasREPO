@@ -2550,3 +2550,10 @@ C:\Users\b30675\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\es\System.Web.Web
 C:\Users\b30675\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\obj\Debug\GuiasOET.csprojResolveAssemblyReference.cache
 C:\Users\b30675\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\obj\Debug\GuiasOET.dll
 C:\Users\b30675\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\obj\Debug\GuiasOET.pdb
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.dll
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\itextsharp.dll
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\NReco.PdfGenerator.dll
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.pdb
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.xml
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\itextsharp.xml
+C:\Users\Luis\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\NReco.PdfGenerator.xml

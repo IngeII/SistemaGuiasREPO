@@ -133,7 +133,7 @@
     <a href="#" class="btn btn-default">Reporte de Reservaciones</a>
     <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-        <li>@Html.ActionLink("PDF", "PDFReporte")</li>
+        <li>@Html.ActionLink("PDF", "PDFReporte", new { fechaDesde = ViewBag.CurrentFilter1, fechaHasta = ViewBag.CurrentFilter2 }, null)</li>
         <li>@Html.ActionLink("Excel", "ExportToExcel")</li>
     </ul>
 </div>

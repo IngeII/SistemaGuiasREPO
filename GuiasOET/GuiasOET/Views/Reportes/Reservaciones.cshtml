@@ -56,20 +56,20 @@
             <div class="col-lg-12">
                 <tr>
                     <th>
-                        @Html.ActionLink("Fecha", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.ReservacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                        Fecha
                     </th>
                     <th>
-                        @Html.ActionLink("Pax", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.NombreSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                        Pax
                     </th>
                     <th>
-                        @Html.ActionLink("Clientes", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.EstacionSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                        Clientes
                     </th>
 
                     <th>
-                        @Html.ActionLink("Reservaciones", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.PersonasSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                        Reservaciones
                     </th>
                     <th>
-                        @Html.ActionLink("Tour", "Consultas_reservaciones_personas", new { sortOrder = ViewBag.FechaSortParm, currentFilter1 = ViewBag.CurrentFilter1, currentFilter2 = ViewBag.CurrentFilter2 })
+                        Tour
                     </th>
                     <th>
                         Hora
@@ -78,6 +78,8 @@
                         Guías Asignados
                     </th>
                 </tr>
+                  
+                
 
                 @if (Model.fechasReservaciones != null)
                 {
