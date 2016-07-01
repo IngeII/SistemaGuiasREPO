@@ -1,6 +1,7 @@
 ﻿
 @model GuiasOET.Models.AsignacionModelos
 @using PagedList.Mvc;
+@using MvcFlashMessages;
 @using PagedList;
 @using System.Diagnostics;
 
@@ -42,7 +43,7 @@
             success: function (data) {
                 $("#Confirmar").attr("disabled", true);
                 $("#Cancelar").attr("disabled", true);
-
+                alert("Confirmación Exitosa");
           },
         });
        // $("#Confirmar").attr("disabled", true);
@@ -92,6 +93,12 @@
 <br>
 
 <div class="row">
+
+    <div class="col-md-9- col-md-offset-4 flash-messages flash-message" , style="color:#7BC143; font-weight:bold; position:center" }>
+        @Html.RenderFlash()
+
+    </div>
+
     <div class="col-lg-12">
 
         @using (Html.BeginForm("Notificaciones", "AsignacionReservaciones", FormMethod.Get))

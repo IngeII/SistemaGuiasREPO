@@ -383,7 +383,9 @@ namespace GuiasOET.Controllers
                 try
                 {
                     reservacionToUpdate.modeloReservacion.CONFIRMACION = 1;
+                    this.Flash("Éxito", "Confirmación Exitosa");
                     baseDatos.SaveChanges();
+                    
                 }
                 catch (RetryLimitExceededException /* dex */)
                 {
