@@ -193,7 +193,16 @@
                                     {
                                         dia = dia + 1;
                                     }
-                                    string nuevoDia = dia.ToString();
+                                    string nuevoDia = "";
+                                    if( dia == 1 || dia ==2 || dia == 3 || dia==4 || dia ==5|| dia == 6 || dia ==7)
+                                    {
+                                        nuevoDia = "0"+dia.ToString();
+                                    }
+                                    else
+                                    {
+                                        nuevoDia = dia.ToString();
+                                    }
+
                                     string fechaNuevaDeDiaAnterior = nuevoDia + "/" + mes + "/" + ano;
                                     Console.Write(fechaNuevaDeDiaAnterior);
                                     string fechaReservacion = String.Format("{0:dd/MM/yyyy}", Model.totalReservaciones.ElementAt(i).FECHAENTRA).Trim();
