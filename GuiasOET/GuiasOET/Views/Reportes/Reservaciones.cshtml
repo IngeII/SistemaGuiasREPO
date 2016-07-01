@@ -95,6 +95,7 @@
                     String formatoFecha = "";
                     int indiceReservacionesAsignadas = 0;
                     int indiceEmpleados = 0;
+                    bool indicadorEmpleado = false;
 
                     for (int i = 0; i < Model.fechasReservaciones.Count; ++i)
                     {
@@ -213,7 +214,7 @@
 
       
                                             @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION)
-                                            @Html.Display(" " + "<br />")
+                                            @Html.Display(" ")
                                     
                                             <br />
                                             ++contador;
@@ -346,19 +347,18 @@
                                   
                                        if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
                                        {
-                                            <bold>  @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION); </bold>
+                                            @Html.DisplayFor(modelItem => Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION); 
                                              @Html.Raw(": ")
                                             <br />
 
                                         if (Model.listaAsociacion.ElementAt(contador) == -1)
                                         {
-                                                  @Html.Raw(" ")
                                                   @Html.Raw(" Sin asignacion ")
                                         }
                                         else
                                         {
-
-                                            if(Model.empleados.ElementAt(indiceEmpleados) !=null && Model.empleados.ElementAt(indiceEmpleados).Count() > 0) {
+                                            
+                                            if(Model.empleados.ElementAt(indiceEmpleados) !=null) {
 
                                                 for (int c = 0; c < Model.empleados.ElementAt(indiceEmpleados).Count(); ++c)
                                                 {
@@ -369,7 +369,14 @@
                                                    @Html.DisplayFor(modelItem => Model.empleados.ElementAt(indiceEmpleados).ElementAt(c).APELLIDO2)
                                                    <br />
                                                 }
-                                                ++indiceEmpleados;
+
+                                                if (indicadorEmpleado == true)
+                                                {
+                                                    ++indiceEmpleados;
+                                                    indicadorEmpleado = true;
+                                                }
+
+
                                             }
                                         }
 
@@ -378,7 +385,7 @@
                                     }
                                     else
                                     {
-
+                                        indicadorEmpleado = false;
                                         contador = contadorAuxiliar;
                                         indicadorSeis = true;
 

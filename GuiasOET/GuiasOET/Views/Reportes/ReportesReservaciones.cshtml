@@ -56,39 +56,6 @@
             var cadena = "";
 
            
-
-            /*
-            $('#tablaReservaciones tr').each(function(row, tr)
-            {
-             /*   TableData[row] = { "Fecha" :  $(tr).find('td:eq(0)').text(),
-                    "Pax" :  $(tr).find('td:eq(1)').text(), 
-                    "Clientes" : $(tr).find('td:eq(2)').text(), 
-                    "Reservaciones" : $(tr).find('td:eq(3)').text(), 
-                    "Tour" : $(tr).find('td:eq(4)').text(), 
-                    "Hora" : $(tr).find('td:eq(5)').text(), 
-                    "Guías Asignados": $(tr).find('td:eq()').text(),
-                                
-                } 
-                TableData = TableData
-                + $(tr).find('td:eq(0)').text() + '$'  // Fecha
-                + $(tr).find('td:eq(1)').text() + '$'  // Cantidad
-                + $(tr).find('td:eq(2)').text() + '$'  // Clientes
-                + $(tr).find('td:eq(3)').text() + '$'  // Numero reservacion
-                + $(tr).find('td:eq(4)').text() + '$'  // tour
-                + $(tr).find('td:eq(5)').text() + '$'  // Hora
-                + $(tr).find('td:eq(6)').text() + '$'  // guias
-        */
-
-            /*    TableData[row] = {
-                    "taskNo": $(tr).find('td:eq(0)').text()
-        , "date": $(tr).find('td:eq(1)').text()
-        , "description": $(tr).find('td:eq(2)').text()
-        , "task": $(tr).find('td:eq(3)').text()
-                } */
-           //     Array.add(TableData, cadena);
-               // TableData.push(cadena); 
-          //  })
-                    
             document.write( $('#tablaReservaciones tr:last').get(0).Reservaciones );
             //generarReportePDF(TableData);
         } else {
@@ -160,20 +127,15 @@
 <br>
 <br>
 
-<div class="row">
-    <div class="col-sm-2">
-        <label>Exportar a: </label>
-    </div>
-
-    <div class="col-sm-1 col-sm-pull-1">
-        <a class="btn btn-default" onclick="generarTipo('PDF');" style="background-color: #7BC143; color:white;">PDF</a>
-    </div>
-
-    <div class="col-sm-1 col-sm-pull-1">
-        <a class="btn btn-default" onclick="generarTipo('EXCEL');" style="background-color: #7BC143; color:white;">EXCEL</a>
-    </div>
 
 
+<div class="btn-group">
+    <a href="#" class="btn btn-default">Reporte de Reservaciones</a>
+    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li>@Html.ActionLink("PDF", "PDFReporte")</li>
+        <li>@Html.ActionLink("Excel", "ExportToExcel")</li>
+    </ul>
 </div>
 
 <br />
@@ -181,7 +143,7 @@
 <div class="table-responsive">
     <table class="table" id="tablaReservaciones">
         </table>
-    </div>
+ </div>
 
 
 
