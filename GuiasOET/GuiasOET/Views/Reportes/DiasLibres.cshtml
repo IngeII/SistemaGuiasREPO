@@ -6,50 +6,7 @@
     Layout = "~/Views/Shared/_GeneralLayout.cshtml";
 }
 
-<script>
 
-</script>
-
-<div class="row">
-    <div class="col-md-9">
-        <h2>@ViewBag.Title</h2>
-    </div>
-    <div class="col-lg-3">
-    </div>
-</div>
-<br />
-
-
-<div class="row">
-    <div class="col-lg-5">
-        @using (Html.BeginForm("DiasLibres", "Reportes", FormMethod.Post))
-        {
-            <p>
-                Semana: <input type="date" step="7" min=2016-01-04 name="semanaABuscar" value="@ViewBag.semanaABuscar">
-                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
-            </p>
-        }
-
-    </div>
-</div>
-<br>
-
-<div class="row">
-    <div class="col-sm-2">
-        <p>Exportar a: </p>
-    </div>
-
-    <div class="col-sm-1 col-sm-pull-1">
-        <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">PDF</a>
-    </div>
-
-    <div class="col-sm-1 col-sm-pull-1">
-        <a class="btn btn-default" onclick="agregarGuia();" style="background-color: #7BC143; color:white;">EXCEL</a>
-    </div>
-</div>
-
-
-<br />
 <div class="row">
     <div class="col-sm-2">
         <p>Lista de días libres: </p>

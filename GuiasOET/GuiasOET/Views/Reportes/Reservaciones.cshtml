@@ -50,11 +50,8 @@
 }
 
 <div class="table-responsive">
-    <table class="table" id="tabla">
-
-        <div class="row">
-            <div class="col-lg-12">
-                <tr>
+    <table class="table" id="tabla" valign="top" style="text-align:left;font-size:10pt;">
+                <tr style="font-size:12pt;font-weight:bold;">
                     <th>
                         Fecha
                     </th>
@@ -102,7 +99,7 @@
                     for (int i = 0; i < Model.fechasReservaciones.Count; ++i)
                     {
                         DateTime feD = Model.fechasReservaciones.ElementAt(i);
-                        formatoFecha = String.Format("{0:d/M/yyyy}", feD).Trim();
+                        formatoFecha = String.Format("{0:M/d/yyyy}", feD).Trim();
                         totalPersonas = 0;
                         contador = contadorGeneral;
                         contadorAuxiliar = contadorGeneral;
@@ -115,7 +112,7 @@
 
                         string style = Model.listaAsociacion.ElementAt(contador).Equals(-1) ? "background-color:Yellow" : null;
 
-                        <tr style="@style">
+                        <tr style="@(style)">
 
                             <td>
                                
@@ -399,7 +396,5 @@
                     }
                 }
 
-            </div>
-        </div>
     </table>
 </div>

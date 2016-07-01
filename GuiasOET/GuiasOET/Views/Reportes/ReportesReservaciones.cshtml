@@ -11,17 +11,20 @@
 
 <script>
     function Generar(tipoU, fechaDesde, fechaHasta) {
+      
         if (tipoU.val() == "Personas Atendidas") {
+            $('#enlace_pdf').attr('href', '@Url.Action("PDFReporteReservaciones")' + '?fechaDesde=' + fechaDesde.val() + '&fechaHasta=' + fechaHasta.val() + '&reportesReservaciones=' + false);
             PersonasAtendidas(fechaDesde.val(), fechaHasta.val());
+          
         } else {
-            Reservaciones(fechaDesde.val(), fechaHasta.val());
+            $('#enlace_pdf').attr('href', '@Url.Action("PDFReporteReservaciones")' + '?fechaDesde=' + fechaDesde.val() + '&fechaHasta=' + fechaHasta.val() + '&reportesReservaciones=' + true);
+                Reservaciones(fechaDesde.val(), fechaHasta.val());
+            }
 
         }
 
-    }
 
-
-    function PersonasAtendidas(fechaDesde, fechaHasta) {
+        function PersonasAtendidas(fechaDesde, fechaHasta) {
 
         $.ajax({
             type: 'POST',
@@ -30,12 +33,12 @@
             success: function (data) {
                 $('#tablaReservaciones').empty();
                 $('#tablaReservaciones').append(data);
-            },
+                },
         });
 
-    }
+        }
 
-    function Reservaciones(fechaDesde, fechaHasta) {
+        function Reservaciones(fechaDesde, fechaHasta) {
 
         $.ajax({
             type: 'POST',
@@ -44,35 +47,35 @@
             success: function (data) {
                 $('#tablaReservaciones').empty();
                 $('#tablaReservaciones').append(data);
-            },
+                },
         });
 
-    }
-
-    function generarTipo(tipo) {
-
-        if (tipo == "PDF") {
-            var TableData = new Array();
-            var cadena = "";
-
-           
-            document.write( $('#tablaReservaciones tr:last').get(0).Reservaciones );
-            //generarReportePDF(TableData);
-        } else {
-
         }
-    }
 
-    function generarReportePDF(TableData) {
+        function generarTipo(tipo) {
+
+            if (tipo == "PDF") {
+                var TableData = new Array();
+                var cadena = "";
+
+
+                document.write( $('#tablaReservaciones tr:last').get(0).Reservaciones );
+                //generarReportePDF(TableData);
+            } else {
+
+            }
+        }
+
+        function generarReportePDF(TableData) {
         $.ajax({
             type: 'POST',
             url: '@Url.Action("generarReportePDF")',
             data: 'datosTabla=' + TableData,
             success: function (data) {
-                
-            },
+
+                },
         });
-    }
+        }
 
 
 
@@ -133,7 +136,7 @@
     <a href="#" class="btn btn-default">Reporte de Reservaciones</a>
     <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-        <li>@Html.ActionLink("PDF", "PDFReporte")</li>
+        <li>@Html.ActionLink("PDF", "PDFReporteReservaciones", null, new { id = "enlace_pdf" })</li>
         <li>@Html.ActionLink("Excel", "ExportToExcel")</li>
     </ul>
 </div>
