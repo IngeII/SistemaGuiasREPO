@@ -83,7 +83,6 @@ namespace GuiasOET.Controllers
 
         public ActionResult PersonasAtendidas(string fechaDesde, string fechaHasta)
         {
-            Debug.WriteLine("EEEEEENTREEEEEE");
 
             ReportesModelo reportes = new ReportesModelo();
             DateTime fechaD;
@@ -105,11 +104,8 @@ namespace GuiasOET.Controllers
 
 
             //Reserva que tiene algún guía asignado
-            GUIAS_RESERVACION reserva;
+            List<GUIAS_RESERVACION> reservas = new List<GUIAS_RESERVACION>();
 
-
-            //Lista que contiene todas las reservaciones con guias 
-            List<GUIAS_ASIGNACION> reservacionesConAsignacion = new List<GUIAS_ASIGNACION>();
 
             //Lista que contiene los guias
             List<IEnumerable<GUIAS_EMPLEADO>> guiasAsignados = new List<IEnumerable<GUIAS_EMPLEADO>>();
@@ -119,11 +115,20 @@ namespace GuiasOET.Controllers
             List<IEnumerable<GUIAS_EMPLEADO>> totalGuiasAsignados = new List<IEnumerable<GUIAS_EMPLEADO>>();
 
             //Lista que contiene el total de guias para cada reservacion
-            IEnumerable<GUIAS_EMPLEADO> totalGuias = null;
+            IEnumerable<GUIAS_EMPLEADO> totalGuias;
 
             DateTime fechaReservacion;
 
             List<GUIAS_TURNO> turnoReservasAsignadas = new List<GUIAS_TURNO>();
+
+            List<List<GUIAS_ASIGNACION>> listaReservasAsignadas = new List<List<GUIAS_ASIGNACION>>();
+
+            GUIAS_RESERVACION datosReserva;
+
+            List<List<GUIAS_RESERVACION>> reservasOrdenadasPorFecha = new List<List<GUIAS_RESERVACION>>();
+
+
+            int contador = 0;
 
             Debug.WriteLine("fecha desde es: " + fechaDesde);
 
@@ -143,15 +148,18 @@ namespace GuiasOET.Controllers
 
                     foreach (var row in reservacionAuxiliar)
                     {
-
+                        //Se guardan todas las asignaciones de la reserva
                         var reservacionAsignada = baseDatos.GUIAS_ASIGNACION.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
+                        Debug.WriteLine("cantidad en reservaciones asignadas: " + reservacionAsignada.Count());
+                        Debug.WriteLine("el num de reservacion es: " + row.NUMERORESERVACION);
+                        listaReservasAsignadas.Add(reservacionAsignada.ToList());
 
                         if (reservacionAsignada != null)
                         {
 
-                            foreach(var reservaAsig in reservacionAsignada)
+                            foreach (var reservaAsig in reservacionAsignada)
                             {
-                                GUIAS_RESERVACION datosReserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(e => e.NUMERORESERVACION.Equals(reservaAsig.NUMERORESERVACION));
+                                datosReserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(e => e.NUMERORESERVACION.Equals(reservaAsig.NUMERORESERVACION));
                                 reservaciones.Add(datosReserva);
 
                                 if (reservaAsig.GUIAS_TURNO.Equals(null))
@@ -165,42 +173,33 @@ namespace GuiasOET.Controllers
                                     turnoReservasAsignadas.Add(turno);
                                 }
 
-                                reservacionesConAsignacion.Add(reservaAsig);
-                            }
-                      
-                            reservaConGuias = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
-                        }
 
-
-
-                        if (reservaConGuias != null)
-                        {
-                        //   reservacionesConAsignacion.Add(reservaConGuias);
-
-                           
-                            //Se obtienen todos los guías asociados a una determinada reservación
-                            foreach (var row2 in reservacionAsignada)
-                            {
-                                var guias = baseDatos.GUIAS_EMPLEADO.Where(x => x.CEDULA.Equals(row2.CEDULAGUIA));
+                                //Se obtienen todos los guías asociados a una determinada reservación                     
+                                GUIAS_EMPLEADO guiasReserva = baseDatos.GUIAS_EMPLEADO.FirstOrDefault(x => x.CEDULA.Equals(reservaAsig.CEDULAGUIA));
+                                reportes.empleadosReserva.Add(guiasReserva);
+                                var guias = baseDatos.GUIAS_EMPLEADO.Where(c => c.CEDULA.Equals(reservaAsig.CEDULAGUIA));
                                 guiasAsignados.Add(guias);
 
+
+                                //Se coloca en una misma posición todos los guías asociados a la reservación
+                                totalGuias = guiasAsignados.ElementAt(0);
+
+                                for (int y = 1; y < guiasAsignados.Count(); ++y)
+                                {
+                                    totalGuias = totalGuias.Concat(guiasAsignados.ElementAt(y));
+                                }
+
+                                totalGuiasAsignados.Add(totalGuias);
+                                reportes.empleadosReservaciones.Add(totalGuias.ToList());
+                                reportes.listaAsignacionReservaciones.Add(reservaAsig);
                             }
 
-                            //Se coloca en una misma posición todos los guías asociados a la reservación
-                            totalGuias = guiasAsignados.ElementAt(0);
 
-                            for (int y = 1; y < guiasAsignados.Count(); ++y)
-                            {
-                                totalGuias = totalGuias.Concat(guiasAsignados.ElementAt(y));
-                            }
+                            //Se limpia la lista de los guías asignados
+                            guiasAsignados.Clear();
 
-                            totalGuiasAsignados.Add(totalGuias);
 
                         }
-
-                        //Se limpia la lista de los guías asignados
-                        guiasAsignados.Clear();
-
 
                     }
 
@@ -212,22 +211,11 @@ namespace GuiasOET.Controllers
                         reportes.fechasReservaciones.Add(fechaReservacion);
                     }
 
+                    reportes.fechasReservaciones = reportes.fechasReservaciones.Distinct().ToList();
                     reportes.empleados = totalGuiasAsignados.ToList();
-                    reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList();
+                    reportes.listaReservacionesAsignadas = listaReservasAsignadas;
                     reportes.totalReservaciones = reservaciones.ToList();
                     reportes.turnoReservacion = turnoReservasAsignadas;
-
-                    for (int i = 0; i < reportes.totalReservaciones.Count(); ++i)
-                    {
-                        Debug.WriteLine("esto tiene total reservaciones: " + reportes.totalReservaciones.ElementAt(i).FECHAENTRA + " num reserv: " + reportes.totalReservaciones.ElementAt(i).NUMERORESERVACION);
-
-                    }
-
-                    for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
-                    {
-                        Debug.WriteLine("fecha tien esto: " + reportes.fechasReservaciones.ElementAt(i));
-                    }
-
                 }
             }
             else if (rol.Contains("Interno"))
@@ -243,21 +231,21 @@ namespace GuiasOET.Controllers
                     //Todas las reservaciones del sistema en el rango de fechas establecido
                     var reservacionAuxiliar = baseDatos.GUIAS_RESERVACION.Where(e => e.NOMBREESTACION.Equals(estacion) && e.FECHAENTRA >= fechaD && e.FECHAENTRA <= fechaH);
 
+                    //Se ordenan las reservaciones por fecha
+                    reservacionAuxiliar = reservacionAuxiliar.OrderBy(r => r.FECHAENTRA);
 
                     foreach (var row in reservacionAuxiliar)
                     {
-
+                        //Se guardan todas las asignaciones de la reserva
                         var reservacionAsignada = baseDatos.GUIAS_ASIGNACION.Where(e => e.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
+                        listaReservasAsignadas.Add(reservacionAsignada.ToList());
 
                         if (reservacionAsignada != null)
                         {
 
-                            //   var listaReservas = baseDatos.GUIAS_RESERVACION.Where(i => i.NUMERORESERVACION.Equals(reservaConGuias.NUMERORESERVACION));
-
-
                             foreach (var reservaAsig in reservacionAsignada)
                             {
-                                GUIAS_RESERVACION datosReserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(e => e.NUMERORESERVACION.Equals(reservaAsig.NUMERORESERVACION));
+                                datosReserva = baseDatos.GUIAS_RESERVACION.FirstOrDefault(e => e.NUMERORESERVACION.Equals(reservaAsig.NUMERORESERVACION));
                                 reservaciones.Add(datosReserva);
 
                                 if (reservaAsig.GUIAS_TURNO.Equals(null))
@@ -266,49 +254,39 @@ namespace GuiasOET.Controllers
                                 }
                                 else
                                 {
+
                                     GUIAS_TURNO turno = baseDatos.GUIAS_TURNO.FirstOrDefault(i => i.NOMBRETURNO.Equals(reservaAsig.GUIAS_TURNO.NOMBRETURNO));
                                     turnoReservasAsignadas.Add(turno);
                                 }
 
 
-                                reservacionesConAsignacion.Add(reservaAsig);
-                            }
-
-                            reservaConGuias = baseDatos.GUIAS_ASIGNACION.FirstOrDefault(i => i.NUMERORESERVACION.Equals(row.NUMERORESERVACION));
-                        }
-
-
-                        if (reservaConGuias != null)
-                        {
-                         //   reservacionesConAsignacion.Add(reservaConGuias);
-                          
-
-
-                            //Se obtienen todos los guías asociados a una determinada reservación
-                            foreach (var row2 in reservacionAsignada)
-                            {
-                                var guias = baseDatos.GUIAS_EMPLEADO.Where(x => x.CEDULA.Equals(row2.CEDULAGUIA));
+                                //Se obtienen todos los guías asociados a una determinada reservación                     
+                                GUIAS_EMPLEADO guiasReserva = baseDatos.GUIAS_EMPLEADO.FirstOrDefault(x => x.CEDULA.Equals(reservaAsig.CEDULAGUIA));
+                                reportes.empleadosReserva.Add(guiasReserva);
+                                var guias = baseDatos.GUIAS_EMPLEADO.Where(c => c.CEDULA.Equals(reservaAsig.CEDULAGUIA));
                                 guiasAsignados.Add(guias);
 
+
+                                //Se coloca en una misma posición todos los guías asociados a la reservación
+                                totalGuias = guiasAsignados.ElementAt(0);
+
+                                for (int y = 1; y < guiasAsignados.Count(); ++y)
+                                {
+                                    totalGuias = totalGuias.Concat(guiasAsignados.ElementAt(y));
+                                }
+
+                                totalGuiasAsignados.Add(totalGuias);
+                                reportes.empleadosReservaciones.Add(totalGuias.ToList());
+                                reportes.listaAsignacionReservaciones.Add(reservaAsig);
                             }
 
-                            //Se coloca en una misma posición todos los guías asociados a la reservación
-                            totalGuias = guiasAsignados.ElementAt(0);
+                            //Se limpia la lista de los guías asignados
+                            guiasAsignados.Clear();
 
-                            for (int y = 1; y < guiasAsignados.Count(); ++y)
-                            {
-                                totalGuias = totalGuias.Concat(guiasAsignados.ElementAt(y));
-                            }
-
-                            totalGuiasAsignados.Add(totalGuias);
 
                         }
 
-                        //Se limpia la lista de los guías asignados
-                        guiasAsignados.Clear();
-
                     }
-
 
                     //Se guardan las fechas de las reservaciones
                     foreach (var row in reservaciones)
@@ -318,39 +296,23 @@ namespace GuiasOET.Controllers
                         reportes.fechasReservaciones.Add(fechaReservacion);
                     }
 
-                    for (int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
-                    {
-                        Debug.WriteLine("fecha es: " + reportes.fechasReservaciones.ElementAt(i));
-                    }
-
-
-
+                    reportes.fechasReservaciones = reportes.fechasReservaciones.Distinct().ToList();
                     reportes.empleados = totalGuiasAsignados.ToList();
-                    reportes.reservacionesAsignadas = reservacionesConAsignacion.ToList(); 
+                    reportes.listaReservacionesAsignadas = listaReservasAsignadas;
                     reportes.totalReservaciones = reservaciones.ToList();
                     reportes.turnoReservacion = turnoReservasAsignadas;
-
-                    for (int i = 0; i < reportes.totalReservaciones.Count(); ++i )
-                    {
-                        Debug.WriteLine("esto tiene total reservaciones: " + reportes.totalReservaciones.ElementAt(i).FECHAENTRA + " num reserv: " + reportes.totalReservaciones.ElementAt(i).NUMERORESERVACION);
-
-                    }
-
-                    for(int i = 0; i < reportes.fechasReservaciones.Count(); ++i)
-                    {
-                        Debug.WriteLine("fecha tien esto: " + reportes.fechasReservaciones.ElementAt(i));
-                    }
-
-
                 }
             }
 
 
-            //Se calcula la cantidad de personas por cada reservacion
-            reportes.subTotales = calcularSubTotales(reportes.totalReservaciones);
+                    //Se calcula la cantidad de personas por cada reservacion
+                    reportes.subTotales = calcularSubTotales(reportes.totalReservaciones);
 
-            return View(reportes);
+
+                    return View(reportes);
+
         }
+
 
         public ActionResult PDFReporte(string fechaDesde, string fechaHasta)
         {

@@ -113,9 +113,10 @@
                         indicadorCinco = false;
                         indicadorSeis = false;
 
+                        string style = Model.listaAsociacion.ElementAt(contador).Equals(-1) ? "background-color:Yellow" : null;
 
+                        <tr style="@style">
 
-                        <tr>
                             <td>
                                
                                 @Html.Raw(formatoFecha)
