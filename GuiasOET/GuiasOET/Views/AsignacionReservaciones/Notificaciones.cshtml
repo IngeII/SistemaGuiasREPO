@@ -20,7 +20,7 @@
                     url: '@Url.Action("CancelarNotificacion")',
                     data: 'id=' + id,
                     success: function(data) {
-                        $('td:contains("'+id+'")').parent().remove();
+                        $('td:contains("'+id+'")').parent().css("background","yellow");;
                 },
                 });
 
@@ -45,8 +45,8 @@
 
           },
         });
-        $("#Confirmar").attr("disabled", true);
-        $("#Cancelar").attr("disabled", true);
+       // $("#Confirmar").attr("disabled", true);
+        //$("#Cancelar").attr("disabled", true);
 
 
     }

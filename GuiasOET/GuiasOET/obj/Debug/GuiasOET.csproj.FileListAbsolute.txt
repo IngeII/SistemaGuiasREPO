@@ -2564,3 +2564,10 @@ C:\Users\Lari\Desktop\Inge2\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPa
 C:\Users\Lari\Desktop\Inge2\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.xml
 C:\Users\Lari\Desktop\Inge2\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\itextsharp.xml
 C:\Users\Lari\Desktop\Inge2\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\NReco.PdfGenerator.xml
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.dll
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\itextsharp.dll
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\NReco.PdfGenerator.dll
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.pdb
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\HtmlAgilityPack.xml
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\itextsharp.xml
+C:\Users\Rosaura\Desktop\SistemaGuiasREPO\GuiasOET\GuiasOET\bin\NReco.PdfGenerator.xml
