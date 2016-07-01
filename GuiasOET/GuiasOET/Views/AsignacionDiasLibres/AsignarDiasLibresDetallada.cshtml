@@ -97,7 +97,11 @@
                         <th>
                             <p>
                                 <input type="hidden" name="ide" value=@ViewBag.identificacion>
-                                <input type="date" name="fechaDesde" value=@ViewBag.fechaVacacion>
+                                <label>Desde</label>
+                                <input type="date" name="fechaDesde" title="Fecha Desde" value=@ViewBag.fechaVacacionI>
+                                <label>Hasta</label>
+                                <input type="date" name="fechaHasta" title="Fecha Hasta" value=@ViewBag.fechaVacacionF>
+
                             </p>
                         </th>
                             <th>
