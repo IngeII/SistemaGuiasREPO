@@ -314,8 +314,11 @@ namespace GuiasOET.Controllers
         }
 
 
-        public ActionResult PDFReporte(string fechaDesde, string fechaHasta)
+        public ActionResult PDFReporte()
         {
+            string fechaDesde = Convert.ToString(DateTime.Now);
+            string fechaHasta = Convert.ToString(DateTime.Now.AddDays(7));
+
             ReportesModelo reportes = new ReportesModelo();
             DateTime fechaD;
             DateTime fechaH;
@@ -630,7 +633,7 @@ namespace GuiasOET.Controllers
             TextReader txtReader = new StringReader(pHTML);
 
             // Se crea un documneto de itextsharp
-            Document doc = new Document(PageSize.A4, 25, 25, 25, 25);
+            Document doc = new Document();
 
             PdfWriter oPdfWriter = PdfWriter.GetInstance(doc, ms);
 
