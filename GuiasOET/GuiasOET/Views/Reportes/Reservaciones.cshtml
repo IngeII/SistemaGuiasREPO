@@ -95,7 +95,7 @@
                     int indiceReservacionesAsignadas = 0;
                     int indiceEmpleados = 0;
                     bool indicadorEmpleado = false;
-
+                    string style = Model.listaAsociacion.ElementAt(contador).Equals(-1) ? "background-color:Yellow" : null;
                     for (int i = 0; i < Model.fechasReservaciones.Count; ++i)
                     {
                         DateTime feD = Model.fechasReservaciones.ElementAt(i);
@@ -110,7 +110,7 @@
                         indicadorCinco = false;
                         indicadorSeis = false;
 
-                        string style = Model.listaAsociacion.ElementAt(contador).Equals(-1) ? "background-color:Yellow" : null;
+                        style = Model.listaAsociacion.ElementAt(contador).Equals(-1) ? "background-color:Yellow" : null;
 
                         <tr style="@(style)">
 
@@ -237,17 +237,18 @@
                             <td>
                                 @while (contador < Model.totalReservaciones.Count() && indicadorCuatro == false)
                                 {
-                                    
-                                        if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
+
+                                    if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
+                                    {
+
+
+
+
+                                        string r = Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION;
+                                        int a = Model.listaAsociacion.ElementAt(contador);
+                                        if (Model.listaAsociacion.ElementAt(contador) == -1)
                                         {
-
-
-                                           
-                                   
-                                            string r = Model.totalReservaciones.ElementAt(contador).NUMERORESERVACION;
-                                            int a = Model.listaAsociacion.ElementAt(contador);
-                                            if (Model.listaAsociacion.ElementAt(contador) == -1)
-                                            {
+                                            
                                                 @Html.Raw("No posee")
                                                 <br />
                                         }
@@ -257,10 +258,11 @@
                                             {
                                                     @Html.DisplayFor(modelItem => Model.reservacionesAsignadas.ElementAt(indiceReservacionesAsignadas).GUIAS_TURNO.NOMBRETURNO)
                                                     @Html.Raw(" ")
-                                                    ++indiceReservacionesAsignadas;
-                                                }
-                                                else
-                                                {
+                                                ++indiceReservacionesAsignadas;
+                                                <br />
+                                            }
+                                            else
+                                            {
                                                 @Html.Raw(" ")
                                                 }
 
@@ -338,13 +340,14 @@
                                 {
 
 
-                                  
-                                       if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
-                                       {
-                                           
+
+                                    if (Model.totalReservaciones.ElementAt(contador).FECHAENTRA == feD)
+                                    {
+
 
                                         if (Model.listaAsociacion.ElementAt(contador) == -1)
                                         {
+                                            style = Model.listaAsociacion.ElementAt(contador).Equals(-1) ? "background-color:Yellow" : null;
                                                   @Html.Raw(" Sin asignacion ")
                                             <br />
                                         }

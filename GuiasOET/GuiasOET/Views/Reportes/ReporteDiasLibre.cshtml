@@ -9,7 +9,7 @@
 <script>
    
     function generarDiaLibre(fechaSemana) {
-        $('#enlace_pdf').attr('href', '@Url.Action("PDFReporteDiasLibres")' + '?semana=' + fechaSemana.val() val());
+        $('#enlace_pdf').attr('href', '@Url.Action("PDFReporteDiasLibres")' + '?semana=' + fechaSemana.val());
         $.ajax({
             type: 'POST',
             url: '@Url.Action("DiasLibres")',
@@ -37,7 +37,7 @@
 
         <p>
             Semana: <input type="date" id="fechaSemana" step="7" min=2016-01-04 name="semanaABuscar" value="@ViewBag.semanaABuscar" >
-            <a class="btn btn-default" onclick="GenerarDiaLibre( $('#fechaSemana'));" style="background-color: #7BC143; color:white;">Buscar</a>
+            <a class="btn btn-default" onclick="generarDiaLibre( $('#fechaSemana'));" style="background-color: #7BC143; color:white;">Buscar</a>
         </p>
 
     
@@ -49,7 +49,7 @@
     <a href="#" class="btn btn-default">Reporte de Reservaciones</a>
     <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-        <li>@Html.ActionLink("PDF", "PDFReporte", null, new { id = "enlace_pdf" })</li>
+        <li>@Html.ActionLink("PDF", "PDFReporteDiasLibres", null, new { id = "enlace_pdf" })</li>
         <li>@Html.ActionLink("Excel", "ExportToExcel")</li>
     </ul>
 </div>

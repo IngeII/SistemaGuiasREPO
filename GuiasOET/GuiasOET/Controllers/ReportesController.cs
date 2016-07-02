@@ -426,7 +426,7 @@ namespace GuiasOET.Controllers
 
                 }
             }
-        
+            DownloadPDF("ReporteDiasLibre", reportes, "ReporteDiasLibres");
             return View(reportes);
         }
 
@@ -703,10 +703,12 @@ namespace GuiasOET.Controllers
 
                     }
 
-                    //Se calcula la cantidad de personas por cada reservacion
-                    reportes.subTotales = calcularSubTotales(reportes.totalReservaciones);
-                    DownloadPDF("Reservaciones", reportes, "ReporteReservaciones");
+                    
                 }
+                //Se calcula la cantidad de personas por cada reservacion
+                reportes.subTotales = calcularSubTotales(reportes.totalReservaciones);
+                DownloadPDF("Reservaciones", reportes, "ReporteReservaciones");
+
             }
             else
             {
@@ -888,7 +890,7 @@ namespace GuiasOET.Controllers
             }
 
         
-            return RedirectToAction("ReportesReservaciones");
+            return View(reportes);
         }
 
       
