@@ -203,13 +203,13 @@ namespace GuiasOET.Controllers
                         {
                             GUIAS_RESERVACION nuevo = new GUIAS_RESERVACION();
                             nuevo.NUMERORESERVACION = reservaciones[i].ID;
+                            nuevo.NUMEROVISIBLERESERVACION = reservaciones[i].NUMERO;
                             nuevo.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
                             nuevo.FECHAENTRA = reservaciones[i].ENTRA;
                             nuevo.FECHASALE = reservaciones[i].SALE;
-                            nuevo.HORA = "8:00am";
+                            nuevo.HORA = reservaciones[i].HORA;
                             nuevo.NOMBREESTACION = reservaciones[i].ESTACION;
                             nuevo.NOMBRESOLICITANTE = reservaciones[i].NOMBRE;
-                            //nuevo.NOTAS = reservaciones[i].
                             nuevo.NUMEROPERSONAS = reservaciones[i].PAX;
                             nuevo.ULTIMAMODIFICACION = reservaciones[i].ULTIMA_MODIFICACION;
                             baseDatos.GUIAS_RESERVACION.Add(nuevo);
@@ -227,13 +227,13 @@ namespace GuiasOET.Controllers
                                 {
                                     GUIAS_RESERVACION actualizado = new GUIAS_RESERVACION();
                                     actualizado.NUMERORESERVACION = reservaciones[i].ID;
+                                    actualizado.NUMEROVISIBLERESERVACION = reservaciones[i].NUMERO;
                                     actualizado.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
                                     actualizado.FECHAENTRA = reservaciones[i].ENTRA;
                                     actualizado.FECHASALE = reservaciones[i].SALE;
-                                    actualizado.HORA = "8:00am";
+                                    actualizado.HORA = reservaciones[i].HORA;
                                     actualizado.NOMBREESTACION = reservaciones[i].ESTACION;
                                     actualizado.NOMBRESOLICITANTE = reservaciones[i].NOMBRE;
-                                    //nuevo.NOTAS = reservaciones[i].
                                     actualizado.NUMEROPERSONAS = reservaciones[i].PAX;
                                     actualizado.ULTIMAMODIFICACION = reservaciones[i].ULTIMA_MODIFICACION;
 
@@ -927,6 +927,14 @@ namespace GuiasOET.Controllers
                     {
                         ViewBag.cambios.Add("Estación: " + reservacionVista[0].ESTACION);
                     }
+                    if (reservacionVista[0].HORA != null && !reservacionVista[0].HORA.Equals(reservacionTabla.HORA))
+                    {
+                        ViewBag.cambios.Add("Hora: " + reservacionVista[0].HORA);
+                    }
+                    if (reservacionVista[0].NUMERO != null && !reservacionVista[0].NUMERO.Equals(reservacionTabla.NUMEROVISIBLERESERVACION))
+                    {
+                        ViewBag.cambios.Add("Número: " + reservacionVista[0].NUMERO);
+                    }
 
                 }
                 else
@@ -1004,7 +1012,7 @@ namespace GuiasOET.Controllers
              actualizado.APELLIDOSSOLICITANTE = reservaciones[0].APELLIDOS;
              actualizado.FECHAENTRA = reservaciones[0].ENTRA;
              actualizado.FECHASALE = reservaciones[0].SALE;
-             actualizado.HORA = "8:00am";
+             actualizado.HORA = reservaciones[0].HORA;
              actualizado.NOMBREESTACION = reservaciones[0].ESTACION;
              actualizado.NOMBRESOLICITANTE = reservaciones[0].NOMBRE;
                     //nuevo.NOTAS = reservaciones[i].

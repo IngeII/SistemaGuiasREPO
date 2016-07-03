@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="GUIAS_ASIGNACION">
     <Key>
       <PropertyRef Name="NUMERORESERVACION" />
@@ -56,12 +56,13 @@
       <PropertyRef Name="NUMERORESERVACION" />
     </Key>
     <Property Name="NUMERORESERVACION" Type="varchar2" MaxLength="255" Nullable="false" />
+    <Property Name="NUMEROVISIBLERESERVACION" Type="varchar2" MaxLength="255" />
     <Property Name="NOMBRESOLICITANTE" Type="varchar2" MaxLength="80" />
     <Property Name="APELLIDOSSOLICITANTE" Type="varchar2" MaxLength="80" />
     <Property Name="NUMEROPERSONAS" Type="number" Precision="38" Scale="0" />
     <Property Name="FECHAENTRA" Type="date" />
     <Property Name="FECHASALE" Type="date" />
-    <Property Name="HORA" Type="varchar2" MaxLength="10" />
+    <Property Name="HORA" Type="varchar2" MaxLength="30" />
     <Property Name="NOMBREESTACION" Type="varchar2" MaxLength="55" />
     <Property Name="ULTIMAMODIFICACION" Type="number" Precision="38" Scale="0" />
     <Property Name="NOTAS" Type="varchar2" MaxLength="4000" />
@@ -93,19 +94,22 @@
     <Property Name="HORAINICIO" Type="varchar2" MaxLength="10" Nullable="false" />
     <Property Name="HORAFIN" Type="varchar2" MaxLength="10" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="V_GUIAS_RESERVADOS">
     <Key>
       <PropertyRef Name="ID" />
+      <PropertyRef Name="NUMERO" />
       <PropertyRef Name="NOMBRE" />
       <PropertyRef Name="ESTACION" />
     </Key>
     <Property Name="ID" Type="varchar2" MaxLength="255" Nullable="false" />
+    <Property Name="NUMERO" Type="varchar2" MaxLength="255" Nullable="false" />
     <Property Name="NOMBRE" Type="varchar2" MaxLength="80" Nullable="false" />
     <Property Name="APELLIDOS" Type="varchar2" MaxLength="80" />
     <Property Name="PAX" Type="number" Precision="20" Scale="0" />
     <Property Name="ENTRA" Type="date" />
+    <Property Name="HORA" Type="varchar2" MaxLength="30" />
     <Property Name="SALE" Type="date" />
     <Property Name="ULTIMA_MODIFICACION" Type="number" Precision="16" Scale="0" />
     <Property Name="ESTACION" Type="varchar2" MaxLength="100" Nullable="false" />
@@ -219,10 +223,12 @@ warning 6002: The table/view 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' does not 
     <EntitySet Name="V_GUIAS_RESERVADOS" EntityType="Self.V_GUIAS_RESERVADOS" store:Type="Views" store:Schema="SERVICIOS_RESERVADOS">
       <DefiningQuery>SELECT 
 "V_GUIAS_RESERVADOS"."ID" AS "ID", 
+"V_GUIAS_RESERVADOS"."NUMERO" AS "NUMERO", 
 "V_GUIAS_RESERVADOS"."NOMBRE" AS "NOMBRE", 
 "V_GUIAS_RESERVADOS"."APELLIDOS" AS "APELLIDOS", 
 "V_GUIAS_RESERVADOS"."PAX" AS "PAX", 
 "V_GUIAS_RESERVADOS"."ENTRA" AS "ENTRA", 
+"V_GUIAS_RESERVADOS"."HORA" AS "HORA", 
 "V_GUIAS_RESERVADOS"."SALE" AS "SALE", 
 "V_GUIAS_RESERVADOS"."ULTIMA_MODIFICACION" AS "ULTIMA_MODIFICACION", 
 "V_GUIAS_RESERVADOS"."ESTACION" AS "ESTACION"

@@ -67,6 +67,8 @@
     <EntitySetMapping Name="V_GUIAS_RESERVADOS">
       <EntityTypeMapping TypeName="Model.V_GUIAS_RESERVADOS">
         <MappingFragment StoreEntitySet="V_GUIAS_RESERVADOS">
+          <ScalarProperty Name="HORA" ColumnName="HORA" />
+          <ScalarProperty Name="NUMERO" ColumnName="NUMERO" />
           <ScalarProperty Name="ESTACION" ColumnName="ESTACION" />
           <ScalarProperty Name="ULTIMA_MODIFICACION" ColumnName="ULTIMA_MODIFICACION" />
           <ScalarProperty Name="SALE" ColumnName="SALE" />
@@ -91,6 +93,7 @@
     <EntitySetMapping Name="GUIAS_RESERVACION">
       <EntityTypeMapping TypeName="Model.GUIAS_RESERVACION">
         <MappingFragment StoreEntitySet="GUIAS_RESERVACION">
+          <ScalarProperty Name="NUMEROVISIBLERESERVACION" ColumnName="NUMEROVISIBLERESERVACION" />
           <ScalarProperty Name="CONFIRMACION" ColumnName="CONFIRMACION" />
           <ScalarProperty Name="NOTAS" ColumnName="NOTAS" />
           <ScalarProperty Name="ULTIMAMODIFICACION" ColumnName="ULTIMAMODIFICACION" />

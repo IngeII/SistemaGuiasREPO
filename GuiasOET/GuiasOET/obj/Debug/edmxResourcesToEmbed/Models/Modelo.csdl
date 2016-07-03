@@ -166,6 +166,7 @@
       <PropertyRef Name="ID" />
       <PropertyRef Name="NOMBRE" />
       <PropertyRef Name="ESTACION" />
+      <PropertyRef Name="NUMERO" />
     </Key>
     <Property Name="ID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
     <Property Name="NOMBRE" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
@@ -175,6 +176,8 @@
     <Property Name="SALE" Type="DateTime" />
     <Property Name="ULTIMA_MODIFICACION" Type="Int64" />
     <Property Name="ESTACION" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="NUMERO" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="HORA" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="GUIAS_ASIGNACION">
     <Key>
@@ -205,6 +208,7 @@
     <Property Name="NOTAS" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
     <Property Name="CONFIRMACION" Type="Decimal" Precision="38" Scale="0" />
     <NavigationProperty Name="GUIAS_ASIGNACION" Relationship="Model.FK_ASIGNACION_RESERVACION" FromRole="GUIAS_RESERVACION" ToRole="GUIAS_ASIGNACION" />
+    <Property Name="NUMEROVISIBLERESERVACION" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_ASIGNACION_GUIA">
     <End Type="Model.GUIAS_EMPLEADO" Role="GUIAS_EMPLEADO" Multiplicity="1" />

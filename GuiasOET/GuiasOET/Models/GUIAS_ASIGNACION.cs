@@ -12,7 +12,7 @@ namespace GuiasOET.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    
+
     public partial class GUIAS_ASIGNACION
     {
         public string NOTASASOCIA { get; set; }
@@ -21,7 +21,7 @@ namespace GuiasOET.Models
         [Display(Name = "Turno:")]
         public string TURNO { get; set; }
         public string CEDULAGUIA { get; set; }
-    
+
         public virtual GUIAS_EMPLEADO GUIAS_EMPLEADO { get; set; }
         public virtual GUIAS_RESERVACION GUIAS_RESERVACION { get; set; }
         public virtual GUIAS_TURNO GUIAS_TURNO { get; set; }

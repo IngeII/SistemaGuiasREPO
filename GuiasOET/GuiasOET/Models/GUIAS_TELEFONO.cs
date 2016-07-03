@@ -13,19 +13,19 @@ namespace GuiasOET.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    
+
     public partial class GUIAS_TELEFONO
     {
         [StringLength(9)]
-        [Display(Name = "Cédula:")]
+        [Display(Name = "CÃ©dula:")]
         public string CEDULAEMPLEADO { get; set; }
 
         [StringLength(11)]
-        [Display(Name = "Teléfono:")]
+        [Display(Name = "TelÃ©fono:")]
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^[0-9]+$", ErrorMessage = "El teléfono solo puede estar compuesto por números")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "El telÃ©fono solo puede estar compuesto por nÃºmeros")]
         public string TELEFONO { get; set; }
-    
+
         public virtual GUIAS_EMPLEADO GUIAS_EMPLEADO { get; set; }
     }
 }

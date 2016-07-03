@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="GUIAS_ASIGNACION">
           <Key>
             <PropertyRef Name="NUMERORESERVACION" />
@@ -61,12 +61,13 @@
             <PropertyRef Name="NUMERORESERVACION" />
           </Key>
           <Property Name="NUMERORESERVACION" Type="varchar2" MaxLength="255" Nullable="false" />
+          <Property Name="NUMEROVISIBLERESERVACION" Type="varchar2" MaxLength="255" />
           <Property Name="NOMBRESOLICITANTE" Type="varchar2" MaxLength="80" />
           <Property Name="APELLIDOSSOLICITANTE" Type="varchar2" MaxLength="80" />
           <Property Name="NUMEROPERSONAS" Type="number" Precision="38" Scale="0" />
           <Property Name="FECHAENTRA" Type="date" />
           <Property Name="FECHASALE" Type="date" />
-          <Property Name="HORA" Type="varchar2" MaxLength="10" />
+          <Property Name="HORA" Type="varchar2" MaxLength="30" />
           <Property Name="NOMBREESTACION" Type="varchar2" MaxLength="55" />
           <Property Name="ULTIMAMODIFICACION" Type="number" Precision="38" Scale="0" />
           <Property Name="NOTAS" Type="varchar2" MaxLength="4000" />
@@ -98,19 +99,22 @@
           <Property Name="HORAINICIO" Type="varchar2" MaxLength="10" Nullable="false" />
           <Property Name="HORAFIN" Type="varchar2" MaxLength="10" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="V_GUIAS_RESERVADOS">
           <Key>
             <PropertyRef Name="ID" />
+            <PropertyRef Name="NUMERO" />
             <PropertyRef Name="NOMBRE" />
             <PropertyRef Name="ESTACION" />
           </Key>
           <Property Name="ID" Type="varchar2" MaxLength="255" Nullable="false" />
+          <Property Name="NUMERO" Type="varchar2" MaxLength="255" Nullable="false" />
           <Property Name="NOMBRE" Type="varchar2" MaxLength="80" Nullable="false" />
           <Property Name="APELLIDOS" Type="varchar2" MaxLength="80" />
           <Property Name="PAX" Type="number" Precision="20" Scale="0" />
           <Property Name="ENTRA" Type="date" />
+          <Property Name="HORA" Type="varchar2" MaxLength="30" />
           <Property Name="SALE" Type="date" />
           <Property Name="ULTIMA_MODIFICACION" Type="number" Precision="16" Scale="0" />
           <Property Name="ESTACION" Type="varchar2" MaxLength="100" Nullable="false" />
@@ -224,10 +228,12 @@ warning 6002: The table/view 'SERVICIOS_RESERVADOS.V_GUIAS_RESERVADOS' does not 
           <EntitySet Name="V_GUIAS_RESERVADOS" EntityType="Self.V_GUIAS_RESERVADOS" store:Type="Views" store:Schema="SERVICIOS_RESERVADOS">
             <DefiningQuery>SELECT 
 "V_GUIAS_RESERVADOS"."ID" AS "ID", 
+"V_GUIAS_RESERVADOS"."NUMERO" AS "NUMERO", 
 "V_GUIAS_RESERVADOS"."NOMBRE" AS "NOMBRE", 
 "V_GUIAS_RESERVADOS"."APELLIDOS" AS "APELLIDOS", 
 "V_GUIAS_RESERVADOS"."PAX" AS "PAX", 
 "V_GUIAS_RESERVADOS"."ENTRA" AS "ENTRA", 
+"V_GUIAS_RESERVADOS"."HORA" AS "HORA", 
 "V_GUIAS_RESERVADOS"."SALE" AS "SALE", 
 "V_GUIAS_RESERVADOS"."ULTIMA_MODIFICACION" AS "ULTIMA_MODIFICACION", 
 "V_GUIAS_RESERVADOS"."ESTACION" AS "ESTACION"
@@ -436,6 +442,7 @@ FROM "SERVICIOS_RESERVADOS"."V_GUIAS_RESERVADOS" "V_GUIAS_RESERVADOS"</DefiningQ
             <PropertyRef Name="ID" />
             <PropertyRef Name="NOMBRE" />
             <PropertyRef Name="ESTACION" />
+            <PropertyRef Name="NUMERO" />
           </Key>
           <Property Name="ID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="NOMBRE" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
@@ -445,6 +452,8 @@ FROM "SERVICIOS_RESERVADOS"."V_GUIAS_RESERVADOS" "V_GUIAS_RESERVADOS"</DefiningQ
           <Property Name="SALE" Type="DateTime" />
           <Property Name="ULTIMA_MODIFICACION" Type="Int64" />
           <Property Name="ESTACION" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NUMERO" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="HORA" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="GUIAS_ASIGNACION">
           <Key>
@@ -475,6 +484,7 @@ FROM "SERVICIOS_RESERVADOS"."V_GUIAS_RESERVADOS" "V_GUIAS_RESERVADOS"</DefiningQ
           <Property Name="NOTAS" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="CONFIRMACION" Type="Decimal" Precision="38" Scale="0" />
           <NavigationProperty Name="GUIAS_ASIGNACION" Relationship="Model.FK_ASIGNACION_RESERVACION" FromRole="GUIAS_RESERVACION" ToRole="GUIAS_ASIGNACION" />
+          <Property Name="NUMEROVISIBLERESERVACION" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_ASIGNACION_GUIA">
           <End Type="Model.GUIAS_EMPLEADO" Role="GUIAS_EMPLEADO" Multiplicity="1" />
@@ -606,6 +616,8 @@ FROM "SERVICIOS_RESERVADOS"."V_GUIAS_RESERVADOS" "V_GUIAS_RESERVADOS"</DefiningQ
           <EntitySetMapping Name="V_GUIAS_RESERVADOS">
             <EntityTypeMapping TypeName="Model.V_GUIAS_RESERVADOS">
               <MappingFragment StoreEntitySet="V_GUIAS_RESERVADOS">
+                <ScalarProperty Name="HORA" ColumnName="HORA" />
+                <ScalarProperty Name="NUMERO" ColumnName="NUMERO" />
                 <ScalarProperty Name="ESTACION" ColumnName="ESTACION" />
                 <ScalarProperty Name="ULTIMA_MODIFICACION" ColumnName="ULTIMA_MODIFICACION" />
                 <ScalarProperty Name="SALE" ColumnName="SALE" />
@@ -630,6 +642,7 @@ FROM "SERVICIOS_RESERVADOS"."V_GUIAS_RESERVADOS" "V_GUIAS_RESERVADOS"</DefiningQ
           <EntitySetMapping Name="GUIAS_RESERVACION">
             <EntityTypeMapping TypeName="Model.GUIAS_RESERVACION">
               <MappingFragment StoreEntitySet="GUIAS_RESERVACION">
+                <ScalarProperty Name="NUMEROVISIBLERESERVACION" ColumnName="NUMEROVISIBLERESERVACION" />
                 <ScalarProperty Name="CONFIRMACION" ColumnName="CONFIRMACION" />
                 <ScalarProperty Name="NOTAS" ColumnName="NOTAS" />
                 <ScalarProperty Name="ULTIMAMODIFICACION" ColumnName="ULTIMAMODIFICACION" />
