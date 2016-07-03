@@ -375,6 +375,7 @@ namespace GuiasOET.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             string reservacionId = id;
+
             reservacion = new AsignacionModelos(baseDatos.GUIAS_RESERVACION.Find(reservacionId));
             var reservacionToUpdate = reservacion;
 
@@ -428,8 +429,24 @@ namespace GuiasOET.Controllers
         [HttpGet]
         public ActionResult Notificaciones(string sortOrder, string currentFilter1, string currentFilter2, string fechaDesde, string fechaHasta, int? page)  //**  string currentFilter2, string fechaHasta
         {
-            string rol = Session["RolUsuarioLogueado"].ToString();
-            string estacion = Session["EstacionUsuarioLogueado"].ToString();
+            string rol;
+            string estacion;
+
+            if (Session["RolUsuarioLogueado"]!= null)
+            {
+                rol = Session["RolUsuarioLogueado"].ToString();
+            }
+            else {
+                return View("Login");
+            }
+
+            if (Session["EstacionUsuarioLogueado"]!= null)
+            {
+                estacion = Session["EstacionUsuarioLogueado"].ToString();
+            }
+            else {
+                return View("Login");
+            }
 
             List<V_GUIAS_RESERVADOS> reservaciones = null;
 
@@ -1158,8 +1175,5 @@ namespace GuiasOET.Controllers
             
 
         }
-
-
-
     }
 }
