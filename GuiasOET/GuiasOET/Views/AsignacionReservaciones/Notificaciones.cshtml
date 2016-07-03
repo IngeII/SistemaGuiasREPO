@@ -20,7 +20,7 @@
                     url: '@Url.Action("CancelarNotificacion")',
                     data: 'id=' + id,
                     success: function(data) {
-                        $('td:contains("'+id+'")').parent().css("background","green");;
+                        $('td:contains("'+id+'")').parent().css("background","yellow");;
                         $('td:contains("' + id + '")').parent().find(':nth-child(8) a.deshabilitar').remove();
                     },
                 });
@@ -210,10 +210,10 @@
 
                             if (fechaReservacion == fechaNuevaDeDiaAnterior && Model.totalReservaciones.ElementAt(i).CONFIRMACION != 1)
                             {
-                                <a class="btn btn-default fa fa-trash-o deshabilitar" id="Confirmar@(i)"  onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
+                                <a class="btn btn-default fa fa-trash-o deshabilitar" id="Confirmar@(i)" name="Confirmar" onclick="ConfirmarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #7BC143; color:white;">Confirmar</a>
 
 
-                                        <a class="btn btn-default fa fa-trash-o deshabilitar" id="Cancelar@(i)"  onclick="CancelarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #F26631; color:white;">Cancelar</a>
+                                        <a class="btn btn-default fa fa-trash-o deshabilitar" id="Cancelar@(i)" name="Cancelar" onclick="CancelarNotificacion('@(Model.totalReservaciones.ElementAt(i).NUMERORESERVACION)');" style="background-color: #F26631; color:white;">Cancelar</a>
 
                             }
                         }
