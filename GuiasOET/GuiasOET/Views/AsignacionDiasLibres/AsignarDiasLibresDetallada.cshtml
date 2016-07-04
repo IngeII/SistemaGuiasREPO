@@ -65,7 +65,10 @@
                 Criterio de búsqueda: Desde: <input type="date" name="fechaInicio" value="@ViewBag.CurrentFilter1">
                 Hasta: <input type="date" name="fechaFin" value="@ViewBag.CurrentFilter2">
                 <input type="hidden" name="ident" value=@ViewBag.identificacion2>
-                <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+
+                <button type="submit" value="Buscar" title="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;">
+                    <i type="submit" class="fa fa-search" style="background-color: #7BC143; color:white;"></i>
+                </button>
             </p>
         }
     </div>

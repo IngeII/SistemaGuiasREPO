@@ -27,7 +27,9 @@
             {
                 <p>
                     Criterio de búsqueda: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-                    <input type="submit" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;" />
+                    <button type="submit" title ="Buscar" value="Buscar" class="btn btn-default" style="background-color: #7BC143; color:white;">
+                        <i type="submit" class="fa fa-search" style="background-color: #7BC143; color:white;"></i>
+                    </button>
                 </p>
             }
         </div>

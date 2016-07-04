@@ -13,7 +13,9 @@
     <br />
     <div class="col-md-9">
         <div style="float: left">
-            @Html.ActionLink("Ir a lista de usuarios", "ListaUsuarios", null, new { @class = "btn btn-default" , @style = "background-color: #7BC143; color:white;" })
+            <a href="@Url.Action("ListaUsuarios", null, new { @class = "btn btn-default", @style = "background-color: #7BC143; color:white;" })">
+                <span class="btn btn-default fa fa-arrow-circle-left" aria-hidden="true" title="Ir a lista de usuarios" style="background-color: #7BC143; color:white;"></span>
+            </a>
             <br />
         </div>
     </div>
