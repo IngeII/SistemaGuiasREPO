@@ -337,14 +337,14 @@ namespace GuiasOET.Controllers
                 semanaABuscar = Convert.ToDateTime(semana);
 
 
-                ViewBag.fechaLunes = semanaABuscar.ToString("dd/MM/yyyy");
+                ViewBag.fechaLunes = semanaABuscar.ToString("MM/dd/yyyy");
                 ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", semanaABuscar).Trim();
-                ViewBag.fechaMartes = semanaABuscar.AddDays(1).ToString("dd/MM/yyyy");
-                ViewBag.fechaMiercoles = semanaABuscar.AddDays(2).ToString("dd/MM/yyyy");
-                ViewBag.fechaJueves = semanaABuscar.AddDays(3).ToString("dd/MM/yyyy");
-                ViewBag.fechaViernes = semanaABuscar.AddDays(4).ToString("dd/MM/yyyy");
-                ViewBag.fechaSabado = semanaABuscar.AddDays(5).ToString("dd/MM/yyyy");
-                ViewBag.fechaDomingo = semanaABuscar.AddDays(6).ToString("dd/MM/yyyy");
+                ViewBag.fechaMartes = semanaABuscar.AddDays(1).ToString("MM/dd/yyyy");
+                ViewBag.fechaMiercoles = semanaABuscar.AddDays(2).ToString("MM/dd/yyyy");
+                ViewBag.fechaJueves = semanaABuscar.AddDays(3).ToString("MM/dd/yyyy");
+                ViewBag.fechaViernes = semanaABuscar.AddDays(4).ToString("MM/dd/yyyy");
+                ViewBag.fechaSabado = semanaABuscar.AddDays(5).ToString("MM/dd/yyyy");
+                ViewBag.fechaDomingo = semanaABuscar.AddDays(6).ToString("MM/dd/yyyy");
 
                 string rol = Session["RolUsuarioLogueado"].ToString();
                 var estacion = "";
@@ -1289,7 +1289,7 @@ namespace GuiasOET.Controllers
         {
             Debug.WriteLine("ENTRE AL GET DE DIAS LIBRES ");
             ReportesModelo reportes = new ReportesModelo();
-            var semana = DateTime.Now.ToString("dd/MM/yyyy");
+            var semana = DateTime.Now.ToString("MM/dd/yyyy");
             ViewBag.fechaLunes = DateTime.Now.DayOfWeek.ToString();
             string rol = Session["RolUsuarioLogueado"].ToString();
             var estacion = "";
@@ -1314,94 +1314,94 @@ namespace GuiasOET.Controllers
 
                 case System.DayOfWeek.Monday:
 
-                    ViewBag.fechaLunes = DateTime.Now.ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.ToString("MM/dd/yyyy");
                     semanaDiasLibres = DateTime.Now;
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
-                    ViewBag.fechaMartes = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.AddDays(4).ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.AddDays(5).ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.AddDays(6).ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.AddDays(4).ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.AddDays(5).ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.AddDays(6).ToString("MM/dd/yyyy");
                     break;
 
                 case System.DayOfWeek.Tuesday:
-                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0));
                     fecha = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0));
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
-                    ViewBag.fechaMartes = DateTime.Now.ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.AddDays(4).ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.AddDays(5).ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.AddDays(4).ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.AddDays(5).ToString("MM/dd/yyyy");
                     break;
 
                 case System.DayOfWeek.Wednesday:
-                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0));
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0));
-                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.AddDays(4).ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.AddDays(4).ToString("MM/dd/yyyy");
                     break;
 
                 case System.DayOfWeek.Thursday:
-                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0));
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0));
-                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
                     break;
 
                 case System.DayOfWeek.Friday:
-                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0));
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0));
-                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
 
                     break;
 
                 case System.DayOfWeek.Saturday:
-                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0));
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0));
-                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.AddDays(1).ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
                     break;
 
                 case System.DayOfWeek.Sunday:
-                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0)).ToString("dd/MM/yyyy");
+                    ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0));
                     ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0));
-                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaViernes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaSabado = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("dd/MM/yyyy");
-                    ViewBag.fechaDomingo = DateTime.Now.ToString("dd/MM/yyyy");
+                    ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaViernes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaSabado = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                    ViewBag.fechaDomingo = DateTime.Now.ToString("MM/dd/yyyy");
                     break;
 
             }
@@ -1533,14 +1533,14 @@ namespace GuiasOET.Controllers
             if (!(String.IsNullOrEmpty(semana)))
             {
                 semanaABuscar = Convert.ToDateTime(semana);
-                ViewBag.fechaLunes = semanaABuscar.ToString("dd/MM/yyyy");
+                ViewBag.fechaLunes = semanaABuscar.ToString("MM/dd/yyyy");
                 ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", semanaABuscar).Trim();
-                ViewBag.fechaMartes = semanaABuscar.AddDays(1).ToString("dd/MM/yyyy");
-                ViewBag.fechaMiercoles = semanaABuscar.AddDays(2).ToString("dd/MM/yyyy");
-                ViewBag.fechaJueves = semanaABuscar.AddDays(3).ToString("dd/MM/yyyy");
-                ViewBag.fechaViernes = semanaABuscar.AddDays(4).ToString("dd/MM/yyyy");
-                ViewBag.fechaSabado = semanaABuscar.AddDays(5).ToString("dd/MM/yyyy");
-                ViewBag.fechaDomingo = semanaABuscar.AddDays(6).ToString("dd/MM/yyyy");
+                ViewBag.fechaMartes = semanaABuscar.AddDays(1).ToString("MM/dd/yyyy");
+                ViewBag.fechaMiercoles = semanaABuscar.AddDays(2).ToString("MM/dd/yyyy");
+                ViewBag.fechaJueves = semanaABuscar.AddDays(3).ToString("MM/dd/yyyy");
+                ViewBag.fechaViernes = semanaABuscar.AddDays(4).ToString("MM/dd/yyyy");
+                ViewBag.fechaSabado = semanaABuscar.AddDays(5).ToString("MM/dd/yyyy");
+                ViewBag.fechaDomingo = semanaABuscar.AddDays(6).ToString("MM/dd/yyyy");
 
                
 
