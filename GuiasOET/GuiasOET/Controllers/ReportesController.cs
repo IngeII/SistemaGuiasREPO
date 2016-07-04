@@ -313,9 +313,10 @@ namespace GuiasOET.Controllers
 
         }
 
-        [HttpPost]
         public ActionResult PDFReporteDiasLibres(string semana)
         {
+
+  
             ReportesModelo reportes = new ReportesModelo();
 
             //Lista que asocia cada empleado que tiene un dia libre 
@@ -1508,6 +1509,10 @@ namespace GuiasOET.Controllers
         [HttpPost]
         public ActionResult DiasLibres(string semana)
         {
+
+            Debug.WriteLine("la semana es: " + semana);
+            Debug.WriteLine("estoy en dias libres");
+
             string rol = Session["RolUsuarioLogueado"].ToString();
             var estacion = "";
             ReportesModelo reportes = new ReportesModelo();
