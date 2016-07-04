@@ -1028,7 +1028,8 @@ namespace GuiasOET.Controllers
             List<V_GUIAS_RESERVADOS> reservaciones = baseDatos.V_GUIAS_RESERVADOS.Where(p => p.ID.Equals(reservacion)).ToList();
              GUIAS_RESERVACION actualizado = new GUIAS_RESERVACION();
              actualizado.NUMERORESERVACION = reservaciones[0].ID;
-             actualizado.APELLIDOSSOLICITANTE = reservaciones[0].APELLIDOS;
+            actualizado.NUMEROVISIBLERESERVACION = reservaciones[0].NUMERO;
+            actualizado.APELLIDOSSOLICITANTE = reservaciones[0].APELLIDOS;
              actualizado.FECHAENTRA = reservaciones[0].ENTRA;
              actualizado.FECHASALE = reservaciones[0].SALE;
              actualizado.HORA = reservaciones[0].HORA;
