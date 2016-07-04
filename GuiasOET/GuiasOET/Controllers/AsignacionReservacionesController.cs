@@ -595,6 +595,25 @@ namespace GuiasOET.Controllers
                                 var reservacion = from r in baseDatos.GUIAS_RESERVACION select r;
                                 List<GUIAS_ASIGNACION> guiasGuardados = baseDatos.GUIAS_ASIGNACION.Where(p => p.NUMERORESERVACION.Equals(contador.NUMERORESERVACION)).ToList();
                                 //Si esta reservacion no tiene guias asignados debe actualizarse sin lanzar alertas
+                                //Si esta reservacion no tiene guias asignados debe actualizarse sin lanzar alertas
+                                if (guiasGuardados.Count == 0)
+                                {
+                                    GUIAS_RESERVACION actualizado = new GUIAS_RESERVACION();
+                                    actualizado.NUMERORESERVACION = reservaciones[i].ID;
+                                    actualizado.NUMEROVISIBLERESERVACION = reservaciones[i].NUMERO;
+                                    actualizado.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
+                                    actualizado.FECHAENTRA = reservaciones[i].ENTRA;
+                                    actualizado.FECHASALE = reservaciones[i].SALE;
+                                    actualizado.HORA = reservaciones[i].HORA;
+                                    actualizado.NOMBREESTACION = reservaciones[i].ESTACION;
+                                    actualizado.NOMBRESOLICITANTE = reservaciones[i].NOMBRE;
+                                    actualizado.NUMEROPERSONAS = reservaciones[i].PAX;
+                                    actualizado.ULTIMAMODIFICACION = reservaciones[i].ULTIMA_MODIFICACION;
+
+                                    baseDatos.Entry(contador).CurrentValues.SetValues(actualizado);
+                                    baseDatos.SaveChanges();
+                                }
+
 
                                 //Llenar la tabla
                                 if (rol.Contains("Local") || rol.Contains("Interno"))
