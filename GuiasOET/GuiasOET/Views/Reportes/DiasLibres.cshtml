@@ -2,9 +2,9 @@
 @using System.Diagnostics;
 
 @{
-    ViewBag.Title = "Reportes de Días Libres";
-    Layout = "~/Views/Shared/_GeneralLayout.cshtml";
+    Layout = null;
 }
+
 
 
 <div class="table-responsive">
@@ -40,7 +40,7 @@
         <tbody>
             @if (Model != null)
             {
-                string fecha = DateTime.Now.ToString("dd/MM/yyyy");
+                string fecha = DateTime.Now.ToString("MM/dd/yyyy");
 
                 for (int j = 0; j < Model.empleadosDiasLibres.Count(); ++j)
                 {
@@ -92,11 +92,11 @@
                                     int contador = 0;
 
                                     DateTime fechaDLibre = Model.diasLibres.ElementAt(j).ElementAt(contador).FECHA;
-                                    string fechaDiaLibre = String.Format("{0:dd/MM/yyyy}", fechaDLibre).Trim();
+                                    string fechaDiaLibre = String.Format("{0:MM/dd/yyyy}", fechaDLibre).Trim();
                                     while (contador < Model.diasLibres.ElementAt(j).Count() && fechaDiaLibre != fecha)
                                     {
                                         Debug.WriteLine("estoy en el while");
-                                        fechaDiaLibre = String.Format("{0:dd/MM/yyyy}", Model.diasLibres.ElementAt(j).ElementAt(contador).FECHA).Trim();
+                                        fechaDiaLibre = String.Format("{0:MM/dd/yyyy}", Model.diasLibres.ElementAt(j).ElementAt(contador).FECHA).Trim();
                                         ++contador;
                                     }
                                     if (contador < Model.diasLibres.ElementAt(j).Count())

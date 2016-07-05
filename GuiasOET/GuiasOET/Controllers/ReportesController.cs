@@ -332,10 +332,24 @@ namespace GuiasOET.Controllers
 
             DateTime semanaABuscar;
 
+            Debug.WriteLine("SEMANA EN REPORTES ES: " + semana);
+
+
+            Debug.WriteLine("ENTRE AL GET DE DIAS LIBRES ");
+            ViewBag.fechaLunes = DateTime.Now.DayOfWeek.ToString();
+            string rol = Session["RolUsuarioLogueado"].ToString();
+            var estacion = "";
+
+            DateTime semanaDiasLibres = DateTime.Now;
+
+            DateTime fecha;
+
+
             if (!(String.IsNullOrEmpty(semana)))
             {
                 semanaABuscar = Convert.ToDateTime(semana);
 
+                Debug.WriteLine("ENTRE AL IF");
 
                 ViewBag.fechaLunes = semanaABuscar.ToString("MM/dd/yyyy");
                 ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", semanaABuscar).Trim();
@@ -346,8 +360,8 @@ namespace GuiasOET.Controllers
                 ViewBag.fechaSabado = semanaABuscar.AddDays(5).ToString("MM/dd/yyyy");
                 ViewBag.fechaDomingo = semanaABuscar.AddDays(6).ToString("MM/dd/yyyy");
 
-                string rol = Session["RolUsuarioLogueado"].ToString();
-                var estacion = "";
+                rol = Session["RolUsuarioLogueado"].ToString();
+                estacion = "";
        
 
                 if (rol.Contains("Global"))
@@ -359,7 +373,7 @@ namespace GuiasOET.Controllers
                     foreach (var row in empleados)
                     {
                         //Se obtienen los dias libres que corresponden a la semana seleccionada
-                        var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaABuscar && e.FECHA <= fechaLimiteHasta);
+                        var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaABuscar && e.FECHA < fechaLimiteHasta);
                         diasLibres = diasLibres.OrderBy(e => e.FECHA);
 
                         //Se obtienen los dias libres del empleado
@@ -427,7 +441,205 @@ namespace GuiasOET.Controllers
 
                 }
             }
-            DownloadPDF("ReporteDiasLibre", reportes, "ReporteDiasLibres");
+            else
+            {
+
+                switch (DateTime.Now.DayOfWeek)
+                {
+
+                    case System.DayOfWeek.Monday:
+
+                        ViewBag.fechaLunes = DateTime.Now.ToString("MM/dd/yyyy");
+                        semanaDiasLibres = DateTime.Now;
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", DateTime.Now).Trim();
+                        ViewBag.fechaMartes = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.AddDays(4).ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.AddDays(5).ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.AddDays(6).ToString("MM/dd/yyyy");
+                        break;
+
+                    case System.DayOfWeek.Tuesday:
+                        ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0));
+                        fecha = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0));
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
+                        ViewBag.fechaMartes = DateTime.Now.ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.AddDays(4).ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.AddDays(5).ToString("MM/dd/yyyy");
+                        break;
+
+                    case System.DayOfWeek.Wednesday:
+                        ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        fecha = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0));
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
+                        semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0));
+                        ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.AddDays(4).ToString("MM/dd/yyyy");
+                        break;
+
+                    case System.DayOfWeek.Thursday:
+                        ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        fecha = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0));
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
+                        semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0));
+                        ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
+                        break;
+
+                    case System.DayOfWeek.Friday:
+                        ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        fecha = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0));
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
+                        semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0));
+                        ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
+
+                        break;
+
+                    case System.DayOfWeek.Saturday:
+                        ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        fecha = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0));
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
+                        semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0));
+                        ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
+                        break;
+
+                    case System.DayOfWeek.Sunday:
+                        ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        fecha = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0));
+                        ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
+                        semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0));
+                        ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaJueves = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaViernes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaSabado = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
+                        ViewBag.fechaDomingo = DateTime.Now.ToString("MM/dd/yyyy");
+                        break;
+
+                }
+
+                if (rol.Contains("Global"))
+                {
+                    //Se obtienen todos los guías ordenados por nombre
+                    var empleados = baseDatos.GUIAS_EMPLEADO.Where(c => c.TIPOEMPLEADO.Contains("Interno") || c.TIPOEMPLEADO.Contains("Externo")).OrderBy(c => c.NOMBREEMPLEADO);
+                    fechaLimiteHasta = semanaDiasLibres.AddDays(7);
+
+                    foreach (var row in empleados)
+                    {
+                        Debug.WriteLine("semana EN GET es:" + semanaDiasLibres);
+                        //Se obtienen los dias libres que corresponden a la semana seleccionada
+                        var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaDiasLibres && e.FECHA < fechaLimiteHasta);
+                        diasLibres = diasLibres.OrderBy(e => e.FECHA);
+
+                        //Se obtienen los dias libres del empleado
+                        var numDiasLibre = diasLibres.Where(e => e.CEDULAINTERNO.Equals(row.CEDULA));
+
+                        //Se verifica si el empleado tiene dia libre
+                        if (numDiasLibre != null)
+                        {
+                            //En caso de tener días libres, se guardan estos días
+                            totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
+                        }
+                        else
+                        {
+
+                            //En caso de que no, se guarda un null
+                            totalDiasLibresEmpleados.Add(null);
+
+                        }
+
+
+                    }
+
+                    //Se guardan todos los empleados
+                    reportes.empleadosDiasLibres = empleados.ToList();
+
+                    //Se guardan todos los días libres
+                    reportes.diasLibres = totalDiasLibresEmpleados.ToList();
+
+
+                    for (int i = 0; i < reportes.diasLibres.Count(); ++i)
+                    {
+                        if (reportes.diasLibres.ElementAt(i).Equals(null))
+                        {
+                            Debug.WriteLine("era vacio");
+                        }
+                        else
+                        {
+                            for (int j = 0; j < reportes.diasLibres.ElementAt(i).Count(); ++j)
+                            {
+                                Debug.WriteLine("dia libre: " + reportes.diasLibres.ElementAt(i).ElementAt(j).CEDULAINTERNO + " tipo de incapacidad " + reportes.diasLibres.ElementAt(i).ElementAt(j).TIPODIALIBRE + " fecha" + reportes.diasLibres.ElementAt(i).ElementAt(j).FECHA);
+                            }
+                        }
+
+
+
+                    }
+                }
+
+                else if (rol.Contains("Local"))
+                {
+                    estacion = Session["EstacionUsuarioLogueado"].ToString();
+
+                    //Se obtienen todos los guías ordenados por nombre de acuerdo a la estación del administrador logueado
+                    var empleados = baseDatos.GUIAS_EMPLEADO.Where(e => e.NOMBREESTACION.Equals(estacion) && (e.TIPOEMPLEADO.Contains("Interno") || e.TIPOEMPLEADO.Contains("Externo"))).OrderBy(c => c.NOMBREEMPLEADO);
+                    fechaLimiteHasta = semanaDiasLibres.AddDays(7);
+
+                    foreach (var row in empleados)
+                    {
+                        //Se obtienen los dias libres que corresponden a la semana seleccionada
+                        var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaDiasLibres && e.FECHA <= fechaLimiteHasta);
+                        diasLibres = diasLibres.OrderBy(e => e.FECHA);
+
+                        //Se obtienen los dias libres del empleado
+                        var numDiasLibre = diasLibres.Where(e => e.CEDULAINTERNO.Equals(row.CEDULA));
+
+                        //Se verifica si el empleado tiene dia libre
+                        if (numDiasLibre != null)
+                        {
+                            //En caso de tener días libres, se guardan estos días
+                            totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
+                        }
+                        else
+                        {
+                            //En caso de que no, se guarda un null
+                            totalDiasLibresEmpleados.Add(null);
+
+                        }
+                    }
+
+                    //Se guardan todos los empleados
+                    reportes.empleadosDiasLibres = empleados.ToList();
+
+                    //Se guardan todos los días libres
+                    reportes.diasLibres = totalDiasLibresEmpleados.ToList();
+
+                }
+            }
+            DownloadPDF("DiasLibres", reportes, "ReporteDiasLibres");
             return View(reportes);
         }
 
@@ -1316,7 +1528,7 @@ namespace GuiasOET.Controllers
 
                     ViewBag.fechaLunes = DateTime.Now.ToString("MM/dd/yyyy");
                     semanaDiasLibres = DateTime.Now;
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", DateTime.Now).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", DateTime.Now).Trim();
                     ViewBag.fechaMartes = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
                     ViewBag.fechaJueves = DateTime.Now.AddDays(3).ToString("MM/dd/yyyy");
@@ -1329,7 +1541,7 @@ namespace GuiasOET.Controllers
                     ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0));
                     fecha = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0));
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
                     ViewBag.fechaMartes = DateTime.Now.ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.AddDays(1).ToString("MM/dd/yyyy");
                     ViewBag.fechaJueves = DateTime.Now.AddDays(2).ToString("MM/dd/yyyy");
@@ -1341,7 +1553,7 @@ namespace GuiasOET.Controllers
                 case System.DayOfWeek.Wednesday:
                     ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0));
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0));
                     ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.ToString("MM/dd/yyyy");
@@ -1354,7 +1566,7 @@ namespace GuiasOET.Controllers
                 case System.DayOfWeek.Thursday:
                     ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0));
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0));
                     ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0)).ToString("MM/dd/yyyy");
@@ -1367,7 +1579,7 @@ namespace GuiasOET.Controllers
                 case System.DayOfWeek.Friday:
                     ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0));
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0));
                     ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(2, 0, 0, 0)).ToString("MM/dd/yyyy");
@@ -1381,7 +1593,7 @@ namespace GuiasOET.Controllers
                 case System.DayOfWeek.Saturday:
                     ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0));
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0));
                     ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(3, 0, 0, 0)).ToString("MM/dd/yyyy");
@@ -1394,7 +1606,7 @@ namespace GuiasOET.Controllers
                 case System.DayOfWeek.Sunday:
                     ViewBag.fechaLunes = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0)).ToString("MM/dd/yyyy");
                     fecha = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0));
-                    ViewBag.semanaABuscar = String.Format("{0:yyyy-MM-dd}", fecha).Trim();
+                    ViewBag.semanaABuscar = String.Format("{0:yyyy-dd-MM}", fecha).Trim();
                     semanaDiasLibres = DateTime.Now.Subtract(new TimeSpan(6, 0, 0, 0));
                     ViewBag.fechaMartes = DateTime.Now.Subtract(new TimeSpan(5, 0, 0, 0)).ToString("MM/dd/yyyy");
                     ViewBag.fechaMiercoles = DateTime.Now.Subtract(new TimeSpan(4, 0, 0, 0)).ToString("MM/dd/yyyy");
@@ -1414,28 +1626,16 @@ namespace GuiasOET.Controllers
 
                 foreach (var row in empleados)
                 {
+
                     //Se obtienen los dias libres que corresponden a la semana seleccionada
-                    var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaDiasLibres && e.FECHA <= fechaLimiteHasta);
+                    var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaDiasLibres && e.FECHA < fechaLimiteHasta);
                     diasLibres = diasLibres.OrderBy(e => e.FECHA);
 
                     //Se obtienen los dias libres del empleado
                     var numDiasLibre = diasLibres.Where(e => e.CEDULAINTERNO.Equals(row.CEDULA));
 
-                    //Se verifica si el empleado tiene dia libre
-                    if (numDiasLibre != null)
-                    {
-                        //En caso de tener días libres, se guardan estos días
-                        totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
-                    }
-                    else
-                    {
-
-                        //En caso de que no, se guarda un null
-                        totalDiasLibresEmpleados.Add(null);
-
-                    }
-
-
+                    //Se guardan los dias libres del empleado, si no tiene, se guarda una lista vacia
+                    totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
                 }
 
                 //Se guardan todos los empleados
@@ -1444,24 +1644,6 @@ namespace GuiasOET.Controllers
                 //Se guardan todos los días libres
                 reportes.diasLibres = totalDiasLibresEmpleados.ToList();
 
-
-                for (int i = 0; i < reportes.diasLibres.Count(); ++i)
-                {
-                    if (reportes.diasLibres.ElementAt(i).Equals(null))
-                    {
-                        Debug.WriteLine("era vacio");
-                    }
-                    else
-                    {
-                        for (int j = 0; j < reportes.diasLibres.ElementAt(i).Count(); ++j)
-                        {
-                            Debug.WriteLine("dia libre: " + reportes.diasLibres.ElementAt(i).ElementAt(j).CEDULAINTERNO + " tipo de incapacidad " + reportes.diasLibres.ElementAt(i).ElementAt(j).TIPODIALIBRE);
-                        }
-                    }
-
-
-
-                }
             }
 
             else if (rol.Contains("Local"))
@@ -1509,10 +1691,6 @@ namespace GuiasOET.Controllers
         [HttpPost]
         public ActionResult DiasLibres(string semana)
         {
-
-            Debug.WriteLine("la semana es: " + semana);
-            Debug.WriteLine("estoy en dias libres");
-
             string rol = Session["RolUsuarioLogueado"].ToString();
             var estacion = "";
             ReportesModelo reportes = new ReportesModelo();
@@ -1553,25 +1731,14 @@ namespace GuiasOET.Controllers
                     foreach (var row in empleados)
                     {
                         //Se obtienen los dias libres que corresponden a la semana seleccionada
-                        var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaABuscar && e.FECHA <= fechaLimiteHasta);
+                        var diasLibres = baseDatos.GUIAS_ROLDIASLIBRES.Where(e => e.FECHA >= semanaABuscar && e.FECHA < fechaLimiteHasta);
                         diasLibres = diasLibres.OrderBy(e => e.FECHA);
 
                         //Se obtienen los dias libres del empleado
                         var numDiasLibre = diasLibres.Where(e => e.CEDULAINTERNO.Equals(row.CEDULA));
 
-
-                        //Se verifica si el empleado tiene dia libre
-                        if (numDiasLibre != null)
-                        {
-                            //En caso de tener días libres, se guardan estos días
-                            totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
-
-                        }
-                        else
-                        {
-                            //En caso de que no, se guarda un null
-                            totalDiasLibresEmpleados.Add(null);
-                        }
+                        //Se guardan los dias libres del empleado, en caso de no tener, se guarda una lista vacía
+                        totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
                     }
 
                     //Se guardan todos los empleados
@@ -1599,18 +1766,8 @@ namespace GuiasOET.Controllers
                         //Se obtienen los dias libres del empleado
                         var numDiasLibre = diasLibres.Where(e => e.CEDULAINTERNO.Equals(row.CEDULA));
 
-                        //Se verifica si el empleado tiene dia libre
-                        if (numDiasLibre != null)
-                        {
-                            //En caso de tener días libres, se guardan estos días
-                            totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
-
-                        }
-                        else
-                        {
-                            //En caso de que no, se guarda un null
-                            totalDiasLibresEmpleados.Add(null);
-                        }
+                        //Se guardan los dias libres del empleado, en caso de no tener, se guarda una lista vacía
+                        totalDiasLibresEmpleados.Add(numDiasLibre.ToList());
                     }
 
                     //Se guardan todos los empleados
