@@ -203,7 +203,8 @@ namespace GuiasOET.Controllers
                         {
                             GUIAS_RESERVACION nuevo = new GUIAS_RESERVACION();
                             nuevo.NUMERORESERVACION = reservaciones[i].ID;
-                            nuevo.NUMEROVISIBLERESERVACION = reservaciones[i].NUMERO;
+                            string codigo = reservaciones[i].NUMERO;
+                            nuevo.NUMEROVISIBLERESERVACION = codigo;
                             nuevo.APELLIDOSSOLICITANTE = reservaciones[i].APELLIDOS;
                             nuevo.FECHAENTRA = reservaciones[i].ENTRA;
                             nuevo.FECHASALE = reservaciones[i].SALE;
