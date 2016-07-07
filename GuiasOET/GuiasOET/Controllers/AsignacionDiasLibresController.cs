@@ -375,7 +375,7 @@ namespace GuiasOET.Controllers
 
                                 DateTime f = Convert.ToDateTime(fecha);
 
-                                List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(f) && p.TIPODIALIBRE.Equals(tipo)).ToList();
+                                List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(f)).ToList();
 
                                 if (dialibre.Count == 0)
                                 {
