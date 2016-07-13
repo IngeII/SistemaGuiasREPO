@@ -332,7 +332,7 @@ namespace GuiasOET.Controllers
                                     DateTime contador = fDesde;
                                     while(contador<= fHasta)
                                     {
-                                        List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(contador) && p.TIPODIALIBRE.Equals(tipo)).ToList();
+                                        List<GUIAS_ROLDIASLIBRES> dialibre = baseDatos.GUIAS_ROLDIASLIBRES.Where(p => p.CEDULAINTERNO.Equals(ide) && p.FECHA.Equals(contador)).ToList();
 
                                         if (dialibre.Count == 0)
                                         {
