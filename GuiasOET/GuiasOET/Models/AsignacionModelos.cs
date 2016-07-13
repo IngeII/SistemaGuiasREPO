@@ -21,6 +21,7 @@ namespace GuiasOET.Models
         public List<GuiasOET.Models.V_GUIAS_RESERVADOS> vistaReservaciones;
         public List<bool> cambiosReservaciones = new List<bool>();
 
+        public IPagedList<GUIAS_ROLDIASLIBRES> rol { get; set; }
 
         public AsignacionModelos()
         {

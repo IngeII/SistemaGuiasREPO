@@ -810,6 +810,7 @@ namespace GuiasOET.Controllers
 
             GUIAS_EMPLEADO empleado = baseDatos.GUIAS_EMPLEADO.Find(Session["IdUsuarioLogueado"].ToString());
             var id = Session["IdUsuarioLogueado"];
+
             if (empleado.TIPOEMPLEADO == "Guía Externo")
             {
                 var empleados = baseDatos.GUIAS_EMPLEADO.Where(e=> e.CEDULA == id.ToString());

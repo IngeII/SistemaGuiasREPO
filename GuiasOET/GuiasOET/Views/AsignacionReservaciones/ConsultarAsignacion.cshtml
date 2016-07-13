@@ -180,6 +180,23 @@
                                         }
                                     }
                                 }
+
+                                @foreach (var rol in item.GUIAS_ROLDIASLIBRES)
+                                {
+                                    String ced = item.CEDULA;
+                                    String nombre = item.NOMBREEMPLEADO;
+                                    String id = rol.CEDULAINTERNO;
+                                    String fechaReservacion = String.Format("{0:dd/MM/yyyy}", rol.FECHA).Trim();
+                                    if (fechaReservacion == fecha)
+                                    {
+                                        if (id == ced)
+                                        {
+                                            @Html.ActionLink("                    ", "ConsultarAsignacionDetallada", new { id = item.CEDULA, fecha = fecha, turno = rol.TIPODIALIBRE }, new { @class = "btn btn-default", @style = "background-color: darkgray; color:white;" })
+
+                                        }
+                                    }
+
+                                }
                             </td>
                         }
                     </tr>
